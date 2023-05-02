@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:11.2-alpine
+    environment:
+      - POSTGRES_USER=gophkeeper
+      - POSTGRES_PASSWORD=gophkeeper
+      - POSTGRES_DB=gophkeeper
+    ports:
+      - "5432"
