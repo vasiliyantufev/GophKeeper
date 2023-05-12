@@ -4,8 +4,8 @@ services:
   db:
     image: postgres:11.2-alpine
     environment:
-      - POSTGRES_USER=gophkeeper
-      - POSTGRES_PASSWORD=gophkeeper
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
       - POSTGRES_DB=gophkeeper
     ports:
       - "5432"
