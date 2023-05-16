@@ -12,8 +12,16 @@ migrate-create:
 
 .PHONY: migrate-up
 migrate-up:
-	migrate -source file://./migrations -database 'postgresql://localhost:5432/postgresql?user=other&password=password' up 4
+	migrate -source file://./migrations -database 'postgres://user:password@localhost:5432/gophkeeper?sslmode=disable' up 5
 
 .PHONY: migrate-down
 migrate-down:
-	migrate -source file://./migrations -database 'postgresql://localhost:5432/postgresql?user=other&password=password' down 4
+	migrate -source file://./migrations -database 'postgres://user:password@localhost:5432/gophkeeper?sslmode=disable' down 5
+
+.PHONY: migrate-up-dev
+migrate-up:
+	migrate -source file://./migrations -database 'postgres://user:password@localhost:5433/gophkeeper_dev?sslmode=disable' up 5
+
+.PHONY: migrate-down-dev
+migrate-down:
+	migrate -source file://./migrations -database 'postgres://user:password@localhost:5433/gophkeeper_dev?sslmode=disable' down 5
