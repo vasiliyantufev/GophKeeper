@@ -1,12 +1,12 @@
 module github.com/vasiliyantufev/gophkeeper
 
-//google.golang.org/grpc v1.45.0
-//google.golang.org/protobuf v1.27.1
-
 go 1.19
 
 require (
+	github.com/caarlos0/env/v6 v6.10.1 // indirect
+	github.com/go-chi/chi/v5 v5.0.8 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/sirupsen/logrus v1.9.2 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
