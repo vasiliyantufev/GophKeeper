@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	grpc "github.com/vasiliyantufev/gophkeeper/internal/api/proto"
+	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
 )
 
 type Handler struct {
-	grpc.UnimplementedDevopsServer
+	grpc.UnimplementedGophkeeperServer
 }
 
 // NewHandler - creates a new grpc server instance
