@@ -11,8 +11,5 @@ type Data struct {
 }
 
 type DataRequest struct {
-	ID     int    `json:"data_id"`
-	UserId int    `json:"user_id"`
-	Data   string `json:"data"`
-	Type   string `json:"type"`
+	ID int `json:"data_id"`
 }

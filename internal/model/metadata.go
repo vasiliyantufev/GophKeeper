@@ -10,7 +10,5 @@ type Metadata struct {
 }
 
 type MetaRequest struct {
-	ID       int    `json:"metadata_id"`
-	DataId   int    `json:"data_id"`
-	Metadata string `json:"metadata"`
+	ID int `json:"metadata_id"`
 }
