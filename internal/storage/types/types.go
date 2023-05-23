@@ -6,6 +6,6 @@ const (
 	Login    Types = "Login"
 	Password Types = "Password"
 	Text     Types = "Text data"
-	Binary   Types = "Binary data"
+	Binary   Types = "File data"
 	Card     Types = "Bank card data"
 )
