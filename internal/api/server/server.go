@@ -12,7 +12,7 @@ import (
 
 // StartService - starts the gophkeeper server
 func StartService(grpcHandler *grpcHandler.Handler, config *configserver.ConfigServer, log *logrus.Logger) {
-	log.Info("Start gophkeeper application %v\n", config.GRPC)
+	log.Infof("Start gophkeeper application %s ", config.GRPC)
 
 	grpcServer := grpc.NewServer()
 	lis, err := net.Listen("tcp", config.GRPC)
