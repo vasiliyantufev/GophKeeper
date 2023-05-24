@@ -19,30 +19,22 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Gophkeeper_Ping_FullMethodName                 = "/api.Gophkeeper/Ping"
-	Gophkeeper_HandleCreateUser_FullMethodName     = "/api.Gophkeeper/HandleCreateUser"
-	Gophkeeper_HandleGetUser_FullMethodName        = "/api.Gophkeeper/HandleGetUser"
-	Gophkeeper_HandleCreateData_FullMethodName     = "/api.Gophkeeper/HandleCreateData"
-	Gophkeeper_HandleGetData_FullMethodName        = "/api.Gophkeeper/HandleGetData"
-	Gophkeeper_HandleCreateToken_FullMethodName    = "/api.Gophkeeper/HandleCreateToken"
-	Gophkeeper_HandleGetToken_FullMethodName       = "/api.Gophkeeper/HandleGetToken"
-	Gophkeeper_HandleCreateMetadata_FullMethodName = "/api.Gophkeeper/HandleCreateMetadata"
-	Gophkeeper_HandleGetMetadata_FullMethodName    = "/api.Gophkeeper/HandleGetMetadata"
+	Gophkeeper_HandleLogin_FullMethodName        = "/api.Gophkeeper/HandleLogin"
+	Gophkeeper_HandleRegistration_FullMethodName = "/api.Gophkeeper/HandleRegistration"
+	Gophkeeper_HandleCreateText_FullMethodName   = "/api.Gophkeeper/HandleCreateText"
+	Gophkeeper_HandleGetListText_FullMethodName  = "/api.Gophkeeper/HandleGetListText"
+	Gophkeeper_HandleGetNodeText_FullMethodName  = "/api.Gophkeeper/HandleGetNodeText"
 )
 
 // GophkeeperClient is the client API for Gophkeeper service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GophkeeperClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
-	HandleCreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
-	HandleGetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
-	HandleCreateData(ctx context.Context, in *CreateDataRequest, opts ...grpc.CallOption) (*CreateDataResponse, error)
-	HandleGetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error)
-	HandleCreateToken(ctx context.Context, in *CreateTokenRequest, opts ...grpc.CallOption) (*CreateTokenResponse, error)
-	HandleGetToken(ctx context.Context, in *GetTokenRequest, opts ...grpc.CallOption) (*GetTokenResponse, error)
-	HandleCreateMetadata(ctx context.Context, in *CreateMetadataRequest, opts ...grpc.CallOption) (*CreateMetadataResponse, error)
-	HandleGetMetadata(ctx context.Context, in *GetMetadataRequest, opts ...grpc.CallOption) (*GetMetadataResponse, error)
+	HandleLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	HandleRegistration(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error)
+	HandleCreateText(ctx context.Context, in *CreateTextRequest, opts ...grpc.CallOption) (*CreateTextResponse, error)
+	HandleGetListText(ctx context.Context, in *GetListTextRequest, opts ...grpc.CallOption) (*GetListTextResponse, error)
+	HandleGetNodeText(ctx context.Context, in *GetNodeTextRequest, opts ...grpc.CallOption) (*GetNodeTextResponse, error)
 }
 
 type gophkeeperClient struct {
@@ -53,81 +45,45 @@ func NewGophkeeperClient(cc grpc.ClientConnInterface) GophkeeperClient {
 	return &gophkeeperClient{cc}
 }
 
-func (c *gophkeeperClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_Ping_FullMethodName, in, out, opts...)
+func (c *gophkeeperClient) HandleLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleLogin_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *gophkeeperClient) HandleCreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
-	out := new(CreateUserResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleCreateUser_FullMethodName, in, out, opts...)
+func (c *gophkeeperClient) HandleRegistration(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error) {
+	out := new(RegistrationResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleRegistration_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *gophkeeperClient) HandleGetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
-	out := new(GetUserResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetUser_FullMethodName, in, out, opts...)
+func (c *gophkeeperClient) HandleCreateText(ctx context.Context, in *CreateTextRequest, opts ...grpc.CallOption) (*CreateTextResponse, error) {
+	out := new(CreateTextResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleCreateText_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *gophkeeperClient) HandleCreateData(ctx context.Context, in *CreateDataRequest, opts ...grpc.CallOption) (*CreateDataResponse, error) {
-	out := new(CreateDataResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleCreateData_FullMethodName, in, out, opts...)
+func (c *gophkeeperClient) HandleGetListText(ctx context.Context, in *GetListTextRequest, opts ...grpc.CallOption) (*GetListTextResponse, error) {
+	out := new(GetListTextResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetListText_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *gophkeeperClient) HandleGetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error) {
-	out := new(GetDataResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetData_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *gophkeeperClient) HandleCreateToken(ctx context.Context, in *CreateTokenRequest, opts ...grpc.CallOption) (*CreateTokenResponse, error) {
-	out := new(CreateTokenResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleCreateToken_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *gophkeeperClient) HandleGetToken(ctx context.Context, in *GetTokenRequest, opts ...grpc.CallOption) (*GetTokenResponse, error) {
-	out := new(GetTokenResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetToken_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *gophkeeperClient) HandleCreateMetadata(ctx context.Context, in *CreateMetadataRequest, opts ...grpc.CallOption) (*CreateMetadataResponse, error) {
-	out := new(CreateMetadataResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleCreateMetadata_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *gophkeeperClient) HandleGetMetadata(ctx context.Context, in *GetMetadataRequest, opts ...grpc.CallOption) (*GetMetadataResponse, error) {
-	out := new(GetMetadataResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetMetadata_FullMethodName, in, out, opts...)
+func (c *gophkeeperClient) HandleGetNodeText(ctx context.Context, in *GetNodeTextRequest, opts ...grpc.CallOption) (*GetNodeTextResponse, error) {
+	out := new(GetNodeTextResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetNodeText_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,15 +94,11 @@ func (c *gophkeeperClient) HandleGetMetadata(ctx context.Context, in *GetMetadat
 // All implementations must embed UnimplementedGophkeeperServer
 // for forward compatibility
 type GophkeeperServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
-	HandleCreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
-	HandleGetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
-	HandleCreateData(context.Context, *CreateDataRequest) (*CreateDataResponse, error)
-	HandleGetData(context.Context, *GetDataRequest) (*GetDataResponse, error)
-	HandleCreateToken(context.Context, *CreateTokenRequest) (*CreateTokenResponse, error)
-	HandleGetToken(context.Context, *GetTokenRequest) (*GetTokenResponse, error)
-	HandleCreateMetadata(context.Context, *CreateMetadataRequest) (*CreateMetadataResponse, error)
-	HandleGetMetadata(context.Context, *GetMetadataRequest) (*GetMetadataResponse, error)
+	HandleLogin(context.Context, *LoginRequest) (*LoginResponse, error)
+	HandleRegistration(context.Context, *RegistrationRequest) (*RegistrationResponse, error)
+	HandleCreateText(context.Context, *CreateTextRequest) (*CreateTextResponse, error)
+	HandleGetListText(context.Context, *GetListTextRequest) (*GetListTextResponse, error)
+	HandleGetNodeText(context.Context, *GetNodeTextRequest) (*GetNodeTextResponse, error)
 	mustEmbedUnimplementedGophkeeperServer()
 }
 
@@ -154,32 +106,20 @@ type GophkeeperServer interface {
 type UnimplementedGophkeeperServer struct {
 }
 
-func (UnimplementedGophkeeperServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedGophkeeperServer) HandleLogin(context.Context, *LoginRequest) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleLogin not implemented")
 }
-func (UnimplementedGophkeeperServer) HandleCreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateUser not implemented")
+func (UnimplementedGophkeeperServer) HandleRegistration(context.Context, *RegistrationRequest) (*RegistrationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleRegistration not implemented")
 }
-func (UnimplementedGophkeeperServer) HandleGetUser(context.Context, *GetUserRequest) (*GetUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleGetUser not implemented")
+func (UnimplementedGophkeeperServer) HandleCreateText(context.Context, *CreateTextRequest) (*CreateTextResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateText not implemented")
 }
-func (UnimplementedGophkeeperServer) HandleCreateData(context.Context, *CreateDataRequest) (*CreateDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateData not implemented")
+func (UnimplementedGophkeeperServer) HandleGetListText(context.Context, *GetListTextRequest) (*GetListTextResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleGetListText not implemented")
 }
-func (UnimplementedGophkeeperServer) HandleGetData(context.Context, *GetDataRequest) (*GetDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleGetData not implemented")
-}
-func (UnimplementedGophkeeperServer) HandleCreateToken(context.Context, *CreateTokenRequest) (*CreateTokenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateToken not implemented")
-}
-func (UnimplementedGophkeeperServer) HandleGetToken(context.Context, *GetTokenRequest) (*GetTokenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleGetToken not implemented")
-}
-func (UnimplementedGophkeeperServer) HandleCreateMetadata(context.Context, *CreateMetadataRequest) (*CreateMetadataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateMetadata not implemented")
-}
-func (UnimplementedGophkeeperServer) HandleGetMetadata(context.Context, *GetMetadataRequest) (*GetMetadataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleGetMetadata not implemented")
+func (UnimplementedGophkeeperServer) HandleGetNodeText(context.Context, *GetNodeTextRequest) (*GetNodeTextResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleGetNodeText not implemented")
 }
 func (UnimplementedGophkeeperServer) mustEmbedUnimplementedGophkeeperServer() {}
 
@@ -194,164 +134,92 @@ func RegisterGophkeeperServer(s grpc.ServiceRegistrar, srv GophkeeperServer) {
 	s.RegisterService(&Gophkeeper_ServiceDesc, srv)
 }
 
-func _Gophkeeper_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+func _Gophkeeper_HandleLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GophkeeperServer).Ping(ctx, in)
+		return srv.(GophkeeperServer).HandleLogin(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gophkeeper_Ping_FullMethodName,
+		FullMethod: Gophkeeper_HandleLogin_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).Ping(ctx, req.(*PingRequest))
+		return srv.(GophkeeperServer).HandleLogin(ctx, req.(*LoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gophkeeper_HandleCreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateUserRequest)
+func _Gophkeeper_HandleRegistration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegistrationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleCreateUser(ctx, in)
+		return srv.(GophkeeperServer).HandleRegistration(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gophkeeper_HandleCreateUser_FullMethodName,
+		FullMethod: Gophkeeper_HandleRegistration_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleCreateUser(ctx, req.(*CreateUserRequest))
+		return srv.(GophkeeperServer).HandleRegistration(ctx, req.(*RegistrationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gophkeeper_HandleGetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserRequest)
+func _Gophkeeper_HandleCreateText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTextRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleGetUser(ctx, in)
+		return srv.(GophkeeperServer).HandleCreateText(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gophkeeper_HandleGetUser_FullMethodName,
+		FullMethod: Gophkeeper_HandleCreateText_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleGetUser(ctx, req.(*GetUserRequest))
+		return srv.(GophkeeperServer).HandleCreateText(ctx, req.(*CreateTextRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gophkeeper_HandleCreateData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateDataRequest)
+func _Gophkeeper_HandleGetListText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetListTextRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleCreateData(ctx, in)
+		return srv.(GophkeeperServer).HandleGetListText(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gophkeeper_HandleCreateData_FullMethodName,
+		FullMethod: Gophkeeper_HandleGetListText_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleCreateData(ctx, req.(*CreateDataRequest))
+		return srv.(GophkeeperServer).HandleGetListText(ctx, req.(*GetListTextRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gophkeeper_HandleGetData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetDataRequest)
+func _Gophkeeper_HandleGetNodeText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNodeTextRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleGetData(ctx, in)
+		return srv.(GophkeeperServer).HandleGetNodeText(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gophkeeper_HandleGetData_FullMethodName,
+		FullMethod: Gophkeeper_HandleGetNodeText_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleGetData(ctx, req.(*GetDataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Gophkeeper_HandleCreateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateTokenRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleCreateToken(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Gophkeeper_HandleCreateToken_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleCreateToken(ctx, req.(*CreateTokenRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Gophkeeper_HandleGetToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTokenRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleGetToken(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Gophkeeper_HandleGetToken_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleGetToken(ctx, req.(*GetTokenRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Gophkeeper_HandleCreateMetadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateMetadataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleCreateMetadata(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Gophkeeper_HandleCreateMetadata_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleCreateMetadata(ctx, req.(*CreateMetadataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Gophkeeper_HandleGetMetadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetMetadataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleGetMetadata(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Gophkeeper_HandleGetMetadata_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleGetMetadata(ctx, req.(*GetMetadataRequest))
+		return srv.(GophkeeperServer).HandleGetNodeText(ctx, req.(*GetNodeTextRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -364,40 +232,24 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*GophkeeperServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _Gophkeeper_Ping_Handler,
+			MethodName: "HandleLogin",
+			Handler:    _Gophkeeper_HandleLogin_Handler,
 		},
 		{
-			MethodName: "HandleCreateUser",
-			Handler:    _Gophkeeper_HandleCreateUser_Handler,
+			MethodName: "HandleRegistration",
+			Handler:    _Gophkeeper_HandleRegistration_Handler,
 		},
 		{
-			MethodName: "HandleGetUser",
-			Handler:    _Gophkeeper_HandleGetUser_Handler,
+			MethodName: "HandleCreateText",
+			Handler:    _Gophkeeper_HandleCreateText_Handler,
 		},
 		{
-			MethodName: "HandleCreateData",
-			Handler:    _Gophkeeper_HandleCreateData_Handler,
+			MethodName: "HandleGetListText",
+			Handler:    _Gophkeeper_HandleGetListText_Handler,
 		},
 		{
-			MethodName: "HandleGetData",
-			Handler:    _Gophkeeper_HandleGetData_Handler,
-		},
-		{
-			MethodName: "HandleCreateToken",
-			Handler:    _Gophkeeper_HandleCreateToken_Handler,
-		},
-		{
-			MethodName: "HandleGetToken",
-			Handler:    _Gophkeeper_HandleGetToken_Handler,
-		},
-		{
-			MethodName: "HandleCreateMetadata",
-			Handler:    _Gophkeeper_HandleCreateMetadata_Handler,
-		},
-		{
-			MethodName: "HandleGetMetadata",
-			Handler:    _Gophkeeper_HandleGetMetadata_Handler,
+			MethodName: "HandleGetNodeText",
+			Handler:    _Gophkeeper_HandleGetNodeText_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

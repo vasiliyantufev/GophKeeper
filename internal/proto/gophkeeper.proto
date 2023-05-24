@@ -5,75 +5,46 @@ package api;
 option go_package = "./gophkeeper";
 
 service Gophkeeper {
-  rpc Ping(PingRequest) returns (PingResponse) {}
-  rpc HandleCreateUser(CreateUserRequest) returns (CreateUserResponse) {}
-  rpc HandleGetUser(GetUserRequest) returns (GetUserResponse) {}
-  rpc HandleCreateData(CreateDataRequest) returns (CreateDataResponse) {}
-  rpc HandleGetData(GetDataRequest) returns (GetDataResponse) {}
-  rpc HandleCreateToken(CreateTokenRequest) returns (CreateTokenResponse) {}
-  rpc HandleGetToken(GetTokenRequest) returns (GetTokenResponse) {}
-  rpc HandleCreateMetadata(CreateMetadataRequest) returns (CreateMetadataResponse) {}
-  rpc HandleGetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
+  rpc HandleLogin(LoginRequest) returns (LoginResponse) {}
+  rpc HandleRegistration(RegistrationRequest) returns (RegistrationResponse) {}
+  rpc HandleCreateText(CreateTextRequest) returns (CreateTextResponse) {}
+  rpc HandleGetListText(GetListTextRequest) returns (GetListTextResponse) {}
+  rpc HandleGetNodeText(GetNodeTextRequest) returns (GetNodeTextResponse) {}
 }
 
-message PingRequest {}
-message PingResponse {
-  string resp = 1;
-}
-
-message CreateUserRequest {
+//------------------------------------
+message LoginRequest {
   string username = 1;
   string password = 2;
 }
-message CreateUserResponse {
+message LoginResponse {
   string resp = 1;
 }
-message GetUserRequest {
+message RegistrationRequest {
   string username = 1;
   string password = 2;
 }
-message GetUserResponse {
+message RegistrationResponse {
   string resp = 1;
 }
-
-message CreateDataRequest {
+//------------------------------------
+message CreateTextRequest {
   string userId = 1;
-  string data = 2;
-  string type = 3;
+  string text = 2;
 }
-message CreateDataResponse {
+message CreateTextResponse {
   string resp = 1;
 }
-message GetDataRequest {
-  string dataId = 1;
-}
-message GetDataResponse {
-  string resp = 1;
-}
-
-message CreateTokenRequest {
+message GetListTextRequest {
   string userId = 1;
 }
-message CreateTokenResponse {
-  string token = 1;
+message GetListTextResponse {
+  string resp = 1;
 }
-message GetTokenRequest {
-  string id = 1;
+message GetNodeTextRequest {
+  string cartName = 1;
 }
-message GetTokenResponse {
-  string token = 1;
+message GetNodeTextResponse {
+  string resp = 1;
 }
 
-message CreateMetadataRequest {
-  string dataId = 1;
-  string data = 2;
-}
-message CreateMetadataResponse {
-  string resp = 1;
-}
-message GetMetadataRequest {
-  string id = 1;
-}
-message GetMetadataResponse {
-  string resp = 1;
-}
