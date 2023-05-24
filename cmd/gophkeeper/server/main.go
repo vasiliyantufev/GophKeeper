@@ -19,7 +19,7 @@ func main() {
 
 	db, err := database.New(config, logger)
 	if err != nil {
-		logger.Error(err)
+		logger.Fatal(err)
 	} else {
 		defer db.Close()
 	}

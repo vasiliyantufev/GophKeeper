@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"time"
 
+	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/config/configserver"
 )
