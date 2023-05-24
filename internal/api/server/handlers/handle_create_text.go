@@ -6,8 +6,8 @@ import (
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
 )
 
-// HandleCreateMetadata - create metadata
-func (h *Handler) HandleCreateMetadata(ctx context.Context, req *grpc.CreateMetadataRequest) (*grpc.CreateMetadataResponse, error) {
+// HandleCreateText - create text
+func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequest) (*grpc.CreateTextResponse, error) {
 	var resp string
-	return &grpc.CreateMetadataResponse{Resp: resp}, nil
+	return &grpc.CreateTextResponse{Resp: resp}, nil
 }

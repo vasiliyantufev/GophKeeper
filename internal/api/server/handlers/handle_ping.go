@@ -6,9 +6,9 @@ import (
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
 )
 
-// HandleLogin - login user
-func (h *Handler) HandleLogin(ctx context.Context, req *grpc.LoginRequest) (*grpc.LoginResponse, error) {
+// HandlePing - checks the database connection
+func (h *Handler) HandlePing(ctx context.Context, req *grpc.PingRequest) (*grpc.PingResponse, error) {
 	var resp string
 
-	return &grpc.LoginResponse{Resp: resp}, nil
+	return &grpc.PingResponse{Resp: resp}, nil
 }

@@ -6,8 +6,8 @@ import (
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
 )
 
-// HandleGetMetadata - get metadata
-func (h *Handler) HandleGetMetadata(ctx context.Context, req *grpc.GetMetadataRequest) (*grpc.GetMetadataResponse, error) {
+// HandleGetNodeText - get node text
+func (h *Handler) HandleGetNodeText(ctx context.Context, req *grpc.GetNodeTextRequest) (*grpc.GetNodeTextResponse, error) {
 	var resp string
-	return &grpc.GetMetadataResponse{Resp: resp}, nil
+	return &grpc.GetNodeTextResponse{Resp: resp}, nil
 }

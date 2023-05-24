@@ -2,25 +2,16 @@ package model
 
 import "time"
 
-type Text struct {
-	ID         int
-	UserID     int
-	MetadataID int
-	Text       string
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	DeletedAt  time.Time
-}
-
-type CreateTextRequest struct {
-	UserID int
-	Text   string
-}
-
-type GetListTextRequest struct {
-	UserID int
-}
-
-type GetNodeTextRequest struct {
-	CartName string
+type Card struct {
+	ID                int
+	UserID            int
+	MetadataID        int
+	CardPaymentSystem string
+	CardNumber        string
+	CardHolder        string
+	CardEndDate       time.Time
+	CVC               int
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
+	DeletedAt         time.Time
 }

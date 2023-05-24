@@ -6,8 +6,9 @@ import (
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
 )
 
-// HandleCreateUser - create user
-func (h *Handler) HandleCreateUser(ctx context.Context, req *grpc.CreateUserRequest) (*grpc.CreateUserResponse, error) {
+// HandleLogin - login user
+func (h *Handler) HandleLogin(ctx context.Context, req *grpc.LoginRequest) (*grpc.LoginResponse, error) {
 	var resp string
-	return &grpc.CreateUserResponse{Resp: resp}, nil
+
+	return &grpc.LoginResponse{Resp: resp}, nil
 }
