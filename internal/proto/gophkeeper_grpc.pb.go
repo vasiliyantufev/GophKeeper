@@ -24,6 +24,7 @@ const (
 	Gophkeeper_HandleCreateText_FullMethodName   = "/api.Gophkeeper/HandleCreateText"
 	Gophkeeper_HandleGetListText_FullMethodName  = "/api.Gophkeeper/HandleGetListText"
 	Gophkeeper_HandleGetNodeText_FullMethodName  = "/api.Gophkeeper/HandleGetNodeText"
+	Gophkeeper_HandlePing_FullMethodName         = "/api.Gophkeeper/HandlePing"
 )
 
 // GophkeeperClient is the client API for Gophkeeper service.
@@ -35,6 +36,7 @@ type GophkeeperClient interface {
 	HandleCreateText(ctx context.Context, in *CreateTextRequest, opts ...grpc.CallOption) (*CreateTextResponse, error)
 	HandleGetListText(ctx context.Context, in *GetListTextRequest, opts ...grpc.CallOption) (*GetListTextResponse, error)
 	HandleGetNodeText(ctx context.Context, in *GetNodeTextRequest, opts ...grpc.CallOption) (*GetNodeTextResponse, error)
+	HandlePing(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 }
 
 type gophkeeperClient struct {
@@ -90,6 +92,15 @@ func (c *gophkeeperClient) HandleGetNodeText(ctx context.Context, in *GetNodeTex
 	return out, nil
 }
 
+func (c *gophkeeperClient) HandlePing(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+	out := new(PingResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandlePing_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GophkeeperServer is the server API for Gophkeeper service.
 // All implementations must embed UnimplementedGophkeeperServer
 // for forward compatibility
@@ -99,6 +110,7 @@ type GophkeeperServer interface {
 	HandleCreateText(context.Context, *CreateTextRequest) (*CreateTextResponse, error)
 	HandleGetListText(context.Context, *GetListTextRequest) (*GetListTextResponse, error)
 	HandleGetNodeText(context.Context, *GetNodeTextRequest) (*GetNodeTextResponse, error)
+	HandlePing(context.Context, *PingRequest) (*PingResponse, error)
 	mustEmbedUnimplementedGophkeeperServer()
 }
 
@@ -120,6 +132,9 @@ func (UnimplementedGophkeeperServer) HandleGetListText(context.Context, *GetList
 }
 func (UnimplementedGophkeeperServer) HandleGetNodeText(context.Context, *GetNodeTextRequest) (*GetNodeTextResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleGetNodeText not implemented")
+}
+func (UnimplementedGophkeeperServer) HandlePing(context.Context, *PingRequest) (*PingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandlePing not implemented")
 }
 func (UnimplementedGophkeeperServer) mustEmbedUnimplementedGophkeeperServer() {}
 
@@ -224,6 +239,24 @@ func _Gophkeeper_HandleGetNodeText_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gophkeeper_HandlePing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandlePing(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandlePing_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandlePing(ctx, req.(*PingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Gophkeeper_ServiceDesc is the grpc.ServiceDesc for Gophkeeper service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -250,6 +283,10 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HandleGetNodeText",
 			Handler:    _Gophkeeper_HandleGetNodeText_Handler,
+		},
+		{
+			MethodName: "HandlePing",
+			Handler:    _Gophkeeper_HandlePing_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

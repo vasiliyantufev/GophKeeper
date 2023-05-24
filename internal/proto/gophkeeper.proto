@@ -10,8 +10,13 @@ service Gophkeeper {
   rpc HandleCreateText(CreateTextRequest) returns (CreateTextResponse) {}
   rpc HandleGetListText(GetListTextRequest) returns (GetListTextResponse) {}
   rpc HandleGetNodeText(GetNodeTextRequest) returns (GetNodeTextResponse) {}
+  rpc HandlePing(PingRequest) returns (PingResponse) {}
 }
 
+message PingRequest {}
+message PingResponse {
+  string resp = 1;
+}
 //------------------------------------
 message LoginRequest {
   string username = 1;
