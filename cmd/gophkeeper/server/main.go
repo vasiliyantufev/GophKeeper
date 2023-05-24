@@ -9,19 +9,27 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/api/server"
 	grpcHandler "github.com/vasiliyantufev/gophkeeper/internal/api/server/handlers"
 	"github.com/vasiliyantufev/gophkeeper/internal/config/configserver"
+	"github.com/vasiliyantufev/gophkeeper/internal/database"
 )
 
 func main() {
-	log := logrus.New()
-	config := configserver.NewConfigServer(log)
-	log.SetLevel(config.DebugLevel)
+	logger := logrus.New()
+	config := configserver.NewConfigServer(logger)
+	logger.SetLevel(config.DebugLevel)
+
+	db, err := database.New(config, logger)
+	if err != nil {
+		logger.Error(err)
+	} else {
+		defer db.Close()
+	}
 
 	ctx, cnl := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT)
 	defer cnl()
 
-	handlerGrpc := grpcHandler.NewHandler()
-	go server.StartService(handlerGrpc, config, log)
+	handlerGrpc := grpcHandler.NewHandler(db, logger)
+	go server.StartService(handlerGrpc, config, logger)
 
 	<-ctx.Done()
-	log.Info("server shutdown on signal with:", ctx.Err())
+	logger.Info("server shutdown on signal with:", ctx.Err())
 }
