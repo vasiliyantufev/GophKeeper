@@ -1,7 +1,7 @@
-// card_data - формат json, защифрованный
+--  card_data - формат json, зашифрованный
 create table card
 (
-    card_id     int PRIMARY KEY,
+    card_id     serial PRIMARY KEY,
     user_id     int          NOT NULL references users (user_id) on delete cascade,
     metadata_id int          NOT NULL,
     card_data   varchar(300) NOT NULL,

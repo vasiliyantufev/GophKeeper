@@ -10,6 +10,7 @@ import (
 	grpcHandler "github.com/vasiliyantufev/gophkeeper/internal/api/server/handlers"
 	"github.com/vasiliyantufev/gophkeeper/internal/config/configserver"
 	"github.com/vasiliyantufev/gophkeeper/internal/database"
+	"github.com/vasiliyantufev/gophkeeper/internal/storage/repositories/user"
 )
 
 func main() {
@@ -24,10 +25,12 @@ func main() {
 		defer db.Close()
 	}
 
+	userRepository := user.New(db)
+
 	ctx, cnl := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT)
 	defer cnl()
 
-	handlerGrpc := grpcHandler.NewHandler(db, logger)
+	handlerGrpc := grpcHandler.NewHandler(db, userRepository, logger)
 	go server.StartService(handlerGrpc, config, logger)
 
 	<-ctx.Done()

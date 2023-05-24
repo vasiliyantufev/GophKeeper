@@ -1,6 +1,6 @@
 create table file
 (
-    file_id        int PRIMARY KEY,
+    file_id        serial PRIMARY KEY,
     user_id        int          NOT NULL references users (user_id) on delete cascade,
     metadata_id             int          NOT NULL,
     file_name      varchar(100) NOT NULL,
