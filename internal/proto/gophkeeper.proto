@@ -36,18 +36,21 @@ message RegistrationResponse {
 message CreateTextRequest {
   string userId = 1;
   string text = 2;
+  string sessionKey = 3;
 }
 message CreateTextResponse {
   string resp = 1;
 }
 message GetListTextRequest {
   string userId = 1;
+  string sessionKey = 2;
 }
 message GetListTextResponse {
   string resp = 1;
 }
 message GetNodeTextRequest {
   string cartName = 1;
+  string sessionKey = 2;
 }
 message GetNodeTextResponse {
   string resp = 1;
