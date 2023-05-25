@@ -34,3 +34,23 @@ func (u *User) Registration(user *model.RegistrationRequest) (int, error) {
 
 	return id, nil
 }
+
+func (u *User) Login(user *model.LoginRequest) (bool, error) {
+	var exists bool
+	row := u.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM users where username = $1 AND password = $2)", user.Username, user.Password)
+	if err := row.Scan(&exists); err != nil {
+		return exists, err
+	}
+	return exists, nil
+	//authorizedUser := &model.User{}
+	//if err := u.db.Pool.QueryRow("SELECT * FROM users where username = $1 AND password = $2", user.Username, user.Password).Scan(
+	//	&authorizedUser.ID,
+	//	&authorizedUser.Username,
+	//	&authorizedUser.Password,
+	//	&authorizedUser.CreatedAt,
+	//	&authorizedUser.DeletedAt,
+	//); err != nil {
+	//	return nil, err
+	//}
+	//return authorizedUser, nil
+}

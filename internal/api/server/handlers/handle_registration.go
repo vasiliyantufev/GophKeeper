@@ -7,7 +7,7 @@ import (
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
 )
 
-// HandleRegistration - registration user
+// HandleRegistration - registration new user
 func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.RegistrationRequest) (*grpc.RegistrationResponse, error) {
 	var resp string
 
@@ -23,6 +23,5 @@ func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.Registration
 	}
 	resp = "successful registration user"
 	h.logger.Info(resp)
-
 	return &grpc.RegistrationResponse{Resp: resp}, err
 }
