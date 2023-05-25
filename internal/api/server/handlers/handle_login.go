@@ -11,21 +11,22 @@ import (
 func (h *Handler) HandleLogin(ctx context.Context, req *grpc.LoginRequest) (*grpc.LoginResponse, error) {
 	var resp string
 
-	LoginData := &model.LoginRequest{}
-	LoginData.Username = req.Username
-	LoginData.Password = req.Password
+	UserData := &model.UserRequest{}
+	UserData.Username = req.Username
+	UserData.Password = req.Password
 
-	exists, err := h.user.Login(LoginData)
+	authentication, err := h.user.Authentication(UserData)
 	if err != nil {
-		resp = "authorisation Error"
+		resp = "server error"
 		h.logger.Error(err)
 		return &grpc.LoginResponse{Resp: resp}, err
 	}
-	if exists == false {
+	if authentication == false {
 		resp = "wrong username or password"
 		h.logger.Error(err)
-		return &grpc.LoginResponse{Resp: resp}, err
+		return &grpc.LoginResponse{Resp: resp}, nil
 	}
+
 	resp = "successful login"
 	h.logger.Info(resp)
 	return &grpc.LoginResponse{Resp: resp}, nil
