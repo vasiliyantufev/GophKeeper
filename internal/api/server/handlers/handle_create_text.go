@@ -8,6 +8,6 @@ import (
 
 // HandleCreateText - create text
 func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequest) (*grpc.CreateTextResponse, error) {
-	var resp string
-	return &grpc.CreateTextResponse{Resp: resp}, nil
+	var msg string
+	return &grpc.CreateTextResponse{Message: msg}, nil
 }

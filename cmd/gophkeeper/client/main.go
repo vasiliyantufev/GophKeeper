@@ -5,6 +5,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/config/configagent"
+	"github.com/vasiliyantufev/gophkeeper/internal/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/service/randomizer"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
@@ -26,5 +28,19 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Info(resp)
+	log.Info(resp.Message)
+
+	username := randomizer.RandStringRunes(10)
+	password := "passworD-123"
+
+	registeredUser, err := client.HandleRegistration(context.Background(), &grpcClient.RegistrationRequest{Username: username, Password: password})
+	if err != nil {
+		log.Fatal(err)
+	}
+	authenticatedUser, err := client.HandleAuthentication(context.Background(), &grpcClient.AuthenticationRequest{Username: registeredUser.Username, Password: password})
+	if err != nil {
+		log.Fatal(err)
+	}
+	user := model.User{ID: authenticatedUser.UserId, Username: authenticatedUser.Username}
+	log.Info(user)
 }

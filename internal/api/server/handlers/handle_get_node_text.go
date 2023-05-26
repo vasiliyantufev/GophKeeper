@@ -8,6 +8,6 @@ import (
 
 // HandleGetNodeText - get node text
 func (h *Handler) HandleGetNodeText(ctx context.Context, req *grpc.GetNodeTextRequest) (*grpc.GetNodeTextResponse, error) {
-	var resp string
-	return &grpc.GetNodeTextResponse{Resp: resp}, nil
+	var msg string
+	return &grpc.GetNodeTextResponse{Message: msg}, nil
 }

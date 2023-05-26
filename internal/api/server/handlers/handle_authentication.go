@@ -18,10 +18,10 @@ func (h *Handler) HandleAuthentication(ctx context.Context, req *grpc.Authentica
 	authenticatedUser, err := h.user.Authentication(UserData)
 	if err != nil {
 		h.logger.Error(err)
-		return &grpc.AuthenticationResponse{Resp: ""}, err
+		return &grpc.AuthenticationResponse{}, err
 	}
 	resp = "successful login"
 	h.logger.Info(resp)
 	h.logger.Debug(authenticatedUser)
-	return &grpc.AuthenticationResponse{Resp: resp}, nil
+	return &grpc.AuthenticationResponse{UserId: authenticatedUser.ID, Username: authenticatedUser.Username}, nil
 }

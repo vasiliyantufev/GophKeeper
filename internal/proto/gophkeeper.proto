@@ -1,8 +1,12 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package api;
 
 option go_package = "./gophkeeper";
+
+
 
 service Gophkeeper {
   rpc HandleAuthentication(AuthenticationRequest) returns (AuthenticationResponse) {}
@@ -15,7 +19,7 @@ service Gophkeeper {
 
 message PingRequest {}
 message PingResponse {
-  string resp = 1;
+  string message = 1;
 }
 //------------------------------------
 message AuthenticationRequest {
@@ -23,14 +27,22 @@ message AuthenticationRequest {
   string password = 2;
 }
 message AuthenticationResponse {
-  string resp = 1;
+    int64 userId = 1;
+    string username = 2;
+    string password = 3;
+    google.protobuf.Timestamp createdAt = 4;
+    google.protobuf.Timestamp deletedAt = 5;
 }
 message RegistrationRequest {
   string username = 1;
   string password = 2;
 }
 message RegistrationResponse {
-  string resp = 1;
+    int64 userId = 1;
+    string username = 2;
+    string password = 3;
+    google.protobuf.Timestamp createdAt = 4;
+    google.protobuf.Timestamp deletedAt = 5;
 }
 //------------------------------------
 message CreateTextRequest {
@@ -39,20 +51,25 @@ message CreateTextRequest {
   string sessionKey = 3;
 }
 message CreateTextResponse {
-  string resp = 1;
+  string message = 1;
 }
 message GetListTextRequest {
   string userId = 1;
   string sessionKey = 2;
 }
 message GetListTextResponse {
-  string resp = 1;
+  string message = 1;
 }
 message GetNodeTextRequest {
   string cartName = 1;
   string sessionKey = 2;
 }
 message GetNodeTextResponse {
-  string resp = 1;
+  string message = 1;
 }
+
+message ErrorResponse {
+  string errorMessage = 1;
+}
+
 

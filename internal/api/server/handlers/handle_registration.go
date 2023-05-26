@@ -20,25 +20,26 @@ func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.Registration
 	if correctPassword := validator.VerifyPassword(req.Password); correctPassword != true {
 		err := errors.ErrBadPassword
 		h.logger.Error(err)
-		return &grpc.RegistrationResponse{Resp: ""}, err
+		return &grpc.RegistrationResponse{}, err
 	}
 	exists, err := h.user.UserExists(UserData)
 	if err != nil {
 		h.logger.Error(err)
-		return &grpc.RegistrationResponse{Resp: ""}, err
+		return &grpc.RegistrationResponse{}, err
 	}
 	if exists == true {
 		err = errors.ErrUserAlreadyExists
 		h.logger.Error(err)
-		return &grpc.RegistrationResponse{Resp: ""}, err
+		return &grpc.RegistrationResponse{}, err
 	}
 
-	_, err = h.user.Registration(UserData)
+	registeredUser, err := h.user.Registration(UserData)
 	if err != nil {
 		h.logger.Error(err)
-		return &grpc.RegistrationResponse{Resp: ""}, err
+		return &grpc.RegistrationResponse{}, err
 	}
 	resp = "successful registration user"
 	h.logger.Info(resp)
-	return &grpc.RegistrationResponse{Resp: resp}, nil
+	h.logger.Debug(registeredUser)
+	return &grpc.RegistrationResponse{UserId: registeredUser.ID, Username: registeredUser.Username}, nil
 }

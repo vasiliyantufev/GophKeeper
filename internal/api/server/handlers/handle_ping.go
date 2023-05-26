@@ -8,14 +8,14 @@ import (
 
 // HandlePing - checks the database connection
 func (h *Handler) HandlePing(ctx context.Context, req *grpc.PingRequest) (*grpc.PingResponse, error) {
-	var resp string
+	var msg string
 	err := h.database.Ping()
 	if err != nil {
-		resp = "unsuccessful database connection"
+		msg = "unsuccessful database connection"
 		h.logger.Error(err)
-		return &grpc.PingResponse{Resp: resp}, err
+		return &grpc.PingResponse{Message: msg}, err
 	}
-	resp = "successful database connection"
-	h.logger.Info(resp)
-	return &grpc.PingResponse{Resp: resp}, nil
+	msg = "successful database connection"
+	h.logger.Info(msg)
+	return &grpc.PingResponse{Message: msg}, nil
 }

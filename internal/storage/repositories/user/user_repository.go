@@ -26,18 +26,17 @@ func New(db *database.DB) *User {
 	}
 }
 
-func (u *User) Registration(user *model.UserRequest) (int, error) {
-	var id int
+func (u *User) Registration(user *model.UserRequest) (*model.User, error) {
+	registeredUser := &model.User{}
 	if err := u.db.Pool.QueryRow(
-		"INSERT INTO users (username, password, created_at) VALUES ($1, $2, $3) RETURNING user_id",
+		"INSERT INTO users (username, password, created_at) VALUES ($1, $2, $3) RETURNING user_id, username",
 		user.Username,
 		user.Password,
 		time.Now(),
-	).Scan(&id); err != nil {
-		return id, err
+	).Scan(&registeredUser.ID, &registeredUser.Username); err != nil {
+		return nil, err
 	}
-
-	return id, nil
+	return registeredUser, nil
 }
 
 func (u *User) Authentication(userRequest *model.UserRequest) (*model.User, error) {
