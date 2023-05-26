@@ -5,7 +5,7 @@ package api;
 option go_package = "./gophkeeper";
 
 service Gophkeeper {
-  rpc HandleLogin(LoginRequest) returns (LoginResponse) {}
+  rpc HandleAuthentication(AuthenticationRequest) returns (AuthenticationResponse) {}
   rpc HandleRegistration(RegistrationRequest) returns (RegistrationResponse) {}
   rpc HandleCreateText(CreateTextRequest) returns (CreateTextResponse) {}
   rpc HandleGetListText(GetListTextRequest) returns (GetListTextResponse) {}
@@ -18,11 +18,11 @@ message PingResponse {
   string resp = 1;
 }
 //------------------------------------
-message LoginRequest {
+message AuthenticationRequest {
   string username = 1;
   string password = 2;
 }
-message LoginResponse {
+message AuthenticationResponse {
   string resp = 1;
 }
 message RegistrationRequest {

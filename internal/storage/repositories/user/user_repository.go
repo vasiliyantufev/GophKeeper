@@ -1,7 +1,10 @@
 package user
 
 import (
+	"database/sql"
 	"time"
+
+	"github.com/vasiliyantufev/gophkeeper/internal/storage/errors"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/model"
@@ -37,13 +40,21 @@ func (u *User) Registration(user *model.UserRequest) (int, error) {
 	return id, nil
 }
 
-func (u *User) Authentication(user *model.UserRequest) (bool, error) {
-	var authentication bool
-	row := u.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM users where username = $1 AND password = $2)", user.Username, user.Password)
-	if err := row.Scan(&authentication); err != nil {
-		return authentication, err
+func (u *User) Authentication(userRequest *model.UserRequest) (*model.User, error) {
+	authenticatedUser := &model.User{}
+	err := u.db.Pool.QueryRow("SELECT user_id, username FROM users WHERE username=$1 and password=$2",
+		userRequest.Username, userRequest.Password).Scan(
+		&authenticatedUser.ID,
+		&authenticatedUser.Username,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrWrongUsernameOrPassword
+		} else {
+			return nil, err
+		}
 	}
-	return authentication, nil
+	return authenticatedUser, nil
 }
 
 func (u *User) UserExists(user *model.UserRequest) (bool, error) {
