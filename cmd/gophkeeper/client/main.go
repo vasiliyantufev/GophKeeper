@@ -44,17 +44,18 @@ func main() {
 	user := model.User{ID: authenticatedUser.UserId, Username: authenticatedUser.Username}
 	log.Info(user)
 
+	randName := randomizer.RandStringRunes(10)
 	randText := randomizer.RandStringRunes(10)
 
-	createdText, err := client.HandleCreateText(context.Background(), &grpcClient.CreateTextRequest{UserId: user.ID, Text: randText})
+	createdText, err := client.HandleCreateText(context.Background(), &grpcClient.CreateTextRequest{UserId: user.ID, Name: randName, Text: randText})
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Info(createdText)
-	getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{TextId: createdText.TextId})
-	if err != nil {
-		log.Fatal(err)
-	}
-	text := model.Text{ID: getNodeText.TextId, Text: getNodeText.Text}
-	log.Info(text)
+	//getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{TextId: createdText.TextId})
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//text := model.Text{ID: getNodeText.TextId, Text: getNodeText.Text}
+	//log.Info(text)
 }

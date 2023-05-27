@@ -33,7 +33,7 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 		h.logger.Error(err)
 		return &grpc.CreateTextResponse{}, err
 	}
-	if correctText := validator.VerifyText(req.Text); correctText != true {
+	if correctText := validator.VerifyText(TextData.Text); correctText != true {
 		err := errors.ErrBadText
 		h.logger.Error(err)
 		return &grpc.CreateTextResponse{}, err
@@ -56,5 +56,5 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 	}
 	h.logger.Debug(CreatedText)
 
-	return &grpc.CreateTextResponse{TextId: CreatedText.ID, Text: CreatedText.Text}, nil
+	return &grpc.CreateTextResponse{Name: CreatedMetadata.Name, Text: CreatedText.Text}, nil
 }
