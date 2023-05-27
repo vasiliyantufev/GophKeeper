@@ -43,4 +43,13 @@ func main() {
 	}
 	user := model.User{ID: authenticatedUser.UserId, Username: authenticatedUser.Username}
 	log.Info(user)
+
+	randText := randomizer.RandStringRunes(10)
+
+	createdText, err := client.HandleCreateText(context.Background(), &grpcClient.CreateTextRequest{UserId: user.ID, Text: randText})
+	if err != nil {
+		log.Fatal(err)
+	}
+	text := model.Text{ID: createdText.TextId, Text: createdText.Text}
+	log.Info(text)
 }

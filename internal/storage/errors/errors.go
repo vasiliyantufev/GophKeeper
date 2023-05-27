@@ -7,4 +7,5 @@ var (
 	ErrWrongUsernameOrPassword = errors.New("wrong username or password")
 	ErrUserAlreadyExists       = errors.New("user with this name already exists")
 	ErrBadPassword             = errors.New("password rules: at least 7 letters, 1 number, 1 upper case, 1 special character")
+	ErrBadText                 = errors.New("text rules: at least 7 letters")
 )

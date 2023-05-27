@@ -9,8 +9,6 @@ import (
 
 // HandleAuthentication - authentication user
 func (h *Handler) HandleAuthentication(ctx context.Context, req *grpc.AuthenticationRequest) (*grpc.AuthenticationResponse, error) {
-	var resp string
-
 	UserData := &model.UserRequest{}
 	UserData.Username = req.Username
 	UserData.Password = req.Password
@@ -20,8 +18,6 @@ func (h *Handler) HandleAuthentication(ctx context.Context, req *grpc.Authentica
 		h.logger.Error(err)
 		return &grpc.AuthenticationResponse{}, err
 	}
-	resp = "successful login"
-	h.logger.Info(resp)
 	h.logger.Debug(authenticatedUser)
 	return &grpc.AuthenticationResponse{UserId: authenticatedUser.ID, Username: authenticatedUser.Username}, nil
 }

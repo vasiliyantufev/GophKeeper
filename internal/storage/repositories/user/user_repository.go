@@ -11,8 +11,8 @@ import (
 )
 
 type Constructor interface {
-	Registration(data *model.UserRequest) error
-	Authentication(user *model.UserRequest) (bool, error)
+	Registration(user *model.UserRequest) (*model.User, error)
+	Authentication(userRequest *model.UserRequest) (*model.User, error)
 	UserExists(user *model.UserRequest) (bool, error)
 }
 

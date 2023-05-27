@@ -3,9 +3,9 @@ package model
 import "time"
 
 type Text struct {
-	ID         int
-	UserID     int
-	MetadataID int
+	ID         int64
+	UserID     int64
+	MetadataID int64
 	Text       string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
@@ -13,14 +13,14 @@ type Text struct {
 }
 
 type CreateTextRequest struct {
-	UserID int
+	UserID int64
 	Text   string
 }
 
 type GetListTextRequest struct {
-	UserID int
+	UserID int64
 }
 
 type GetNodeTextRequest struct {
-	CartName string
+	Name string
 }
