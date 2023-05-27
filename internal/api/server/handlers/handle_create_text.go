@@ -11,7 +11,6 @@ import (
 
 // HandleCreateText - create text
 func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequest) (*grpc.CreateTextResponse, error) {
-
 	if correctText := validator.VerifyText(req.Text); correctText != true {
 		err := errors.ErrBadText
 		h.logger.Error(err)
@@ -21,7 +20,6 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 	TextData := &model.CreateTextRequest{}
 	TextData.UserID = req.UserId
 	TextData.Text = req.Text
-
 	CreatedText, err := h.text.CreateText(TextData)
 	if err != nil {
 		h.logger.Error(err)

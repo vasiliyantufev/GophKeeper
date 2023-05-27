@@ -52,18 +52,19 @@ message CreateTextResponse {
   int64  textId = 1;
   string text = 2;
 }
-message GetListTextRequest {
-  int64  userId = 1;
-  string sessionKey = 2;
-}
-message GetListTextResponse {
-  string message = 1;
-}
 message GetNodeTextRequest {
   int64  textId = 1;
   string sessionKey = 2;
 }
 message GetNodeTextResponse {
+  int64  textId = 1;
+  string text = 2;
+}
+message GetListTextRequest {
+  int64  userId = 1;
+  string sessionKey = 2;
+}
+message GetListTextResponse {
   string message = 1;
 }
 

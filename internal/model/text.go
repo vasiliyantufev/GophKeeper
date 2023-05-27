@@ -13,14 +13,17 @@ type Text struct {
 }
 
 type CreateTextRequest struct {
-	UserID int64
-	Text   string
+	UserID     int64
+	Text       string
+	SessionKey string
 }
 
 type GetListTextRequest struct {
-	UserID int64
+	UserID     int64
+	SessionKey string
 }
 
 type GetNodeTextRequest struct {
-	Name string
+	TextId     int64
+	SessionKey string
 }

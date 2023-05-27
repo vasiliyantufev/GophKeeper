@@ -1,10 +1,12 @@
 package text
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/storage/errors"
 )
 
 type Text struct {
@@ -17,17 +19,34 @@ func New(db *database.DB) *Text {
 	}
 }
 
-func (t *Text) CreateText(text *model.CreateTextRequest) (*model.Text, error) {
-	textCreated := &model.Text{}
+func (t *Text) CreateText(textRequest *model.CreateTextRequest) (*model.Text, error) {
+	text := &model.Text{}
 	if err := t.db.Pool.QueryRow(
 		"INSERT INTO text (user_id, metadata_id, text, updated_at, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING text_id, text",
-		text.UserID,
+		textRequest.UserID,
 		1, //metadata_id - надо изменить
-		text.Text,
+		textRequest.Text,
 		time.Now(),
 		time.Now(),
-	).Scan(&textCreated.ID, &textCreated.Text); err != nil {
+	).Scan(&text.ID, &text.Text); err != nil {
 		return nil, err
 	}
-	return textCreated, nil
+	return text, nil
+}
+
+func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, error) {
+	text := &model.Text{}
+	err := t.db.Pool.QueryRow("SELECT text_id, text FROM text WHERE text_id=$1",
+		textRequest.TextId).Scan(
+		&text.ID,
+		&text.Text,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrRecordNotFound
+		} else {
+			return nil, err
+		}
+	}
+	return text, nil
 }

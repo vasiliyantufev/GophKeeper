@@ -50,6 +50,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	text := model.Text{ID: createdText.TextId, Text: createdText.Text}
+	log.Info(createdText)
+	getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{TextId: createdText.TextId})
+	if err != nil {
+		log.Fatal(err)
+	}
+	text := model.Text{ID: getNodeText.TextId, Text: getNodeText.Text}
 	log.Info(text)
 }

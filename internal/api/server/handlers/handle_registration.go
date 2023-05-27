@@ -11,7 +11,6 @@ import (
 
 // HandleRegistration - registration new user
 func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.RegistrationRequest) (*grpc.RegistrationResponse, error) {
-
 	if correctPassword := validator.VerifyPassword(req.Password); correctPassword != true {
 		err := errors.ErrBadPassword
 		h.logger.Error(err)
