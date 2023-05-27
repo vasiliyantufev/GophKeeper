@@ -32,7 +32,6 @@ func main() {
 
 	username := randomizer.RandStringRunes(10)
 	password := "passworD-123"
-
 	registeredUser, err := client.HandleRegistration(context.Background(), &grpcClient.RegistrationRequest{Username: username, Password: password})
 	if err != nil {
 		log.Fatal(err)
@@ -46,16 +45,13 @@ func main() {
 
 	randName := randomizer.RandStringRunes(10)
 	randText := randomizer.RandStringRunes(10)
-
 	createdText, err := client.HandleCreateText(context.Background(), &grpcClient.CreateTextRequest{UserId: user.ID, Name: randName, Text: randText})
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Info(createdText)
-	//getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{TextId: createdText.TextId})
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//text := model.Text{ID: getNodeText.TextId, Text: getNodeText.Text}
-	//log.Info(text)
+	getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{Name: createdText.Name})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(getNodeText)
 }
