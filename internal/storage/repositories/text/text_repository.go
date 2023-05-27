@@ -24,7 +24,7 @@ func (t *Text) CreateText(textRequest *model.CreateTextRequest) (*model.Text, er
 	if err := t.db.Pool.QueryRow(
 		"INSERT INTO text (user_id, metadata_id, text, updated_at, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING text_id, text",
 		textRequest.UserID,
-		1, //metadata_id - надо изменить
+		textRequest.MetadataID,
 		textRequest.Text,
 		time.Now(),
 		time.Now(),
@@ -34,11 +34,11 @@ func (t *Text) CreateText(textRequest *model.CreateTextRequest) (*model.Text, er
 	return text, nil
 }
 
-func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, error) {
-	text := &model.Text{}
-	err := t.db.Pool.QueryRow("SELECT text_id, text FROM text WHERE text_id=$1",
-		textRequest.TextId).Scan(
-		&text.ID,
+func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.GetNodeTextResponse, error) {
+	text := &model.GetNodeTextResponse{}
+	err := t.db.Pool.QueryRow("SELECT metadata.name, text.text FROM metadata inner join text.metadata_id = metadata.metadata_id WHERE metadata.name=$1",
+		textRequest.Name).Scan(
+		&text.Name,
 		&text.Text,
 	)
 	if err != nil {
@@ -49,4 +49,13 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 		}
 	}
 	return text, nil
+}
+
+func (t *Text) NameExists(name string) (bool, error) {
+	var exists bool
+	row := t.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM metadata inner join text.metadata_id = metadata.metadata_id where metadata.name = $1)", name)
+	if err := row.Scan(&exists); err != nil {
+		return exists, err
+	}
+	return exists, nil
 }

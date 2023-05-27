@@ -45,27 +45,34 @@ message RegistrationResponse {
 //------------------------------------
 message CreateTextRequest {
   int64  userId = 1;
-  string text = 2;
-  string sessionKey = 3;
+  string name = 2;
+  string description = 3;
+  string text = 4;
+  string sessionKey = 5;
 }
 message CreateTextResponse {
   int64  textId = 1;
   string text = 2;
+  string sessionKey = 3;
 }
 message GetNodeTextRequest {
-  int64  textId = 1;
+  string name = 1;
   string sessionKey = 2;
 }
 message GetNodeTextResponse {
-  int64  textId = 1;
-  string text = 2;
+  string name = 1;
+  string description = 2;
+  string text = 3;
+  string sessionKey = 4;
 }
+//------------------------------------
 message GetListTextRequest {
   int64  userId = 1;
   string sessionKey = 2;
 }
 message GetListTextResponse {
   string message = 1;
+  string sessionKey = 2;
 }
 
 message ErrorResponse {
