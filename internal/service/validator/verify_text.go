@@ -2,14 +2,14 @@ package validator
 
 /*
  * Text rules:
- * at least 7 letters
+ * at least 10 letters
  */
 
-func VerifyText(s string) bool {
+func VerifyText(s []byte) bool {
 	var (
 		hasMinLen = false
 	)
-	if len(s) >= 7 {
+	if len(string(s)) >= 10 {
 		hasMinLen = true
 	}
 	return hasMinLen

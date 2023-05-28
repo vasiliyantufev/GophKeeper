@@ -6,7 +6,7 @@ type Text struct {
 	ID         int64
 	UserID     int64
 	MetadataID int64
-	Text       string
+	Text       []byte
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	DeletedAt  time.Time
@@ -15,7 +15,7 @@ type Text struct {
 type CreateTextRequest struct {
 	UserID      int64
 	MetadataID  int64
-	Text        string
+	Text        []byte
 	Name        string
 	Description string
 	SessionKey  string
@@ -33,5 +33,5 @@ type GetNodeTextRequest struct {
 
 type GetNodeTextResponse struct {
 	Name string
-	Text string
+	Text []byte
 }

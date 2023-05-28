@@ -6,6 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/config/configagent"
 	"github.com/vasiliyantufev/gophkeeper/internal/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/service/encryption"
 	"github.com/vasiliyantufev/gophkeeper/internal/service/randomizer"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -31,7 +32,7 @@ func main() {
 	log.Info(resp.Message)
 
 	username := randomizer.RandStringRunes(10)
-	password := "passworD-123"
+	password := "Пароль-1"
 	registeredUser, err := client.HandleRegistration(context.Background(), &grpcClient.RegistrationRequest{Username: username, Password: password})
 	if err != nil {
 		log.Fatal(err)
@@ -44,15 +45,27 @@ func main() {
 	log.Info(user)
 
 	randName := randomizer.RandStringRunes(10)
-	randText := randomizer.RandStringRunes(10)
-	createdText, err := client.HandleCreateText(context.Background(), &grpcClient.CreateTextRequest{UserId: user.ID, Name: randName, Text: randText})
+	plaintext := "Hi my sweetly friends!!!"
+
+	secretKey := encryption.AesKeySecureRandom(password)
+
+	encryptText := encryption.Encrypt(plaintext, secretKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	createdText, err := client.HandleCreateText(context.Background(), &grpcClient.CreateTextRequest{UserId: user.ID, Name: randName, Text: []byte(encryptText)})
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Info(createdText.Text)
+
 	getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{Name: createdText.Name})
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Info(getNodeText.Text)
+	plaintext = encryption.Decrypt(string(getNodeText.Text), secretKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(plaintext)
 }
