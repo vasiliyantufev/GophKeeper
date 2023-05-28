@@ -31,20 +31,3 @@ func (m *Metadata) CreateMetadata(metadataRequest *model.CreateMetadataRequest) 
 	}
 	return metadata, nil
 }
-
-//func (m *Metadata) GetMetadata(metadataRequest *model.GetMetadataRequest) (*model.Metadata, error) {
-//	metadata := &model.Metadata{}
-//	err := m.db.Pool.QueryRow("SELECT name, description FROM metadata WHERE metadata_id=$1",
-//		metadataRequest.MetadataId).Scan(
-//		&metadata.Name,
-//		&metadata.Description,
-//	)
-//	if err != nil {
-//		if err == sql.ErrNoRows {
-//			return nil, errors.ErrRecordNotFound
-//		} else {
-//			return nil, err
-//		}
-//	}
-//	return metadata, nil
-//}

@@ -49,9 +49,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Info(createdText.Text)
 	getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{Name: createdText.Name})
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Info(getNodeText)
+	log.Info(getNodeText.Text)
 }
