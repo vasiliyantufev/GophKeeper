@@ -33,6 +33,12 @@ func main() {
 
 	username := randomizer.RandStringRunes(10)
 	password := "Пароль-1"
+
+	password, err = encryption.HashPassword(password)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	registeredUser, err := client.HandleRegistration(context.Background(), &grpcClient.RegistrationRequest{Username: username, Password: password})
 	if err != nil {
 		log.Fatal(err)
@@ -47,7 +53,7 @@ func main() {
 	randName := randomizer.RandStringRunes(10)
 	plaintext := "Hi my sweetly friends!!!"
 
-	secretKey := encryption.AesKeySecureRandom(password)
+	secretKey := encryption.AesKeySecureRandom([]byte(password))
 
 	encryptText := encryption.Encrypt(plaintext, secretKey)
 	if err != nil {

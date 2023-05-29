@@ -11,7 +11,7 @@ import (
 func (h *Handler) HandleGetNodeText(ctx context.Context, req *grpc.GetNodeTextRequest) (*grpc.GetNodeTextResponse, error) {
 	TextData := &model.GetNodeTextRequest{}
 	TextData.Name = req.Name
-	GetNodeText, err := h.text.GetNodeText(TextData)
+	GetNodeText, err := h.text.GetNodeText(TextData.Name)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.GetNodeTextResponse{}, err

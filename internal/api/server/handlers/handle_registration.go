@@ -21,7 +21,7 @@ func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.Registration
 	UserData.Username = req.Username
 	UserData.Password = req.Password
 
-	exists, err := h.user.UserExists(UserData)
+	exists, err := h.user.UserExists(UserData.Username)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.RegistrationResponse{}, err

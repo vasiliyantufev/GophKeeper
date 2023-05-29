@@ -56,9 +56,27 @@ func (u *User) Authentication(userRequest *model.UserRequest) (*model.User, erro
 	return authenticatedUser, nil
 }
 
-func (u *User) UserExists(user *model.UserRequest) (bool, error) {
+//func (u *User) FindByUsername(username string) (*model.User, error) {
+//	authenticatedUser := &model.User{}
+//	err := u.db.Pool.QueryRow("SELECT user_id, username, password FROM users WHERE username=$1",
+//		username).Scan(
+//		&authenticatedUser.ID,
+//		&authenticatedUser.Username,
+//		&authenticatedUser.Password,
+//	)
+//	if err != nil {
+//		if err == sql.ErrNoRows {
+//			return nil, errors.ErrWrongUsernameOrPassword
+//		} else {
+//			return nil, err
+//		}
+//	}
+//	return authenticatedUser, nil
+//}
+
+func (u *User) UserExists(username string) (bool, error) {
 	var exists bool
-	row := u.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM users where username = $1)", user.Username)
+	row := u.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM users where username = $1)", username)
 	if err := row.Scan(&exists); err != nil {
 		return exists, err
 	}

@@ -27,9 +27,8 @@ message AuthenticationRequest {
 message AuthenticationResponse {
     int64 userId = 1;
     string username = 2;
-    string password = 3;
-    google.protobuf.Timestamp createdAt = 4;
-    google.protobuf.Timestamp deletedAt = 5;
+    google.protobuf.Timestamp createdAt = 3;
+    google.protobuf.Timestamp deletedAt = 4;
 }
 message RegistrationRequest {
   string username = 1;
@@ -38,9 +37,8 @@ message RegistrationRequest {
 message RegistrationResponse {
     int64  userId = 1;
     string username = 2;
-    string password = 3;
-    google.protobuf.Timestamp createdAt = 4;
-    google.protobuf.Timestamp deletedAt = 5;
+    google.protobuf.Timestamp createdAt = 3;
+    google.protobuf.Timestamp deletedAt = 4;
 }
 //------------------------------------
 message CreateTextRequest {

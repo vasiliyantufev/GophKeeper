@@ -8,7 +8,7 @@ func SHA1(data []byte) []byte {
 	return h.Sum(nil)
 }
 
-func AesKeySecureRandom(keyword string) (key []byte) {
+func AesKeySecureRandom(keyword []byte) (key []byte) {
 	data := []byte(keyword)
 
 	hashs := SHA1(SHA1(data))
