@@ -14,7 +14,6 @@ service Gophkeeper {
   rpc HandleGetNodeText(GetNodeTextRequest) returns (GetNodeTextResponse) {}
   rpc HandlePing(PingRequest) returns (PingResponse) {}
 }
-
 //------------------------------------
 message PingRequest {}
 message PingResponse {
@@ -22,10 +21,10 @@ message PingResponse {
 }
 //------------------------------------
 message User {
-  string name = 1;
-  string description = 2;
-  bytes  text = 3;
-  string sessionKey = 4;
+  int64 userId = 1;
+  string username = 2;
+  google.protobuf.Timestamp createdAt = 3;
+  google.protobuf.Timestamp deletedAt = 4;
 }
 message AuthenticationRequest {
   string username = 1;
