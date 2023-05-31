@@ -15,66 +15,61 @@ service Gophkeeper {
   rpc HandlePing(PingRequest) returns (PingResponse) {}
 }
 
+//------------------------------------
 message PingRequest {}
 message PingResponse {
   string message = 1;
 }
 //------------------------------------
+message User {
+  string name = 1;
+  string description = 2;
+  bytes  text = 3;
+  string sessionKey = 4;
+}
 message AuthenticationRequest {
   string username = 1;
   string password = 2;
 }
 message AuthenticationResponse {
-    int64 userId = 1;
-    string username = 2;
-    google.protobuf.Timestamp createdAt = 3;
-    google.protobuf.Timestamp deletedAt = 4;
+  User user = 1;
 }
 message RegistrationRequest {
   string username = 1;
   string password = 2;
 }
 message RegistrationResponse {
-    int64  userId = 1;
-    string username = 2;
-    google.protobuf.Timestamp createdAt = 3;
-    google.protobuf.Timestamp deletedAt = 4;
+  User user = 1;
 }
 //------------------------------------
+message Text {
+  string name = 1;
+  string description = 2;
+  bytes  text = 3;
+  string sessionKey = 4;
+}
 message CreateTextRequest {
   int64  userId = 1;
   string name = 2;
   string description = 3;
-  bytes text = 4;
+  bytes  text = 4;
   string sessionKey = 5;
 }
 message CreateTextResponse {
-  string name = 1;
-  bytes text = 2;
-  string sessionKey = 3;
+  Text text = 1;
 }
 message GetNodeTextRequest {
   string name = 1;
   string sessionKey = 2;
 }
 message GetNodeTextResponse {
-  string name = 1;
-  string description = 2;
-  bytes text = 3;
-  string sessionKey = 4;
+  Text text = 1;
 }
-//------------------------------------
 message GetListTextRequest {
   int64  userId = 1;
   string sessionKey = 2;
 }
 message GetListTextResponse {
-  string message = 1;
-  string sessionKey = 2;
+  repeated Text text = 1;
 }
-
-message ErrorResponse {
-  string errorMessage = 1;
-}
-
-
+//------------------------------------

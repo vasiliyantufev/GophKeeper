@@ -13,7 +13,7 @@ import (
 type Constructor interface {
 	Registration(user *model.UserRequest) (*model.User, error)
 	Authentication(userRequest *model.UserRequest) (*model.User, error)
-	UserExists(user *model.UserRequest) (bool, error)
+	UserExists(username string) (bool, error)
 }
 
 type User struct {
@@ -55,24 +55,6 @@ func (u *User) Authentication(userRequest *model.UserRequest) (*model.User, erro
 	}
 	return authenticatedUser, nil
 }
-
-//func (u *User) FindByUsername(username string) (*model.User, error) {
-//	authenticatedUser := &model.User{}
-//	err := u.db.Pool.QueryRow("SELECT user_id, username, password FROM users WHERE username=$1",
-//		username).Scan(
-//		&authenticatedUser.ID,
-//		&authenticatedUser.Username,
-//		&authenticatedUser.Password,
-//	)
-//	if err != nil {
-//		if err == sql.ErrNoRows {
-//			return nil, errors.ErrWrongUsernameOrPassword
-//		} else {
-//			return nil, err
-//		}
-//	}
-//	return authenticatedUser, nil
-//}
 
 func (u *User) UserExists(username string) (bool, error) {
 	var exists bool

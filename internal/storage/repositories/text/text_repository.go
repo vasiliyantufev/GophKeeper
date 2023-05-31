@@ -55,6 +55,23 @@ func (t *Text) GetNodeText(name string) (*model.GetNodeTextResponse, error) {
 	return text, nil
 }
 
+func (t *Text) GetListText(userId int64) (*model.GetNodeTextResponse, error) {
+	text := &model.GetNodeTextResponse{}
+	err := t.db.Pool.QueryRow("SELECT metadata.name, text.text FROM metadata "+
+		"inner join text on metadata.metadata_id = text.metadata_id "+
+		"inner join users on text.user_id  = users.user_id "+
+		"where users.user_id = $1", userId).
+		Scan(&text.Name, &text.Text)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrRecordNotFound
+		} else {
+			return nil, err
+		}
+	}
+	return text, nil
+}
+
 func (t *Text) NameExists(name string) (bool, error) {
 	var exists bool
 	row := t.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM metadata "+

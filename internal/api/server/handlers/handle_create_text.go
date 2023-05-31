@@ -11,7 +11,6 @@ import (
 
 // HandleCreateText - create text
 func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequest) (*grpc.CreateTextResponse, error) {
-
 	TextData := &model.CreateTextRequest{}
 	TextData.UserID = req.UserId
 	TextData.Name = req.Name
