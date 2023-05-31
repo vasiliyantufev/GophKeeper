@@ -46,7 +46,6 @@ message Text {
   string name = 1;
   string description = 2;
   bytes  text = 3;
-  string sessionKey = 4;
 }
 message CreateTextRequest {
   int64  userId = 1;
