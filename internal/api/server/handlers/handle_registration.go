@@ -11,6 +11,7 @@ import (
 
 // HandleRegistration - registration new user
 func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.RegistrationRequest) (*grpc.RegistrationResponse, error) {
+	h.logger.Info("Registration")
 	if correctPassword := validator.VerifyPassword(req.Password); correctPassword != true {
 		err := errors.ErrBadPassword
 		h.logger.Error(err)
@@ -36,6 +37,9 @@ func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.Registration
 		h.logger.Error(err)
 		return &grpc.RegistrationResponse{}, err
 	}
+
+	user := model.GetUserData(registeredUser)
+
 	h.logger.Debug(registeredUser)
-	return &grpc.RegistrationResponse{UserId: registeredUser.ID, Username: registeredUser.Username}, nil
+	return &grpc.RegistrationResponse{User: user, AccessToken: "token"}, nil
 }

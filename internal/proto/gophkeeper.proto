@@ -24,7 +24,8 @@ message User {
   int64 userId = 1;
   string username = 2;
   google.protobuf.Timestamp createdAt = 3;
-  google.protobuf.Timestamp deletedAt = 4;
+  google.protobuf.Timestamp updatedAt = 4;
+  google.protobuf.Timestamp deletedAt = 5;
 }
 message AuthenticationRequest {
   string username = 1;
@@ -32,6 +33,7 @@ message AuthenticationRequest {
 }
 message AuthenticationResponse {
   User user = 1;
+  string accessToken = 2;
 }
 message RegistrationRequest {
   string username = 1;
@@ -39,35 +41,51 @@ message RegistrationRequest {
 }
 message RegistrationResponse {
   User user = 1;
+  string accessToken = 2;
 }
 //------------------------------------
 message Text {
-  string name = 1;
-  string description = 2;
-  bytes  text = 3;
+  int64  userId = 1;
+  string text = 2;
+  google.protobuf.Timestamp createdAt = 3;
+  google.protobuf.Timestamp updatedAt = 4;
+  google.protobuf.Timestamp deletedAt = 5;
 }
 message CreateTextRequest {
   int64  userId = 1;
-  string name = 2;
-  string description = 3;
-  bytes  text = 4;
-  string sessionKey = 5;
+  string key = 2;
+  string value = 3;
+  string type = 4;
+  bytes  text = 5;
+  string accessToken = 6;
 }
 message CreateTextResponse {
   Text text = 1;
 }
 message GetNodeTextRequest {
-  string name = 1;
-  string sessionKey = 2;
+  int64  userId = 1;
+  string key = 2;
+  string value = 3;
+  string accessToken = 4;
 }
 message GetNodeTextResponse {
   Text text = 1;
 }
 message GetListTextRequest {
   int64  userId = 1;
-  string sessionKey = 2;
+  string accessToken = 2;
 }
 message GetListTextResponse {
   repeated Text text = 1;
+}
+//------------------------------------
+message Metadata {
+  int64  entityId = 1;
+  string key = 2;
+  string value = 3;
+  string type = 4;
+  google.protobuf.Timestamp createdAt = 5;
+  google.protobuf.Timestamp updatedAt = 6;
+  google.protobuf.Timestamp deletedAt = 7;
 }
 //------------------------------------

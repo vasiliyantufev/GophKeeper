@@ -1,37 +1,58 @@
 package model
 
-import "time"
+import (
+	"github.com/golang/protobuf/ptypes/timestamp"
+	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
+)
 
 type Text struct {
-	ID         int64
-	UserID     int64
-	MetadataID int64
-	Text       []byte
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	DeletedAt  time.Time
+	ID        int64
+	UserID    int64
+	Text      string
+	CreatedAt timestamp.Timestamp
+	UpdatedAt timestamp.Timestamp
+	DeletedAt timestamp.Timestamp
 }
 
 type CreateTextRequest struct {
 	UserID      int64
-	MetadataID  int64
+	Key         string
+	Value       string
+	Type        string
 	Text        []byte
-	Name        string
-	Description string
-	SessionKey  string
+	AccessToken string
 }
 
-type GetListTextRequest struct {
-	UserID     int64
-	SessionKey string
+type CreateTextResponse struct {
+	Text Text
 }
 
 type GetNodeTextRequest struct {
-	Name       string
-	SessionKey string
+	UserID      int64
+	Key         string
+	Value       string
+	AccessToken string
 }
 
 type GetNodeTextResponse struct {
-	Name string
-	Text []byte
+	Text Text
+}
+
+type GetListTextRequest struct {
+	UserID      int64
+	AccessToken string
+}
+
+type GetListTextResponse struct {
+	Text Text
+}
+
+func GetTextData(data *Text) *grpc.Text {
+	return &grpc.Text{
+		UserId:    data.UserID,
+		Text:      data.Text,
+		CreatedAt: &data.CreatedAt,
+		UpdatedAt: &data.UpdatedAt,
+		DeletedAt: &data.DeletedAt,
+	}
 }

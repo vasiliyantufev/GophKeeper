@@ -5,55 +5,54 @@ import (
 
 	"github.com/vasiliyantufev/gophkeeper/internal/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
-	"github.com/vasiliyantufev/gophkeeper/internal/service/validator"
 	"github.com/vasiliyantufev/gophkeeper/internal/storage/errors"
 )
 
 // HandleCreateText - create text
 func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequest) (*grpc.CreateTextResponse, error) {
+	h.logger.Info("Create text")
+
 	TextData := &model.CreateTextRequest{}
 	TextData.UserID = req.UserId
-	TextData.Name = req.Name
-	TextData.Description = req.Description
+	TextData.Key = req.Key
+	TextData.Value = req.Value
 	TextData.Text = req.Text
 
-	if TextData.Name == "" {
-		err := errors.ErrBadName
+	if TextData.Key == "" || TextData.Value == "" {
+		err := errors.ErrNoMetadataSet
 		h.logger.Error(err)
 		return &grpc.CreateTextResponse{}, err
 	}
-	exists, err := h.text.NameExists(TextData.Name)
+	exists, err := h.text.KeyExists(TextData)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.CreateTextResponse{}, err
 	}
 	if exists == true {
-		err = errors.ErrNameAlreadyExists
-		h.logger.Error(err)
-		return &grpc.CreateTextResponse{}, err
-	}
-	if correctText := validator.VerifyText(TextData.Text); correctText != true {
-		err := errors.ErrBadText
+		err = errors.ErrKeyAlreadyExists
 		h.logger.Error(err)
 		return &grpc.CreateTextResponse{}, err
 	}
 
+	CreatedText, err := h.text.CreateText(TextData)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.CreateTextResponse{}, err
+	}
+	text := model.GetTextData(CreatedText)
+
 	Metadata := &model.CreateMetadataRequest{}
-	Metadata.Name = TextData.Name
-	Metadata.Description = TextData.Description
+	Metadata.EntityId = CreatedText.ID
+	Metadata.Key = TextData.Key
+	Metadata.Value = TextData.Value
+	Metadata.Type = TextData.Type
 	CreatedMetadata, err := h.metadata.CreateMetadata(Metadata)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.CreateTextResponse{}, err
 	}
 
-	TextData.MetadataID = CreatedMetadata.ID
-	CreatedText, err := h.text.CreateText(TextData)
-	if err != nil {
-		h.logger.Error(err)
-		return &grpc.CreateTextResponse{}, err
-	}
 	h.logger.Debug(CreatedText)
-
-	return &grpc.CreateTextResponse{Name: CreatedMetadata.Name, Text: CreatedText.Text}, nil
+	h.logger.Debug(CreatedMetadata)
+	return &grpc.CreateTextResponse{Text: text}, nil
 }

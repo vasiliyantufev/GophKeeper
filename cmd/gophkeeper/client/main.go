@@ -43,35 +43,35 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	authenticatedUser, err := client.HandleAuthentication(context.Background(), &grpcClient.AuthenticationRequest{Username: registeredUser.Username, Password: password})
+	authenticatedUser, err := client.HandleAuthentication(context.Background(), &grpcClient.AuthenticationRequest{Username: registeredUser.User.Username, Password: password})
 	if err != nil {
 		log.Fatal(err)
 	}
-	user := model.User{ID: authenticatedUser.UserId, Username: authenticatedUser.Username}
+	user := model.User{ID: authenticatedUser.User.UserId, Username: authenticatedUser.User.Username}
 	log.Info(user)
 
-	randName := randomizer.RandStringRunes(10)
-	plaintext := "Hi my sweetly friends!!!"
+	//randName := randomizer.RandStringRunes(10)
+	//plaintext := "Hi my sweetly friends!!!"
+	//
+	//secretKey := encryption.AesKeySecureRandom([]byte(password))
+	//
+	//encryptText := encryption.Encrypt(plaintext, secretKey)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//createdText, err := client.HandleCreateText(context.Background(), &grpcClient.CreateTextRequest{UserId: user.ID, Key: "Name", Value: randName, Text: []byte(encryptText)})
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//log.Info(createdText.Text)
 
-	secretKey := encryption.AesKeySecureRandom([]byte(password))
-
-	encryptText := encryption.Encrypt(plaintext, secretKey)
-	if err != nil {
-		log.Fatal(err)
-	}
-	createdText, err := client.HandleCreateText(context.Background(), &grpcClient.CreateTextRequest{UserId: user.ID, Name: randName, Text: []byte(encryptText)})
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Info(createdText.Text)
-
-	getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{Name: createdText.Name})
-	if err != nil {
-		log.Fatal(err)
-	}
-	plaintext = encryption.Decrypt(string(getNodeText.Text), secretKey)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Info(plaintext)
+	//getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{UserId: user.ID, Key: "Name", Value: randName})
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//plaintext = encryption.Decrypt(string(getNodeText.Text.Text), secretKey)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//log.Info(plaintext)
 }

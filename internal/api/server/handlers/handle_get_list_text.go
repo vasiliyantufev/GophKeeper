@@ -8,7 +8,7 @@ import (
 
 // HandleGetListText - get list text
 func (h *Handler) HandleGetListText(ctx context.Context, req *grpc.GetListTextRequest) (*grpc.GetListTextResponse, error) {
-	var msg string
+	h.logger.Info("Get list  text")
 
 	ListText, err := h.text.GetListText(req.UserId)
 	if err != nil {
@@ -16,5 +16,5 @@ func (h *Handler) HandleGetListText(ctx context.Context, req *grpc.GetListTextRe
 	}
 	h.logger.Info(ListText)
 
-	return &grpc.GetListTextResponse{Message: msg}, nil
+	return &grpc.GetListTextResponse{}, nil
 }

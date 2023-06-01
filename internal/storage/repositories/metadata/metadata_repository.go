@@ -20,13 +20,14 @@ func New(db *database.DB) *Metadata {
 func (m *Metadata) CreateMetadata(metadataRequest *model.CreateMetadataRequest) (*model.Metadata, error) {
 	metadata := &model.Metadata{}
 	if err := m.db.Pool.QueryRow(
-		"INSERT INTO metadata (name, description, created_at, updated_at) "+
-			"VALUES ($1, $2, $3, $4) RETURNING metadata_id, name, description",
-		metadataRequest.Name,
-		metadataRequest.Description,
+		"INSERT INTO metadata (entity_id, key, value, type, created_at) "+
+			"VALUES ($1, $2, $3, $4, $5) RETURNING metadata_id, key, value",
+		metadata.EntityId,
+		metadataRequest.Key,
+		metadataRequest.Value,
+		metadataRequest.Type,
 		time.Now(),
-		time.Now(),
-	).Scan(&metadata.ID, &metadata.Name, &metadata.Description); err != nil {
+	).Scan(&metadata.ID, &metadata.Key, &metadata.Value); err != nil {
 		return nil, err
 	}
 	return metadata, nil
