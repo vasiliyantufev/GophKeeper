@@ -2,6 +2,7 @@ package text
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/model"
@@ -25,7 +26,7 @@ func (t *Text) CreateText(textRequest *model.CreateTextRequest) (*model.Text, er
 			"RETURNING text_id, text",
 		textRequest.UserID,
 		textRequest.Text,
-		//time.Now(),
+		time.Now(),
 	).Scan(&text.ID, &text.Text); err != nil {
 		return nil, err
 	}
@@ -34,7 +35,7 @@ func (t *Text) CreateText(textRequest *model.CreateTextRequest) (*model.Text, er
 
 func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, error) {
 	text := &model.Text{}
-	err := t.db.Pool.QueryRow("SELECT text.text FROM text "+
+	err := t.db.Pool.QueryRow("SELECT text.text FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
 		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3",

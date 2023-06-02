@@ -8,7 +8,7 @@ import (
 type Text struct {
 	ID        int64
 	UserID    int64
-	Text      string
+	Text      []byte
 	CreatedAt timestamp.Timestamp
 	UpdatedAt timestamp.Timestamp
 	DeletedAt timestamp.Timestamp

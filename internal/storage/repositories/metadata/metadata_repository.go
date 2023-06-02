@@ -22,7 +22,7 @@ func (m *Metadata) CreateMetadata(metadataRequest *model.CreateMetadataRequest) 
 	if err := m.db.Pool.QueryRow(
 		"INSERT INTO metadata (entity_id, key, value, type, created_at) "+
 			"VALUES ($1, $2, $3, $4, $5) RETURNING metadata_id, key, value",
-		metadata.EntityId,
+		metadataRequest.EntityId,
 		metadataRequest.Key,
 		metadataRequest.Value,
 		metadataRequest.Type,
