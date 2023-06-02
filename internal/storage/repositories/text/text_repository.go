@@ -52,13 +52,14 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 	return text, nil
 }
 
-func (t *Text) GetListText(userId int64) (*model.GetNodeTextResponse, error) {
-	text := &model.GetNodeTextResponse{}
-	err := t.db.Pool.QueryRow("SELECT metadata.name, text.text FROM metadata "+
+func (t *Text) GetListText(userId int64) ([]model.Text, error) {
+	ListText := []model.Text{}
+
+	rows, err := t.db.Pool.Query("SELECT text.text FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
-		"where users.user_id = $1", userId).
-		Scan(&text.Text)
+		"where users.user_id = $1", userId)
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrRecordNotFound
@@ -66,7 +67,17 @@ func (t *Text) GetListText(userId int64) (*model.GetNodeTextResponse, error) {
 			return nil, err
 		}
 	}
-	return text, nil
+	defer rows.Close()
+	for rows.Next() {
+		text := model.Text{}
+		err = rows.Scan(&text.Text)
+
+		if err != nil {
+			return nil, err
+		}
+		ListText = append(ListText, text)
+	}
+	return ListText, nil
 }
 
 func (t *Text) KeyExists(textRequest *model.CreateTextRequest) (bool, error) {

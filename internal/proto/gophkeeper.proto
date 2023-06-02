@@ -76,7 +76,7 @@ message GetListTextRequest {
   string accessToken = 2;
 }
 message GetListTextResponse {
-  repeated Text text = 1;
+  repeated Text node = 1;
 }
 //------------------------------------
 message Metadata {

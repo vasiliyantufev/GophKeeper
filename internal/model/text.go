@@ -35,7 +35,9 @@ type GetNodeTextRequest struct {
 }
 
 type GetNodeTextResponse struct {
-	Text Text
+	Key   string
+	Value string
+	Text  Text
 }
 
 type GetListTextRequest struct {
@@ -44,7 +46,7 @@ type GetListTextRequest struct {
 }
 
 type GetListTextResponse struct {
-	Text Text
+	Text []Text
 }
 
 func GetTextData(data *Text) *grpc.Text {
@@ -55,4 +57,12 @@ func GetTextData(data *Text) *grpc.Text {
 		UpdatedAt: &data.UpdatedAt,
 		DeletedAt: &data.DeletedAt,
 	}
+}
+
+func GetListData(data []Text) []*grpc.Text {
+	items := make([]*grpc.Text, len(data))
+	for i := range data {
+		items[i] = &grpc.Text{Text: data[i].Text}
+	}
+	return items
 }

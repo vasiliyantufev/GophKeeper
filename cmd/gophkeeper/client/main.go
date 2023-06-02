@@ -75,4 +75,17 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(plaintext)
+
+	createdText2, err := client.HandleCreateText(context.Background(),
+		&grpcClient.CreateTextRequest{UserId: user.ID, Key: "Name2", Value: randName, Text: []byte(encryptText)})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(createdText2.Text)
+
+	getListText, err := client.HandleGetListText(context.Background(), &grpcClient.GetListTextRequest{UserId: user.ID})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(getListText)
 }
