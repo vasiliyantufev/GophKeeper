@@ -48,6 +48,14 @@ func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.Registration
 	}
 	user := model.GetUserData(registeredUser)
 
+	token, err := h.token.Create(user.UserId)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.RegistrationResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
 	h.logger.Debug(registeredUser)
-	return &grpc.RegistrationResponse{User: user, AccessToken: "token"}, nil
+	return &grpc.RegistrationResponse{User: user, AccessToken: token}, nil
 }

@@ -25,15 +25,15 @@ func New(db *database.DB) *Token {
 	}
 }
 
-func (t Token) Create(userID int) (string, error) {
+func (t Token) Create(userID int64) (string, error) {
 	token := encryption.GenerateAccessToken(lengthToken)
 	currentTime := time.Now()
 
 	var accessToken string
 	return token, t.db.Pool.QueryRow(
-		"INSERT INTO token (access_token, user_id, created_at, end_date_at) VALUES ($1, $2, $3, $4) RETURNING access_token",
-		userID,
+		"INSERT INTO access_token (access_token, user_id, created_at, end_date_at) VALUES ($1, $2, $3, $4) RETURNING access_token",
 		token,
+		userID,
 		currentTime,
 		currentTime.Add(time.Hour+lifetimeToken),
 	).Scan(&accessToken)

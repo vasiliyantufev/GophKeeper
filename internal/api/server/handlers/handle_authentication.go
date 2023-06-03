@@ -26,6 +26,14 @@ func (h *Handler) HandleAuthentication(ctx context.Context, req *grpc.Authentica
 	}
 	user := model.GetUserData(authenticatedUser)
 
+	token, err := h.token.Create(user.UserId)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.AuthenticationResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
 	h.logger.Debug(authenticatedUser)
-	return &grpc.AuthenticationResponse{User: user, AccessToken: "token"}, nil
+	return &grpc.AuthenticationResponse{User: user, AccessToken: token}, nil
 }
