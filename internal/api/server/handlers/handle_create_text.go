@@ -6,6 +6,8 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/storage/errors"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // HandleCreateText - create text
@@ -21,23 +23,31 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 	if TextData.Key == "" || TextData.Value == "" {
 		err := errors.ErrNoMetadataSet
 		h.logger.Error(err)
-		return &grpc.CreateTextResponse{}, err
+		return &grpc.CreateTextResponse{}, status.Errorf(
+			codes.InvalidArgument, err.Error(),
+		)
 	}
 	exists, err := h.text.KeyExists(TextData)
 	if err != nil {
 		h.logger.Error(err)
-		return &grpc.CreateTextResponse{}, err
+		return &grpc.CreateTextResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
 	}
 	if exists == true {
 		err = errors.ErrKeyAlreadyExists
 		h.logger.Error(err)
-		return &grpc.CreateTextResponse{}, err
+		return &grpc.CreateTextResponse{}, status.Errorf(
+			codes.AlreadyExists, err.Error(),
+		)
 	}
 
 	CreatedText, err := h.text.CreateText(TextData)
 	if err != nil {
 		h.logger.Error(err)
-		return &grpc.CreateTextResponse{}, err
+		return &grpc.CreateTextResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
 	}
 	text := model.GetTextData(CreatedText)
 
@@ -49,7 +59,9 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 	CreatedMetadata, err := h.metadata.CreateMetadata(Metadata)
 	if err != nil {
 		h.logger.Error(err)
-		return &grpc.CreateTextResponse{}, err
+		return &grpc.CreateTextResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
 	}
 
 	h.logger.Debug(CreatedText)

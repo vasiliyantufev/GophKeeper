@@ -5,6 +5,8 @@ import (
 
 	"github.com/vasiliyantufev/gophkeeper/internal/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // HandleGetNodeText - get node text
@@ -18,7 +20,9 @@ func (h *Handler) HandleGetNodeText(ctx context.Context, req *grpc.GetNodeTextRe
 	GetNodeText, err := h.text.GetNodeText(TextData)
 	if err != nil {
 		h.logger.Error(err)
-		return &grpc.GetNodeTextResponse{}, err
+		return &grpc.GetNodeTextResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
 	}
 	text := model.GetTextData(GetNodeText)
 
