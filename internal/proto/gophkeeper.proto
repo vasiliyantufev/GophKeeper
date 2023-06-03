@@ -52,28 +52,25 @@ message Text {
   google.protobuf.Timestamp deletedAt = 5;
 }
 message CreateTextRequest {
-  int64  userId = 1;
-  string key = 2;
-  string value = 3;
-  string type = 4;
-  bytes  text = 5;
-  string accessToken = 6;
+  string key = 1;
+  string value = 2;
+  string type = 3;
+  bytes  text = 4;
+  string accessToken = 5;
 }
 message CreateTextResponse {
   Text text = 1;
 }
 message GetNodeTextRequest {
-  int64  userId = 1;
-  string key = 2;
-  string value = 3;
-  string accessToken = 4;
+  string key = 1;
+  string value = 2;
+  string accessToken = 3;
 }
 message GetNodeTextResponse {
   Text text = 1;
 }
 message GetListTextRequest {
-  int64  userId = 1;
-  string accessToken = 2;
+  string accessToken = 1;
 }
 message GetListTextResponse {
   repeated Text node = 1;

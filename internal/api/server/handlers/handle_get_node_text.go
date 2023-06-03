@@ -13,8 +13,22 @@ import (
 func (h *Handler) HandleGetNodeText(ctx context.Context, req *grpc.GetNodeTextRequest) (*grpc.GetNodeTextResponse, error) {
 	h.logger.Info("Get node text")
 
+	valid, accessToken, err := h.token.Validate(req.AccessToken)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.GetNodeTextResponse{}, status.Errorf(
+			codes.Unauthenticated, err.Error(),
+		)
+	}
+	if !valid {
+		h.logger.Error("Not validate token")
+		return &grpc.GetNodeTextResponse{}, status.Errorf(
+			codes.Unauthenticated, err.Error(),
+		)
+	}
+
 	TextData := &model.GetNodeTextRequest{}
-	TextData.UserID = req.UserId
+	TextData.UserID = accessToken.UserID
 	TextData.Key = req.Key
 	TextData.Value = req.Value
 	GetNodeText, err := h.text.GetNodeText(TextData)

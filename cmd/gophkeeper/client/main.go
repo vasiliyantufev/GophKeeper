@@ -60,13 +60,13 @@ func main() {
 		log.Fatal(err)
 	}
 	createdText, err := client.HandleCreateText(context.Background(),
-		&grpcClient.CreateTextRequest{UserId: user.ID, Key: "Name", Value: randName, Text: []byte(encryptText)})
+		&grpcClient.CreateTextRequest{Key: "Name", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Info(createdText.Text)
 
-	getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{UserId: user.ID, Key: "Name", Value: randName})
+	getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{Key: "Name", Value: randName, AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,13 +77,13 @@ func main() {
 	log.Info(plaintext)
 
 	createdText2, err := client.HandleCreateText(context.Background(),
-		&grpcClient.CreateTextRequest{UserId: user.ID, Key: "Name2", Value: randName, Text: []byte(encryptText)})
+		&grpcClient.CreateTextRequest{Key: "Name2", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Info(createdText2.Text)
 
-	getListText, err := client.HandleGetListText(context.Background(), &grpcClient.GetListTextRequest{UserId: user.ID})
+	getListText, err := client.HandleGetListText(context.Background(), &grpcClient.GetListTextRequest{AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}

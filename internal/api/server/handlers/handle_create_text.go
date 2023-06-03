@@ -14,8 +14,22 @@ import (
 func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequest) (*grpc.CreateTextResponse, error) {
 	h.logger.Info("Create text")
 
+	valid, accessToken, err := h.token.Validate(req.AccessToken)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.CreateTextResponse{}, status.Errorf(
+			codes.Unauthenticated, err.Error(),
+		)
+	}
+	if !valid {
+		h.logger.Error("Not validate token")
+		return &grpc.CreateTextResponse{}, status.Errorf(
+			codes.Unauthenticated, err.Error(),
+		)
+	}
+
 	TextData := &model.CreateTextRequest{}
-	TextData.UserID = req.UserId
+	TextData.UserID = accessToken.UserID
 	TextData.Key = req.Key
 	TextData.Value = req.Value
 	TextData.Text = req.Text

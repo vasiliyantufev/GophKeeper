@@ -52,9 +52,9 @@ func (t *Token) Validate(token string) (bool, *model.Token, error) {
 	}
 
 	//timestamp.Timestamp to Time
-	timeValue := time.Unix(tokenUser.EndDateAt.GetSeconds(), int64(tokenUser.EndDateAt.GetNanos())).UTC()
+	//timeValue := time.Unix(tokenUser.EndDateAt.GetSeconds(), int64(tokenUser.EndDateAt.GetNanos())).UTC()
 
-	if currentTime.After(timeValue) {
+	if currentTime.After(tokenUser.EndDateAt) {
 		return false, tokenUser, nil
 	}
 
