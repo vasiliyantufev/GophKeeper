@@ -11,3 +11,4 @@ create table metadata
 );
 
 CREATE INDEX idx_entity_id_key ON metadata (entity_id, key);
+CREATE INDEX idx_updated_at ON metadata (updated_at);
