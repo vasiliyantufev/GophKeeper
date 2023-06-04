@@ -8,6 +8,6 @@ create table metadata
     created_at  timestamp    NOT NULL,
     updated_at  timestamp    NULL,
     deleted_at  timestamp NULL
-)
+);
 
--- индексы проставить
+CREATE INDEX idx_entity_id_key ON metadata (entity_id, key);

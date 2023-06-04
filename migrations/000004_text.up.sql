@@ -6,4 +6,4 @@ create table text
     created_at timestamp NOT NULL,
     updated_at timestamp NULL,
     deleted_at timestamp NULL
-)
+);

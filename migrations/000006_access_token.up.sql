@@ -7,4 +7,3 @@ create table access_token
 );
 
 CREATE UNIQUE INDEX idx_unique_access_token ON access_token (access_token);
--- сделать проверку сессионного ключа, они должны быть уникальными
