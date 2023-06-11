@@ -4,14 +4,13 @@ import (
 	"context"
 
 	"github.com/sirupsen/logrus"
-	"github.com/vasiliyantufev/gophkeeper/internal/config/configagent"
-	"github.com/vasiliyantufev/gophkeeper/internal/model"
-	"github.com/vasiliyantufev/gophkeeper/internal/service/encryption"
-	"github.com/vasiliyantufev/gophkeeper/internal/service/randomizer"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/config/configagent"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	encryption2 "github.com/vasiliyantufev/gophkeeper/internal/server/service/encryption"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/service/randomizer"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-
-	grpcClient "github.com/vasiliyantufev/gophkeeper/internal/proto"
 )
 
 func main() {
@@ -24,8 +23,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	client := grpcClient.NewGophkeeperClient(conn)
-	resp, err := client.HandlePing(context.Background(), &grpcClient.PingRequest{})
+	client := gophkeeper.NewGophkeeperClient(conn)
+	resp, err := client.HandlePing(context.Background(), &gophkeeper.PingRequest{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,16 +33,16 @@ func main() {
 	username := randomizer.RandStringRunes(10)
 	password := "Пароль-1"
 
-	password, err = encryption.HashPassword(password)
+	password, err = encryption2.HashPassword(password)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	registeredUser, err := client.HandleRegistration(context.Background(), &grpcClient.RegistrationRequest{Username: username, Password: password})
+	registeredUser, err := client.HandleRegistration(context.Background(), &gophkeeper.RegistrationRequest{Username: username, Password: password})
 	if err != nil {
 		log.Fatal(err)
 	}
-	authenticatedUser, err := client.HandleAuthentication(context.Background(), &grpcClient.AuthenticationRequest{Username: registeredUser.User.Username, Password: password})
+	authenticatedUser, err := client.HandleAuthentication(context.Background(), &gophkeeper.AuthenticationRequest{Username: registeredUser.User.Username, Password: password})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,37 +52,37 @@ func main() {
 	randName := randomizer.RandStringRunes(10)
 	plaintext := "Hi my sweetly friends!!!!!!!TeST ВСЕМПРИВЕТ!"
 
-	secretKey := encryption.AesKeySecureRandom([]byte(password))
+	secretKey := encryption2.AesKeySecureRandom([]byte(password))
 
-	encryptText := encryption.Encrypt(plaintext, secretKey)
+	encryptText := encryption2.Encrypt(plaintext, secretKey)
 	if err != nil {
 		log.Fatal(err)
 	}
 	createdText, err := client.HandleCreateText(context.Background(),
-		&grpcClient.CreateTextRequest{Key: "Name", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
+		&gophkeeper.CreateTextRequest{Key: "Name", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Info(createdText.Text)
 
-	getNodeText, err := client.HandleGetNodeText(context.Background(), &grpcClient.GetNodeTextRequest{Key: "Name", Value: randName, AccessToken: authenticatedUser.AccessToken})
+	getNodeText, err := client.HandleGetNodeText(context.Background(), &gophkeeper.GetNodeTextRequest{Key: "Name", Value: randName, AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
-	plaintext = encryption.Decrypt(string(getNodeText.Text.Text), secretKey)
+	plaintext = encryption2.Decrypt(string(getNodeText.Text.Text), secretKey)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Info(plaintext)
 
 	createdText2, err := client.HandleCreateText(context.Background(),
-		&grpcClient.CreateTextRequest{Key: "Name2", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
+		&gophkeeper.CreateTextRequest{Key: "Name2", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Info(createdText2.Text)
 
-	getListText, err := client.HandleGetListText(context.Background(), &grpcClient.GetListTextRequest{AccessToken: authenticatedUser.AccessToken})
+	getListText, err := client.HandleGetListText(context.Background(), &gophkeeper.GetListTextRequest{AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}

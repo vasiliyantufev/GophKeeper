@@ -6,14 +6,14 @@ import (
 	"syscall"
 
 	"github.com/sirupsen/logrus"
-	"github.com/vasiliyantufev/gophkeeper/internal/api/server"
-	grpcHandler "github.com/vasiliyantufev/gophkeeper/internal/api/server/handlers"
-	"github.com/vasiliyantufev/gophkeeper/internal/config/configserver"
-	"github.com/vasiliyantufev/gophkeeper/internal/database"
-	"github.com/vasiliyantufev/gophkeeper/internal/storage/repositories/metadata"
-	"github.com/vasiliyantufev/gophkeeper/internal/storage/repositories/text"
-	"github.com/vasiliyantufev/gophkeeper/internal/storage/repositories/token"
-	"github.com/vasiliyantufev/gophkeeper/internal/storage/repositories/user"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/api"
+	grpcHandler "github.com/vasiliyantufev/gophkeeper/internal/server/api/handlers"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/config/configserver"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/metadata"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/text"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/token"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/user"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 	defer cnl()
 
 	handlerGrpc := grpcHandler.NewHandler(db, userRepository, textRepository, metadataRepository, tokenRepository, logger)
-	go server.StartService(handlerGrpc, config, logger)
+	go api.StartService(handlerGrpc, config, logger)
 
 	<-ctx.Done()
 	logger.Info("server shutdown on signal with:", ctx.Err())
