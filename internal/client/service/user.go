@@ -12,13 +12,13 @@ func UserExist(username string) bool {
 func Authentication(username, password string) (model.User, bool) {
 	userId = 1
 	accessToken = "token"
-	user := model.User{ID: userId, Name: username, Password: password, AccessToken: accessToken}
+	user := model.User{ID: userId, Username: username, Password: password, AccessToken: accessToken}
 	return user, true
 }
 
 func Registration(username, password string) model.User {
 	userId = 1
 	accessToken = "token"
-	user := model.User{ID: userId, Name: username, Password: password, AccessToken: accessToken}
+	user := model.User{ID: userId, Username: username, Password: password, AccessToken: accessToken}
 	return user
 }

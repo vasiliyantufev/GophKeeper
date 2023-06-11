@@ -1,4 +1,4 @@
-package configagent
+package config
 
 import (
 	"flag"
@@ -7,15 +7,15 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type ConfigClient struct {
+type Config struct {
 	GRPC       string       `env:"GRPC"`
 	DebugLevel logrus.Level `env:"DEBUG_LEVEL" envDefault:"debug"`
 }
 
-// NewConfigClient - creates a new instance with the configuration for the client
-func NewConfigClient(log *logrus.Logger) *ConfigClient {
+// NewConfig - creates a new instance with the configuration for the client
+func NewConfig(log *logrus.Logger) *Config {
 	// Set default values
-	configClient := ConfigClient{
+	configClient := Config{
 		GRPC: "localhost:8080",
 	}
 

@@ -7,7 +7,7 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/config/configserver"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/config"
 )
 
 type DB struct {
@@ -15,7 +15,7 @@ type DB struct {
 	log  *logrus.Logger
 }
 
-func New(config *configserver.ConfigServer, log *logrus.Logger) (*DB, error) {
+func New(config *config.Config, log *logrus.Logger) (*DB, error) {
 	pool, err := sql.Open("postgres", config.DSN)
 	if err != nil {
 		log.Fatal(err)

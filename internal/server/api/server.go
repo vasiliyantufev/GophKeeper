@@ -5,13 +5,13 @@ import (
 
 	"github.com/sirupsen/logrus"
 	grpcHandler "github.com/vasiliyantufev/gophkeeper/internal/server/api/handlers"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/config/configserver"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/config"
 	grpcGophkeeper "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"google.golang.org/grpc"
 )
 
 // StartService - starts the gophkeeper server
-func StartService(grpcHandler *grpcHandler.Handler, config *configserver.ConfigServer, log *logrus.Logger) {
+func StartService(grpcHandler *grpcHandler.Handler, config *config.Config, log *logrus.Logger) {
 	log.Infof("Start gophkeeper application %s ", config.GRPC)
 
 	grpcServer := grpc.NewServer()

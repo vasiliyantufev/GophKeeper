@@ -4,18 +4,18 @@ import (
 	"context"
 
 	"github.com/sirupsen/logrus"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/config/configagent"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/config"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/randomizer"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/proto"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/service/encryption"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/service/randomizer"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
 	log := logrus.New()
-	config := configagent.NewConfigClient(log)
+	config := config.NewConfig(log)
 	log.SetLevel(config.DebugLevel)
 
 	conn, err := grpc.Dial(config.GRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -59,13 +59,13 @@ func main() {
 		log.Fatal(err)
 	}
 	createdText, err := client.HandleCreateText(context.Background(),
-		&gophkeeper.CreateTextRequest{Key: "Name", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
+		&gophkeeper.CreateTextRequest{Key: "Username", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Info(createdText.Text)
 
-	getNodeText, err := client.HandleGetNodeText(context.Background(), &gophkeeper.GetNodeTextRequest{Key: "Name", Value: randName, AccessToken: authenticatedUser.AccessToken})
+	getNodeText, err := client.HandleGetNodeText(context.Background(), &gophkeeper.GetNodeTextRequest{Key: "Username", Value: randName, AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}

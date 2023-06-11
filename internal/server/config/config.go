@@ -1,4 +1,4 @@
-package configserver
+package config
 
 import (
 	"flag"
@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type ConfigServer struct {
+type Config struct {
 	GRPC                string        `env:"GRPC"`
 	DSN                 string        `env:"DATABASE_DSN"`
 	MigrationsPath      string        `env:"ROOT_PATH" envDefault:"file://./migrations"`
@@ -16,10 +16,10 @@ type ConfigServer struct {
 	AccessTokenLifetime time.Duration `env:"ACCESS_TOKEN_LIFETIME"`
 }
 
-// NewConfigServer - creates a new instance with the configuration for the server
-func NewConfigServer(log *logrus.Logger) *ConfigServer {
+// NewConfig - creates a new instance with the configuration for the server
+func NewConfig(log *logrus.Logger) *Config {
 	// Set default values
-	configServer := ConfigServer{
+	configServer := Config{
 		GRPC:                "localhost:8080",
 		DSN:                 "host=localhost port=5432 user=user password=password dbname=gophkeeper sslmode=disable",
 		AccessTokenLifetime: 300 * time.Second,

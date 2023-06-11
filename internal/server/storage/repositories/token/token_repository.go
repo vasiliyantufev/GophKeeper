@@ -3,9 +3,9 @@ package token
 import (
 	"time"
 
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/service/encryption"
 )
 
 const lengthToken = 32

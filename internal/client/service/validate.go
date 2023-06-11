@@ -50,7 +50,7 @@ func ValidateText(exists bool, textNameEntry *widget.Entry, textEntry *widget.En
 		return false
 	}
 	if textNameEntry.Text == "" {
-		labelAlertText.SetText("Name не заполнен")
+		labelAlertText.SetText("Username не заполнен")
 		log.Print(labelAlertText.Text)
 		return false
 	}
@@ -72,7 +72,7 @@ func ValidateCart(exists bool, cartNameEntry *widget.Entry, paymentSystemEntry *
 		return false
 	}
 	if cartNameEntry.Text == "" {
-		labelAlertCart.SetText("Name не заполнен")
+		labelAlertCart.SetText("Username не заполнен")
 		log.Print(labelAlertCart.Text)
 		return false
 	}

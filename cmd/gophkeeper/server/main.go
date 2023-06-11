@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/api"
 	grpcHandler "github.com/vasiliyantufev/gophkeeper/internal/server/api/handlers"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/config/configserver"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/metadata"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/text"
@@ -18,7 +18,7 @@ import (
 
 func main() {
 	logger := logrus.New()
-	config := configserver.NewConfigServer(logger)
+	config := config.NewConfig(logger)
 	logger.SetLevel(config.DebugLevel)
 
 	db, err := database.New(config, logger)
