@@ -2,10 +2,14 @@ version: "3.7"
 
 services:
   db:
-    image: postgres:11.2-alpine
+    image: postgres
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=gophkeeper
-    ports:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gophkeeper
+    expose:
+      # publish port on docker network
       - "5432"
+    ports:
+      # exposed to host (host:container)
+      - "5432:5432"
