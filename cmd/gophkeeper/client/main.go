@@ -11,7 +11,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/api/data"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/component"
-	form2 "github.com/vasiliyantufev/gophkeeper/internal/client/component/form"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/component/form"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
 )
@@ -119,7 +119,7 @@ func main() {
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblText[i.Row][i.Col])
 		})
-	form2.SetDefaultColumnsWidthText(tblText)
+	form.SetDefaultColumnsWidthText(tblText)
 	//---------------------------------------------------------------------- table cart init
 	tblCart = widget.NewTable(
 		func() (int, int) {
@@ -131,7 +131,7 @@ func main() {
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblCart[i.Row][i.Col])
 		})
-	form2.SetDefaultColumnsWidthCart(tblCart)
+	form.SetDefaultColumnsWidthCart(tblCart)
 	//---------------------------------------------------------------------- containerTabs
 	tabText = component.GetTabTexts(tblText, buttonTop, buttonText)
 	tabCart = component.GetTabCarts(tblCart, buttonTop, buttonCart)
@@ -141,9 +141,9 @@ func main() {
 		labelAlertAuth.Show()
 		valid = false
 		if radioAuth.Selected == "Login" {
-			valid = form2.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
+			valid = form.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
 			if valid {
-				user, exist = user.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text) //ищем в бд
+				user, exist = data.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text) //ищем в бд
 				if exist {
 					dataTblText, dataTblCart = data.Sync(user.ID)
 					window.SetContent(containerTabs)
@@ -153,11 +153,11 @@ func main() {
 			}
 		}
 		if radioAuth.Selected == "Registration" {
-			valid = form2.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
+			valid = form.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
 			if valid {
-				exist = user.UserExist(usernameRegistrationEntry.Text) //ищем в бд
+				exist = data.UserExist(usernameRegistrationEntry.Text) //ищем в бд
 				if !exist {
-					user = user.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
+					user = data.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
 					window.SetContent(containerTabs)
 					window.Resize(fyne.NewSize(1250, 300))
 					window.Show()
@@ -170,12 +170,12 @@ func main() {
 		labelAlertText.Show()
 		valid = false
 		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) //ищем в мапке
-		valid = form2.ValidateText(exist, textNameEntry, textEntry, textDescriptionEntry, labelAlertText)
+		valid = form.ValidateText(exist, textNameEntry, textEntry, textDescriptionEntry, labelAlertText)
 		if valid {
 			dataTblText = append(dataTblText, []string{textNameEntry.Text, textEntry.Text, textDescriptionEntry.Text,
 				time.Now().Format(layout), time.Now().Format(layout)})
 
-			form2.ClearText(textNameEntry, textEntry, textDescriptionEntry)
+			form.ClearText(textNameEntry, textEntry, textDescriptionEntry)
 			log.Print("Текст добавлен")
 
 			labelAlertText.Hide()
@@ -190,13 +190,13 @@ func main() {
 		labelAlertCart.Show()
 		valid = false
 		exist = table.SearchByColumn(dataTblCart, 0, cartNameEntry.Text) //ищем в мапке
-		valid = form2.ValidateCart(exist, cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCart)
+		valid = form.ValidateCart(exist, cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCart)
 		if valid {
 			layout := "01/02/2006 15:04:05"
 			dataTblCart = append(dataTblCart, []string{cartNameEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
 				cvcEntry.Text, endDateEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
-			form2.ClearCart(cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+			form.ClearCart(cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 			log.Print("Карта добавлена")
 
 			labelAlertCart.Hide()
