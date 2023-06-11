@@ -1,6 +1,6 @@
 package service
 
-import "github.com/vasiliyantufev/gui/internal/model"
+import "github.com/vasiliyantufev/gophkeeper/internal/client/model"
 
 var userId int64
 var accessToken string

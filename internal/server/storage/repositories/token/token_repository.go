@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
-	model2 "github.com/vasiliyantufev/gophkeeper/internal/server/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service/encryption"
 )
 
@@ -12,7 +12,7 @@ const lengthToken = 32
 const lifetimeToken = 100 * time.Hour
 
 type TokenRepository interface {
-	Create(user *model2.User) (string, error)
+	Create(user *model.User) (string, error)
 }
 
 type Token struct {
@@ -39,10 +39,10 @@ func (t Token) Create(userID int64) (string, error) {
 	).Scan(&accessToken)
 }
 
-func (t *Token) Validate(token string) (bool, *model2.Token, error) {
+func (t *Token) Validate(token string) (bool, *model.Token, error) {
 	currentTime := time.Now()
 
-	tokenUser := &model2.Token{}
+	tokenUser := &model.Token{}
 	if err := t.db.Pool.QueryRow("SELECT access_token, user_id, end_date_at FROM access_token where access_token = $1", token).Scan(
 		&tokenUser.AccessToken,
 		&tokenUser.UserID,

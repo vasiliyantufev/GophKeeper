@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 
-	model2 "github.com/vasiliyantufev/gophkeeper/internal/server/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"google.golang.org/grpc/codes"
@@ -28,7 +28,7 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 		)
 	}
 
-	TextData := &model2.CreateTextRequest{}
+	TextData := &model.CreateTextRequest{}
 	TextData.UserID = accessToken.UserID
 	TextData.Key = req.Key
 	TextData.Value = req.Value
@@ -63,9 +63,9 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 			codes.Internal, err.Error(),
 		)
 	}
-	text := model2.GetTextData(CreatedText)
+	text := model.GetTextData(CreatedText)
 
-	Metadata := &model2.CreateMetadataRequest{}
+	Metadata := &model.CreateMetadataRequest{}
 	Metadata.EntityId = CreatedText.ID
 	Metadata.Key = TextData.Key
 	Metadata.Value = TextData.Value
