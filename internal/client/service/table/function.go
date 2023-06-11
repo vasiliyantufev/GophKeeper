@@ -1,4 +1,4 @@
-package service
+package table
 
 func SearchByColumn(slice [][]string, targetColumn int, targetValue string) bool {
 	for i := 1; i < len(slice) && len(slice) > 1; i++ {

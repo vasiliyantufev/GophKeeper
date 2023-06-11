@@ -1,4 +1,4 @@
-package service
+package data
 
 func Sync(userId int64) ([][]string, [][]string) {
 	dataTblText := [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"},

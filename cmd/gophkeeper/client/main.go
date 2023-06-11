@@ -9,9 +9,11 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/api/data"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/component"
+	form2 "github.com/vasiliyantufev/gophkeeper/internal/client/component/form"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
-	"github.com/vasiliyantufev/gophkeeper/internal/client/service"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
 )
 
 func main() {
@@ -91,7 +93,7 @@ func main() {
 	})
 	//---------------------------------------------------------------------- buttons event
 	buttonTop = widget.NewButton("Обновить данные", func() {
-		dataTblText, dataTblCart = service.Sync(user.ID)
+		dataTblText, dataTblCart = data.Sync(user.ID)
 		tblText.Resize(fyne.NewSize(float32(len(dataTblText)), float32(len(dataTblText[0]))))
 		tblText.Refresh()
 		tblCart.Resize(fyne.NewSize(float32(len(dataTblCart)), float32(len(dataTblCart[0]))))
@@ -117,7 +119,7 @@ func main() {
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblText[i.Row][i.Col])
 		})
-	service.SetDefaultColumnsWidthText(tblText)
+	form2.SetDefaultColumnsWidthText(tblText)
 	//---------------------------------------------------------------------- table cart init
 	tblCart = widget.NewTable(
 		func() (int, int) {
@@ -129,7 +131,7 @@ func main() {
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblCart[i.Row][i.Col])
 		})
-	service.SetDefaultColumnsWidthCart(tblCart)
+	form2.SetDefaultColumnsWidthCart(tblCart)
 	//---------------------------------------------------------------------- containerTabs
 	tabText = component.GetTabTexts(tblText, buttonTop, buttonText)
 	tabCart = component.GetTabCarts(tblCart, buttonTop, buttonCart)
@@ -139,11 +141,11 @@ func main() {
 		labelAlertAuth.Show()
 		valid = false
 		if radioAuth.Selected == "Login" {
-			valid = service.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
+			valid = form2.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
 			if valid {
-				user, exist = service.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text) //ищем в бд
+				user, exist = user.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text) //ищем в бд
 				if exist {
-					dataTblText, dataTblCart = service.Sync(user.ID)
+					dataTblText, dataTblCart = data.Sync(user.ID)
 					window.SetContent(containerTabs)
 					window.Resize(fyne.NewSize(1250, 300))
 					window.Show()
@@ -151,11 +153,11 @@ func main() {
 			}
 		}
 		if radioAuth.Selected == "Registration" {
-			valid = service.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
+			valid = form2.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
 			if valid {
-				exist = service.UserExist(usernameRegistrationEntry.Text) //ищем в бд
+				exist = user.UserExist(usernameRegistrationEntry.Text) //ищем в бд
 				if !exist {
-					user = service.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
+					user = user.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
 					window.SetContent(containerTabs)
 					window.Resize(fyne.NewSize(1250, 300))
 					window.Show()
@@ -167,13 +169,13 @@ func main() {
 	buttonTextAdd = widget.NewButton("Добавить", func() {
 		labelAlertText.Show()
 		valid = false
-		exist = service.SearchByColumn(dataTblText, 0, textNameEntry.Text) //ищем в мапке
-		valid = service.ValidateText(exist, textNameEntry, textEntry, textDescriptionEntry, labelAlertText)
+		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) //ищем в мапке
+		valid = form2.ValidateText(exist, textNameEntry, textEntry, textDescriptionEntry, labelAlertText)
 		if valid {
 			dataTblText = append(dataTblText, []string{textNameEntry.Text, textEntry.Text, textDescriptionEntry.Text,
 				time.Now().Format(layout), time.Now().Format(layout)})
 
-			service.ClearText(textNameEntry, textEntry, textDescriptionEntry)
+			form2.ClearText(textNameEntry, textEntry, textDescriptionEntry)
 			log.Print("Текст добавлен")
 
 			labelAlertText.Hide()
@@ -187,14 +189,14 @@ func main() {
 	buttonCartAdd = widget.NewButton("Добавить", func() {
 		labelAlertCart.Show()
 		valid = false
-		exist = service.SearchByColumn(dataTblCart, 0, cartNameEntry.Text) //ищем в мапке
-		valid = service.ValidateCart(exist, cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCart)
+		exist = table.SearchByColumn(dataTblCart, 0, cartNameEntry.Text) //ищем в мапке
+		valid = form2.ValidateCart(exist, cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCart)
 		if valid {
 			layout := "01/02/2006 15:04:05"
 			dataTblCart = append(dataTblCart, []string{cartNameEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
 				cvcEntry.Text, endDateEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
-			service.ClearCart(cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+			form2.ClearCart(cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 			log.Print("Карта добавлена")
 
 			labelAlertCart.Hide()
