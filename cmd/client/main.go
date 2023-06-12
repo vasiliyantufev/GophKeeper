@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -22,7 +23,7 @@ import (
 )
 
 func main() {
-
+	//---------------------------------------------------------------------- client application init
 	log := logrus.New()
 	config := config.NewConfig(log)
 	log.SetLevel(config.DebugLevel)
@@ -32,8 +33,12 @@ func main() {
 	}
 	grpc := gophkeeper.NewGophkeeperClient(conn)
 	client := api.NewClient(log, grpc)
-	log.Info(client)
-	//---------------------------------------------------------------------- fyne application
+	response, err := client.Ping(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Debug(response)
+	//---------------------------------------------------------------------- fyne application init
 	application := app.New()
 	application.Settings().SetTheme(theme.LightTheme())
 	window := application.NewWindow("GophKeeper")
