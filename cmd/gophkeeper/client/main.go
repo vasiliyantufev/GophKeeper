@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -9,14 +8,32 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/sirupsen/logrus"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/api"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/api/data"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/component"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/component/form"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
+
+	log := logrus.New()
+	config := config.NewConfig(log)
+	log.SetLevel(config.DebugLevel)
+	conn, err := grpc.Dial(config.GRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatal(err)
+	}
+	grpc := gophkeeper.NewGophkeeperClient(conn)
+	client := api.NewClient(log, grpc)
+	log.Info(client)
+	//---------------------------------------------------------------------- fyne application
 	application := app.New()
 	application.Settings().SetTheme(theme.LightTheme())
 	window := application.NewWindow("GophKeeper")

@@ -24,6 +24,7 @@ func main() {
 	}
 
 	client := gophkeeper.NewGophkeeperClient(conn)
+
 	resp, err := client.HandlePing(context.Background(), &gophkeeper.PingRequest{})
 	if err != nil {
 		log.Fatal(err)
