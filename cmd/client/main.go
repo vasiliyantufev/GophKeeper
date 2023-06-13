@@ -11,7 +11,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/api"
-	"github.com/vasiliyantufev/gophkeeper/internal/client/api/data"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/component"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/component/form"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/config"
@@ -118,7 +117,7 @@ func main() {
 	})
 	//---------------------------------------------------------------------- buttons event
 	buttonTop = widget.NewButton(labels.BtnUpdateData, func() {
-		dataTblText, dataTblCart = data.Sync(user.ID)
+		dataTblText, dataTblCart = client.Sync(user.ID)
 		tblText.Resize(fyne.NewSize(float32(len(dataTblText)), float32(len(dataTblText[0]))))
 		tblText.Refresh()
 		tblCart.Resize(fyne.NewSize(float32(len(dataTblCart)), float32(len(dataTblCart[0]))))
@@ -172,7 +171,7 @@ func main() {
 				if err != nil {
 					labelAlertAuth.SetText(errors.ErrLogin)
 				} else {
-					dataTblText, dataTblCart = data.Sync(user.ID)
+					dataTblText, dataTblCart = client.Sync(user.ID)
 					window.SetContent(containerTabs)
 					window.Resize(fyne.NewSize(1250, 300))
 					window.Show()
