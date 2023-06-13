@@ -5,6 +5,7 @@ import (
 
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -13,21 +14,15 @@ import (
 func (h *Handler) HandleGetListText(ctx context.Context, req *grpc.GetListTextRequest) (*grpc.GetListTextResponse, error) {
 	h.logger.Info("Get list text")
 
-	valid, accessToken, err := h.token.Validate(req.AccessToken)
-	if err != nil {
-		h.logger.Error(err)
-		return &grpc.GetListTextResponse{}, status.Errorf(
-			codes.Unauthenticated, err.Error(),
-		)
-	}
+	valid := h.token.Validate(req.AccessToken)
 	if !valid {
-		h.logger.Error("Not validate token")
+		h.logger.Error(errors.ErrNotValidateToken)
 		return &grpc.GetListTextResponse{}, status.Errorf(
-			codes.Unauthenticated, err.Error(),
+			codes.Unauthenticated, errors.ErrNotValidateToken.Error(),
 		)
 	}
 
-	ListText, err := h.text.GetListText(accessToken.UserID)
+	ListText, err := h.text.GetListText(req.AccessToken.UserId)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.GetListTextResponse{}, status.Errorf(

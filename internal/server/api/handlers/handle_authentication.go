@@ -5,6 +5,7 @@ import (
 
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -33,7 +34,8 @@ func (h *Handler) HandleAuthentication(ctx context.Context, req *grpc.Authentica
 			codes.Internal, err.Error(),
 		)
 	}
-
+	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
+	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	h.logger.Debug(authenticatedUser)
-	return &grpc.AuthenticationResponse{User: user, AccessToken: token}, nil
+	return &grpc.AuthenticationResponse{AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}}, nil
 }

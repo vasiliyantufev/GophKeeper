@@ -5,6 +5,7 @@ import (
 
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -13,13 +14,7 @@ import (
 // HandleRegistration - registration new user
 func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.RegistrationRequest) (*grpc.RegistrationResponse, error) {
 	h.logger.Info("Registration")
-	//if correctPassword := validator.VerifyPassword(req.Password); correctPassword != true {
-	//	err := errors.ErrBadPassword
-	//	h.logger.Error(err)
-	//	return &grpc.RegistrationResponse{}, status.Errorf(
-	//		codes.InvalidArgument, err.Error(),
-	//	)
-	//}
+
 	UserData := &model.UserRequest{}
 	UserData.Username = req.Username
 	UserData.Password = req.Password
@@ -54,7 +49,8 @@ func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.Registration
 			codes.Internal, err.Error(),
 		)
 	}
-
+	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
+	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	h.logger.Debug(registeredUser)
-	return &grpc.RegistrationResponse{User: user, AccessToken: token}, nil
+	return &grpc.RegistrationResponse{AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}}, nil
 }

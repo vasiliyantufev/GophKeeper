@@ -21,6 +21,13 @@ message PingResponse {
   string message = 1;
 }
 //------------------------------------
+message Token {
+  int64  userId = 1;
+  string token = 2;
+  google.protobuf.Timestamp createdAt = 3;
+  google.protobuf.Timestamp endDateAt = 4;
+}
+//------------------------------------
 message User {
   int64 userId = 1;
   string username = 2;
@@ -33,16 +40,14 @@ message AuthenticationRequest {
   string password = 2;
 }
 message AuthenticationResponse {
-  User user = 1;
-  string accessToken = 2;
+  Token accessToken = 1;
 }
 message RegistrationRequest {
   string username = 1;
   string password = 2;
 }
 message RegistrationResponse {
-  User user = 1;
-  string accessToken = 2;
+  Token accessToken = 1;
 }
 message UserExistRequest {
   string username = 1;
@@ -61,9 +66,8 @@ message Text {
 message CreateTextRequest {
   string key = 1;
   string value = 2;
-  string type = 3;
-  bytes  text = 4;
-  string accessToken = 5;
+  bytes  text = 3;
+  Token accessToken = 4;
 }
 message CreateTextResponse {
   Text text = 1;
@@ -71,13 +75,13 @@ message CreateTextResponse {
 message GetNodeTextRequest {
   string key = 1;
   string value = 2;
-  string accessToken = 3;
+  Token accessToken = 3;
 }
 message GetNodeTextResponse {
   Text text = 1;
 }
 message GetListTextRequest {
-  string accessToken = 1;
+  Token accessToken = 1;
 }
 message GetListTextResponse {
   repeated Text node = 1;

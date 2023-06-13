@@ -49,7 +49,8 @@ func main() {
 	var dataTblText = [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}}
 	var dataTblCart = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
 	var radioOptions = []string{"Login", "Registration"}
-	var user = model.User{}
+	//var user = model.User{}
+	var accessToken = model.Token{}
 	var exist bool
 	var valid bool
 	var layout string
@@ -117,7 +118,7 @@ func main() {
 	})
 	//---------------------------------------------------------------------- buttons event
 	buttonTop = widget.NewButton(labels.BtnUpdateData, func() {
-		dataTblText, dataTblCart = client.Sync(user.ID)
+		dataTblText, dataTblCart = client.Sync(accessToken.UserID)
 		tblText.Resize(fyne.NewSize(float32(len(dataTblText)), float32(len(dataTblText[0]))))
 		tblText.Refresh()
 		tblCart.Resize(fyne.NewSize(float32(len(dataTblCart)), float32(len(dataTblCart[0]))))
@@ -167,11 +168,11 @@ func main() {
 		if radioAuth.Selected == "Login" {
 			valid = form.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
 			if valid {
-				user, err = client.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
+				accessToken, err = client.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
 				if err != nil {
 					labelAlertAuth.SetText(errors.ErrLogin)
 				} else {
-					dataTblText, dataTblCart = client.Sync(user.ID)
+					dataTblText, dataTblCart = client.Sync(accessToken.UserID)
 					window.SetContent(containerTabs)
 					window.Resize(fyne.NewSize(1250, 300))
 					window.Show()
@@ -188,7 +189,7 @@ func main() {
 				if exist {
 					labelAlertAuth.SetText(errors.ErrUserExist)
 				} else {
-					user, err = client.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
+					accessToken, err = client.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrRegistration)
 					} else {

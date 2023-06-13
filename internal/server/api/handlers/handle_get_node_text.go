@@ -5,6 +5,7 @@ import (
 
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -13,22 +14,16 @@ import (
 func (h *Handler) HandleGetNodeText(ctx context.Context, req *grpc.GetNodeTextRequest) (*grpc.GetNodeTextResponse, error) {
 	h.logger.Info("Get node text")
 
-	valid, accessToken, err := h.token.Validate(req.AccessToken)
-	if err != nil {
-		h.logger.Error(err)
-		return &grpc.GetNodeTextResponse{}, status.Errorf(
-			codes.Unauthenticated, err.Error(),
-		)
-	}
+	valid := h.token.Validate(req.AccessToken)
 	if !valid {
-		h.logger.Error("Not validate token")
+		h.logger.Error(errors.ErrNotValidateToken)
 		return &grpc.GetNodeTextResponse{}, status.Errorf(
-			codes.Unauthenticated, err.Error(),
+			codes.Unauthenticated, errors.ErrNotValidateToken.Error(),
 		)
 	}
 
 	TextData := &model.GetNodeTextRequest{}
-	TextData.UserID = accessToken.UserID
+	TextData.UserID = req.AccessToken.UserId
 	TextData.Key = req.Key
 	TextData.Value = req.Value
 	GetNodeText, err := h.text.GetNodeText(TextData)
