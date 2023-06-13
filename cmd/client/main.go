@@ -166,8 +166,11 @@ func main() {
 		if radioAuth.Selected == "Login" {
 			valid = form.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
 			if valid {
-				user, exist = data.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text) //ищем в бд
-				if !exist {
+				user, err = client.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
+				if err != nil {
+					labelAlertAuth.Text = "Неудачная попытка регистрации"
+				}
+				if user == (model.User{}) {
 					labelAlertAuth.Text = "Пользователь с таким username не зарегистрирован"
 				} else {
 					dataTblText, dataTblCart = data.Sync(user.ID)
@@ -180,7 +183,7 @@ func main() {
 		if radioAuth.Selected == "Registration" {
 			valid = form.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
 			if valid {
-				exist, err = client.UserExist(usernameRegistrationEntry.Text) //ищем в бд
+				exist, err = client.UserExist(usernameRegistrationEntry.Text)
 				if err != nil {
 					labelAlertAuth.Text = "Неудачная попытка регистрации"
 				}
