@@ -41,6 +41,12 @@ func (c Client) UserExist(username string) (bool, error) {
 
 func (c Client) Registration(username, password string) (model.User, error) {
 	user := model.User{}
+	//password = "Пароль-1"
+	password, err := encryption.HashPassword2(password)
+	if err != nil {
+		c.logger.Error(err)
+		return user, err
+	}
 	registeredUser, err := c.grpc.HandleRegistration(c.context, &gophkeeper.RegistrationRequest{Username: username, Password: password})
 	if err != nil {
 		c.logger.Error(err)
@@ -52,6 +58,12 @@ func (c Client) Registration(username, password string) (model.User, error) {
 
 func (c Client) Authentication(username, password string) (model.User, error) {
 	user := model.User{}
+	//password = "Пароль-1"
+	password, err := encryption.HashPassword2(password)
+	if err != nil {
+		c.logger.Error(err)
+		return user, err
+	}
 	authenticatedUser, err := c.grpc.HandleAuthentication(c.context, &gophkeeper.AuthenticationRequest{Username: username, Password: password})
 	if err != nil {
 		c.logger.Error(err)

@@ -7,8 +7,8 @@ import (
 	"unicode/utf8"
 
 	"fyne.io/fyne/v2/widget"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/service/validator"
 )
 
 func ValidateLogin(usernameLoginEntry *widget.Entry, passwordLoginEntry *widget.Entry, labelAlertAuth *widget.Label) bool {
@@ -32,7 +32,7 @@ func ValidateRegistration(usernameRegistrationEntry *widget.Entry, passwordRegis
 		log.Print(labelAlertAuth.Text)
 		return false
 	}
-	if !validator.VerifyPassword(passwordRegistrationEntry.Text) {
+	if !encryption.VerifyPassword(passwordRegistrationEntry.Text) {
 		labelAlertAuth.SetText(errors.ErrPasswordIncorrect)
 		log.Print(labelAlertAuth.Text)
 		return false
