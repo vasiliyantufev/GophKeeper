@@ -17,6 +17,8 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/labels"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -115,7 +117,7 @@ func main() {
 		}
 	})
 	//---------------------------------------------------------------------- buttons event
-	buttonTop = widget.NewButton("Обновить данные", func() {
+	buttonTop = widget.NewButton(labels.BtnUpdateData, func() {
 		dataTblText, dataTblCart = data.Sync(user.ID)
 		tblText.Resize(fyne.NewSize(float32(len(dataTblText)), float32(len(dataTblText[0]))))
 		tblText.Refresh()
@@ -123,11 +125,11 @@ func main() {
 		tblCart.Refresh()
 		window.SetContent(containerTabs)
 	})
-	buttonText = widget.NewButton("Добавить текстовые данные", func() {
+	buttonText = widget.NewButton(labels.BtnAddText, func() {
 		window.SetContent(containerFormText)
 		window.Show()
 	})
-	buttonCart = widget.NewButton("Добавить банковскую карту", func() {
+	buttonCart = widget.NewButton(labels.BtnAddCart, func() {
 		window.SetContent(containerFormCart)
 		window.Show()
 	})
@@ -168,10 +170,10 @@ func main() {
 			if valid {
 				user, err = client.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
 				if err != nil {
-					labelAlertAuth.Text = "Неудачная попытка регистрации"
+					labelAlertAuth.Text = errors.ErrLogin
 				}
 				if user == (model.User{}) {
-					labelAlertAuth.Text = "Пользователь с таким username не зарегистрирован"
+					labelAlertAuth.Text = errors.ErrUserNotExist
 				} else {
 					dataTblText, dataTblCart = data.Sync(user.ID)
 					window.SetContent(containerTabs)
@@ -185,14 +187,14 @@ func main() {
 			if valid {
 				exist, err = client.UserExist(usernameRegistrationEntry.Text)
 				if err != nil {
-					labelAlertAuth.Text = "Неудачная попытка регистрации"
+					labelAlertAuth.Text = errors.ErrRegistration
 				}
 				if exist {
-					labelAlertAuth.Text = "Пользователь с таким username зарегистрирован"
+					labelAlertAuth.Text = errors.ErrUserExist
 				} else {
 					user, err = client.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
 					if err != nil {
-						labelAlertAuth.Text = "Неудачная попытка регистрация"
+						labelAlertAuth.Text = errors.ErrRegistration
 					} else {
 						window.SetContent(containerTabs)
 						window.Resize(fyne.NewSize(1250, 300))
@@ -203,7 +205,7 @@ func main() {
 		}
 	})
 	//---------------------------------------------------------------------- text event
-	buttonTextAdd = widget.NewButton("Добавить", func() {
+	buttonTextAdd = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertText.Show()
 		valid = false
 		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) //ищем в мапке
@@ -223,7 +225,7 @@ func main() {
 		log.Print(dataTblText)
 	})
 	//---------------------------------------------------------------------- cart event
-	buttonCartAdd = widget.NewButton("Добавить", func() {
+	buttonCartAdd = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertCart.Show()
 		valid = false
 		exist = table.SearchByColumn(dataTblCart, 0, cartNameEntry.Text) //ищем в мапке
