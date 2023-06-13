@@ -6,7 +6,7 @@ func GetFormRegistration(UsernameRegistration *widget.Entry, PasswordRegistratio
 	formRegistration := widget.NewForm(
 		widget.NewFormItem("Username", UsernameRegistration),
 		widget.NewFormItem("Password", PasswordRegistration),
-		widget.NewFormItem("Confirm password", NewPasswordEntryRegistration),
+		widget.NewFormItem("Confirm Password", NewPasswordEntryRegistration),
 	)
 	return formRegistration
 }

@@ -5,7 +5,7 @@ var (
 	ErrRegistration       = "Неудачная попытка регистрации"
 	ErrUserExist          = "Пользователь с таким username зарегистрирован"
 	ErrUsernameIncorrect  = "Длинна username должна быть не менее шести символов"
-	ErrPasswordIncorrect  = "Пароль должен из минимум 8 букв, минимум 1 цифра, по крайней мере 1 верхний регистр, не менее 1 специального символа (пример: Password-123)"
+	ErrPasswordIncorrect  = "Пароль должен состоять минимум из 8 букв, 1 цифра, 1 верхний регистр, 1 специальный символ (пример: Password-123)"
 	ErrPasswordDifferent  = "Пароли не совпали"
 	ErrNameEmpty          = "Name не заполнен"
 	ErrTextEmpty          = "Text не заполнен"
