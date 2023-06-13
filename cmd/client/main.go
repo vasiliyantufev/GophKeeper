@@ -170,10 +170,7 @@ func main() {
 			if valid {
 				user, err = client.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
 				if err != nil {
-					labelAlertAuth.Text = errors.ErrLogin
-				}
-				if user == (model.User{}) {
-					labelAlertAuth.Text = errors.ErrUserNotExist
+					labelAlertAuth.SetText(errors.ErrLogin)
 				} else {
 					dataTblText, dataTblCart = data.Sync(user.ID)
 					window.SetContent(containerTabs)
@@ -187,14 +184,14 @@ func main() {
 			if valid {
 				exist, err = client.UserExist(usernameRegistrationEntry.Text)
 				if err != nil {
-					labelAlertAuth.Text = errors.ErrRegistration
+					labelAlertAuth.SetText(errors.ErrRegistration)
 				}
 				if exist {
-					labelAlertAuth.Text = errors.ErrUserExist
+					labelAlertAuth.SetText(errors.ErrUserExist)
 				} else {
 					user, err = client.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
 					if err != nil {
-						labelAlertAuth.Text = errors.ErrRegistration
+						labelAlertAuth.SetText(errors.ErrRegistration)
 					} else {
 						window.SetContent(containerTabs)
 						window.Resize(fyne.NewSize(1250, 300))
