@@ -1,6 +1,8 @@
 package data
 
-import "github.com/vasiliyantufev/gophkeeper/internal/client/model"
+import (
+	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
+)
 
 var userId int64
 var accessToken string
@@ -16,9 +18,11 @@ func Authentication(username, password string) (model.User, bool) {
 	return user, true
 }
 
-func Registration(username, password string) model.User {
-	userId = 1
-	accessToken = "token"
-	user := model.User{ID: userId, Username: username, Password: password, AccessToken: accessToken}
-	return user
-}
+//func Registration(client *api.Client, username, password string) (model.User, error) {
+//	user := model.User{}
+//	user, err := client.Registration(username, password)
+//	if err != nil {
+//		return user, err
+//	}
+//	return user, nil
+//}

@@ -8,7 +8,6 @@ package gophkeeper
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -26,6 +25,7 @@ const (
 	Gophkeeper_HandleGetListText_FullMethodName    = "/api.Gophkeeper/HandleGetListText"
 	Gophkeeper_HandleGetNodeText_FullMethodName    = "/api.Gophkeeper/HandleGetNodeText"
 	Gophkeeper_HandlePing_FullMethodName           = "/api.Gophkeeper/HandlePing"
+	Gophkeeper_HandleUserExist_FullMethodName      = "/api.Gophkeeper/HandleUserExist"
 )
 
 // GophkeeperClient is the client API for Gophkeeper service.
@@ -38,6 +38,7 @@ type GophkeeperClient interface {
 	HandleGetListText(ctx context.Context, in *GetListTextRequest, opts ...grpc.CallOption) (*GetListTextResponse, error)
 	HandleGetNodeText(ctx context.Context, in *GetNodeTextRequest, opts ...grpc.CallOption) (*GetNodeTextResponse, error)
 	HandlePing(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	HandleUserExist(ctx context.Context, in *UserExistRequest, opts ...grpc.CallOption) (*UserExistResponse, error)
 }
 
 type gophkeeperClient struct {
@@ -102,6 +103,15 @@ func (c *gophkeeperClient) HandlePing(ctx context.Context, in *PingRequest, opts
 	return out, nil
 }
 
+func (c *gophkeeperClient) HandleUserExist(ctx context.Context, in *UserExistRequest, opts ...grpc.CallOption) (*UserExistResponse, error) {
+	out := new(UserExistResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleUserExist_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GophkeeperServer is the server API for Gophkeeper service.
 // All implementations must embed UnimplementedGophkeeperServer
 // for forward compatibility
@@ -112,6 +122,7 @@ type GophkeeperServer interface {
 	HandleGetListText(context.Context, *GetListTextRequest) (*GetListTextResponse, error)
 	HandleGetNodeText(context.Context, *GetNodeTextRequest) (*GetNodeTextResponse, error)
 	HandlePing(context.Context, *PingRequest) (*PingResponse, error)
+	HandleUserExist(context.Context, *UserExistRequest) (*UserExistResponse, error)
 	mustEmbedUnimplementedGophkeeperServer()
 }
 
@@ -136,6 +147,9 @@ func (UnimplementedGophkeeperServer) HandleGetNodeText(context.Context, *GetNode
 }
 func (UnimplementedGophkeeperServer) HandlePing(context.Context, *PingRequest) (*PingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandlePing not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleUserExist(context.Context, *UserExistRequest) (*UserExistResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleUserExist not implemented")
 }
 func (UnimplementedGophkeeperServer) mustEmbedUnimplementedGophkeeperServer() {}
 
@@ -258,6 +272,24 @@ func _Gophkeeper_HandlePing_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gophkeeper_HandleUserExist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserExistRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleUserExist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleUserExist_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleUserExist(ctx, req.(*UserExistRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Gophkeeper_ServiceDesc is the grpc.ServiceDesc for Gophkeeper service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -288,6 +320,10 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HandlePing",
 			Handler:    _Gophkeeper_HandlePing_Handler,
+		},
+		{
+			MethodName: "HandleUserExist",
+			Handler:    _Gophkeeper_HandleUserExist_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

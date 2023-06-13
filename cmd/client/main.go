@@ -25,6 +25,7 @@ import (
 func main() {
 	//---------------------------------------------------------------------- client application init
 	log := logrus.New()
+	ctx := context.Background()
 	config := config.NewConfig(log)
 	log.SetLevel(config.DebugLevel)
 	conn, err := grpc.Dial(config.GRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -32,8 +33,8 @@ func main() {
 		log.Fatal(err)
 	}
 	grpc := gophkeeper.NewGophkeeperClient(conn)
-	client := api.NewClient(log, grpc)
-	response, err := client.Ping(context.Background())
+	client := api.NewClient(ctx, log, grpc)
+	response, err := client.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -166,7 +167,9 @@ func main() {
 			valid = form.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
 			if valid {
 				user, exist = data.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text) //ищем в бд
-				if exist {
+				if !exist {
+					labelAlertAuth.Text = "Пользователь с таким username не зарегистрирован"
+				} else {
 					dataTblText, dataTblCart = data.Sync(user.ID)
 					window.SetContent(containerTabs)
 					window.Resize(fyne.NewSize(1250, 300))
@@ -177,12 +180,21 @@ func main() {
 		if radioAuth.Selected == "Registration" {
 			valid = form.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
 			if valid {
-				exist = data.UserExist(usernameRegistrationEntry.Text) //ищем в бд
-				if !exist {
-					user = data.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
-					window.SetContent(containerTabs)
-					window.Resize(fyne.NewSize(1250, 300))
-					window.Show()
+				exist, err = client.UserExist(usernameRegistrationEntry.Text) //ищем в бд
+				if err != nil {
+					labelAlertAuth.Text = "Неудачная попытка регистрации"
+				}
+				if exist {
+					labelAlertAuth.Text = "Пользователь с таким username зарегистрирован"
+				} else {
+					user, err = client.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
+					if err != nil {
+						labelAlertAuth.Text = "Неудачная попытка регистрация"
+					} else {
+						window.SetContent(containerTabs)
+						window.Resize(fyne.NewSize(1250, 300))
+						window.Show()
+					}
 				}
 			}
 		}

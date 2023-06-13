@@ -13,6 +13,7 @@ service Gophkeeper {
   rpc HandleGetListText(GetListTextRequest) returns (GetListTextResponse) {}
   rpc HandleGetNodeText(GetNodeTextRequest) returns (GetNodeTextResponse) {}
   rpc HandlePing(PingRequest) returns (PingResponse) {}
+  rpc HandleUserExist(UserExistRequest) returns (UserExistResponse) {}
 }
 //------------------------------------
 message PingRequest {}
@@ -42,6 +43,12 @@ message RegistrationRequest {
 message RegistrationResponse {
   User user = 1;
   string accessToken = 2;
+}
+message UserExistRequest {
+  string username = 1;
+}
+message UserExistResponse {
+  bool exist = 1;
 }
 //------------------------------------
 message Text {
