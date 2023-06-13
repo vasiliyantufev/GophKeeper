@@ -5,4 +5,5 @@ var (
 	BtnAddCart    = "Добавить банковскую карту"
 	BtnUpdateData = "Обновить данные"
 	BtnAdd        = "Добавить"
+	TblLabel      = "Содержимое"
 )

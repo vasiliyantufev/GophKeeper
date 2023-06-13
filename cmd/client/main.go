@@ -138,7 +138,7 @@ func main() {
 			return len(dataTblText), len(dataTblText[0])
 		},
 		func() fyne.CanvasObject {
-			return widget.NewLabel("wide content")
+			return widget.NewLabel(labels.TblLabel)
 		},
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblText[i.Row][i.Col])
@@ -150,7 +150,7 @@ func main() {
 			return len(dataTblCart), len(dataTblCart[0])
 		},
 		func() fyne.CanvasObject {
-			return widget.NewLabel("wide content")
+			return widget.NewLabel(labels.TblLabel)
 		},
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblCart[i.Row][i.Col])

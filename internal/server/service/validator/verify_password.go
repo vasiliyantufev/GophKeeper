@@ -10,6 +10,8 @@ import "unicode"
  * at least 1 special character
  */
 
+var lenPassword = 8
+
 func VerifyPassword(s string) bool {
 	var (
 		hasMinLen  = false
@@ -18,7 +20,7 @@ func VerifyPassword(s string) bool {
 		hasNumber  = false
 		hasSpecial = false
 	)
-	if len(s) >= 8 {
+	if len(s) >= lenPassword {
 		hasMinLen = true
 	}
 	for _, char := range s {
