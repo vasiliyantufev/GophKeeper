@@ -210,7 +210,7 @@ func main() {
 		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) //ищем в мапке
 		valid = form.ValidateText(exist, textNameEntry, textEntry, textDescriptionEntry, labelAlertText)
 		if valid {
-			err = client.CreateText("name", textNameEntry.Text, password, textEntry.Text, accessToken)
+			err = client.CreateText(textNameEntry.Text, textDescriptionEntry.Text, password, textEntry.Text, accessToken)
 			if err != nil {
 				labelAlertAuth.SetText(errors.ErrTextAdd)
 			} else {

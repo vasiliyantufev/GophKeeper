@@ -9,6 +9,7 @@ var (
 	ErrPasswordDifferent  = "Пароли не совпали"
 	ErrNameEmpty          = "Name не заполнен"
 	ErrTextEmpty          = "Text не заполнен"
+	ErrDescriptionEmpty   = "Description не заполнен"
 	ErrTextExist          = "Текст с таким name уже существует"
 	ErrCartExist          = "Карта с таким name уже существует"
 	ErrPaymentSystemEmpty = "Payment System не заполнен"

@@ -66,6 +66,11 @@ func ValidateText(exists bool, textNameEntry *widget.Entry, textEntry *widget.En
 		log.Print(labelAlertText.Text)
 		return false
 	}
+	if textDescriptionEntry.Text == "" {
+		labelAlertText.SetText(errors.ErrDescriptionEmpty)
+		log.Print(labelAlertText.Text)
+		return false
+	}
 	return true
 }
 
