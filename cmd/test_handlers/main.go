@@ -71,7 +71,7 @@ func main() {
 	}
 	log.Info(createdText.Text)
 
-	getNodeText, err := client.HandleGetNodeText(context.Background(), &gophkeeper.GetNodeTextRequest{Key: "Username", Value: randName, AccessToken: authenticatedUser.AccessToken})
+	getNodeText, err := client.HandleGetNodeText(context.Background(), &gophkeeper.GetNodeTextRequest{Key: "name1", Value: randName, AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
