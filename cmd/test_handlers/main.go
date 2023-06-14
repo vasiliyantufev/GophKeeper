@@ -9,6 +9,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/randomizer"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -22,6 +23,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	var accessToken = model.Token{}
 
 	client := gophkeeper.NewGophkeeperClient(conn)
 
@@ -39,16 +42,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	registeredUser, err := client.HandleRegistration(context.Background(), &gophkeeper.RegistrationRequest{Username: username, Password: password})
+	_, err = client.HandleRegistration(context.Background(), &gophkeeper.RegistrationRequest{Username: username, Password: password})
 	if err != nil {
 		log.Fatal(err)
 	}
-	authenticatedUser, err := client.HandleAuthentication(context.Background(), &gophkeeper.AuthenticationRequest{Username: registeredUser.User.Username, Password: password})
+	authenticatedUser, err := client.HandleAuthentication(context.Background(), &gophkeeper.AuthenticationRequest{Username: username, Password: password})
 	if err != nil {
 		log.Fatal(err)
 	}
-	user := model.User{ID: authenticatedUser.User.UserId, Username: authenticatedUser.User.Username}
-	log.Info(user)
+	created, _ := service.ConvertTimestampToTime(authenticatedUser.AccessToken.CreatedAt)
+	endDate, _ := service.ConvertTimestampToTime(authenticatedUser.AccessToken.EndDateAt)
+
+	accessToken = model.Token{AccessToken: authenticatedUser.AccessToken.Token, UserID: authenticatedUser.AccessToken.UserId,
+		CreatedAt: created, EndDateAt: endDate}
+	log.Info(accessToken)
 
 	randName := randomizer.RandStringRunes(10)
 	plaintext := "Hi my sweetly friends!!!!!!!TeST ВСЕМПРИВЕТ!"

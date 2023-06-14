@@ -27,7 +27,6 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 	TextData.Key = req.Key
 	TextData.Value = req.Value
 	TextData.Text = req.Text
-
 	if TextData.Key == "" || TextData.Value == "" {
 		err := errors.ErrNoMetadataSet
 		h.logger.Error(err)
