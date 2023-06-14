@@ -119,11 +119,16 @@ func main() {
 	//---------------------------------------------------------------------- buttons event
 	buttonTop = widget.NewButton(labels.BtnUpdateData, func() {
 		dataTblText, dataTblCart = client.Sync(accessToken.UserID)
-		tblText.Resize(fyne.NewSize(float32(len(dataTblText)), float32(len(dataTblText[0]))))
-		tblText.Refresh()
-		tblCart.Resize(fyne.NewSize(float32(len(dataTblCart)), float32(len(dataTblCart[0]))))
-		tblCart.Refresh()
-		window.SetContent(containerTabs)
+		dataTblText, err = client.Synchronization(password, accessToken)
+		if err != nil {
+			labelAlertAuth.SetText(errors.ErrLogin)
+		} else {
+			tblText.Resize(fyne.NewSize(float32(len(dataTblText)), float32(len(dataTblText[0]))))
+			tblText.Refresh()
+			tblCart.Resize(fyne.NewSize(float32(len(dataTblCart)), float32(len(dataTblCart[0]))))
+			tblCart.Refresh()
+			window.SetContent(containerTabs)
+		}
 	})
 	buttonText = widget.NewButton(labels.BtnAddText, func() {
 		window.SetContent(containerFormText)
@@ -174,9 +179,15 @@ func main() {
 				} else {
 					password = passwordLoginEntry.Text
 					dataTblText, dataTblCart = client.Sync(accessToken.UserID)
-					window.SetContent(containerTabs)
-					window.Resize(fyne.NewSize(1250, 300))
-					window.Show()
+					dataTblText, err = client.Synchronization(password, accessToken)
+					if err != nil {
+						labelAlertAuth.SetText(errors.ErrLogin)
+					} else {
+						//dataTblText, dataTblCart = client.Sync(accessToken.UserID)
+						window.SetContent(containerTabs)
+						window.Resize(fyne.NewSize(1250, 300))
+						window.Show()
+					}
 				}
 			}
 		}

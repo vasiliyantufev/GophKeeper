@@ -6,6 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
@@ -103,30 +104,47 @@ func (c Client) CreateText(key, value, password, plaintext string, token model.T
 	return nil
 }
 
-//func (c Client) GetNodeText(key, value, password, accessToken string) (string, error) {
-//	var plaintext string
-//	secretKey := encryption.AesKeySecureRandom([]byte(password))
-//	getNodeText, err := c.grpc.HandleGetNodeText(c.context, &gophkeeper.GetNodeTextRequest{Key: key, Value: value, AccessToken: accessToken})
-//	if err != nil {
-//		c.logger.Error(err)
-//		return plaintext, err
+//	func (c Client) GetNodeText(key, value, password, accessToken string) (string, error) {
+//		var plaintext string
+//		secretKey := encryption.AesKeySecureRandom([]byte(password))
+//		getNodeText, err := c.grpc.HandleGetNodeText(c.context, &gophkeeper.GetNodeTextRequest{Key: key, Value: value, AccessToken: accessToken})
+//		if err != nil {
+//			c.logger.Error(err)
+//			return plaintext, err
+//		}
+//		plaintext = encryption.Decrypt(string(getNodeText.Text.Text), secretKey)
+//		if err != nil {
+//			c.logger.Error(err)
+//			return plaintext, err
+//		}
+//		return plaintext, nil
 //	}
-//	plaintext = encryption.Decrypt(string(getNodeText.Text.Text), secretKey)
-//	if err != nil {
-//		c.logger.Error(err)
-//		return plaintext, err
-//	}
-//	return plaintext, nil
-//}
-//
-//func (c Client) GetListText(accessToken string) (*gophkeeper.GetListTextResponse, error) {
-//	getListText, err := c.grpc.HandleGetListText(c.context, &gophkeeper.GetListTextRequest{AccessToken: accessToken})
-//	if err != nil {
-//		c.logger.Error(err)
-//		return nil, err
-//	}
-//	return getListText, nil
-//}
+
+func (c Client) Synchronization(password string, token model.Token) ([][]string, error) {
+	data := [][]string{}
+	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
+	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+	nodes, err := c.grpc.HandleGetListText(c.context,
+		&grpc.GetListTextRequest{AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
+			CreatedAt: created, EndDateAt: endDate}})
+	if err != nil {
+		c.logger.Error(err)
+		return data, err
+	}
+
+	var plaintext string
+	data = table.InitTblText(cap(nodes.Node))
+	secretKey := encryption.AesKeySecureRandom([]byte(password))
+	for index, node := range nodes.Node {
+		plaintext, err = encryption.Decrypt(string(node.Text), secretKey)
+		if err != nil {
+			c.logger.Error(err)
+			return data, err
+		}
+		data[index] = []string{"NAME", plaintext, "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}
+	}
+	return data, nil
+}
 
 func (c Client) Sync(userId int64) ([][]string, [][]string) {
 	dataTblText := [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"},
