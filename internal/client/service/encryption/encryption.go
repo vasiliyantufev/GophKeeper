@@ -6,15 +6,15 @@ import (
 	"crypto/rand"
 )
 
-func Encrypt(plaintext string, secretKey []byte) string {
+func Encrypt(plaintext string, secretKey []byte) (string, error) {
 	aes, err := aes.NewCipher(secretKey)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	gcm, err := cipher.NewGCM(aes)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	// We need a 12-byte nonce for GCM (modifiable if you use cipher.NewGCMWithNonceSize())
@@ -22,7 +22,7 @@ func Encrypt(plaintext string, secretKey []byte) string {
 	nonce := make([]byte, gcm.NonceSize())
 	_, err = rand.Read(nonce)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	// ciphertext here is actually nonce+ciphertext
@@ -30,18 +30,18 @@ func Encrypt(plaintext string, secretKey []byte) string {
 	// is enough to separate it from the ciphertext.
 	ciphertext := gcm.Seal(nonce, nonce, []byte(plaintext), nil)
 
-	return string(ciphertext)
+	return string(ciphertext), nil
 }
 
-func Decrypt(ciphertext string, secretKey []byte) string {
+func Decrypt(ciphertext string, secretKey []byte) (string, error) {
 	aes, err := aes.NewCipher(secretKey)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	gcm, err := cipher.NewGCM(aes)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	// Since we know the ciphertext is actually nonce+ciphertext
@@ -52,7 +52,8 @@ func Decrypt(ciphertext string, secretKey []byte) string {
 	plaintext, err := gcm.Open(nil, []byte(nonce), []byte(ciphertext), nil)
 	if err != nil {
 		panic(err)
+		return "", err
 	}
 
-	return string(plaintext)
+	return string(plaintext), nil
 }

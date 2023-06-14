@@ -24,8 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var accessToken = model.Token{}
-
+	accessToken := model.Token{}
 	client := gophkeeper.NewGophkeeperClient(conn)
 
 	resp, err := client.HandlePing(context.Background(), &gophkeeper.PingRequest{})
@@ -61,8 +60,7 @@ func main() {
 	plaintext := "Hi my sweetly friends!!!!!!!TeST ВСЕМПРИВЕТ!"
 
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
-
-	encryptText := encryption.Encrypt(plaintext, secretKey)
+	encryptText, err := encryption.Encrypt(plaintext, secretKey)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,7 +75,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	plaintext = encryption.Decrypt(string(getNodeText.Text.Text), secretKey)
+	plaintext, err = encryption.Decrypt(string(getNodeText.Text.Text), secretKey)
 	if err != nil {
 		log.Fatal(err)
 	}
