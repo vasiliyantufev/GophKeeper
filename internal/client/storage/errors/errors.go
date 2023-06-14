@@ -18,4 +18,5 @@ var (
 	ErrEndDataIncorrect   = "End Date некорректный (пример: 01/02/2006)"
 	ErrCvcEmpty           = "CVC не заполнен"
 	ErrCvcIncorrect       = "CVC некорректный (пример: 123)"
+	ErrTextAdd            = "Ошибка при добавлении текста"
 )

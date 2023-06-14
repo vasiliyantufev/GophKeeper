@@ -23,6 +23,7 @@ func NewClient(ctx context.Context, log *logrus.Logger, client grpc.GophkeeperCl
 }
 
 func (c Client) Ping() (string, error) {
+	c.logger.Info("ping")
 	msg, err := c.grpc.HandlePing(c.context, &grpc.PingRequest{})
 	if err != nil {
 		c.logger.Error(err)
@@ -32,6 +33,7 @@ func (c Client) Ping() (string, error) {
 }
 
 func (c Client) UserExist(username string) (bool, error) {
+	c.logger.Info("user exist")
 	user, err := c.grpc.HandleUserExist(c.context, &grpc.UserExistRequest{Username: username})
 	if err != nil {
 		c.logger.Error(err)
@@ -41,6 +43,7 @@ func (c Client) UserExist(username string) (bool, error) {
 }
 
 func (c Client) Registration(username, password string) (model.Token, error) {
+	c.logger.Info("registration")
 	token := model.Token{}
 	password, err := encryption.HashPassword(password)
 	if err != nil {
@@ -60,6 +63,7 @@ func (c Client) Registration(username, password string) (model.Token, error) {
 }
 
 func (c Client) Authentication(username, password string) (model.Token, error) {
+	c.logger.Info("authentication")
 	token := model.Token{}
 	password, err := encryption.HashPassword(password)
 	if err != nil {
@@ -79,6 +83,7 @@ func (c Client) Authentication(username, password string) (model.Token, error) {
 }
 
 func (c Client) CreateText(key, value, password, plaintext string, token model.Token) error {
+	c.logger.Info("create text")
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
 	encryptText, err := encryption.Encrypt(plaintext, secretKey)
 	if err != nil {

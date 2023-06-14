@@ -51,7 +51,6 @@ func Decrypt(ciphertext string, secretKey []byte) (string, error) {
 
 	plaintext, err := gcm.Open(nil, []byte(nonce), []byte(ciphertext), nil)
 	if err != nil {
-		panic(err)
 		return "", err
 	}
 

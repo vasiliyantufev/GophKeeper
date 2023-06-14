@@ -65,7 +65,7 @@ func main() {
 		log.Fatal(err)
 	}
 	createdText, err := client.HandleCreateText(context.Background(),
-		&gophkeeper.CreateTextRequest{Key: "Username", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
+		&gophkeeper.CreateTextRequest{Key: "name1", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,7 +82,7 @@ func main() {
 	log.Info(plaintext)
 
 	createdText2, err := client.HandleCreateText(context.Background(),
-		&gophkeeper.CreateTextRequest{Key: "Name2", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
+		&gophkeeper.CreateTextRequest{Key: "name2", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}

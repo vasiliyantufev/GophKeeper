@@ -49,8 +49,8 @@ func main() {
 	var dataTblText = [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}}
 	var dataTblCart = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
 	var radioOptions = []string{"Login", "Registration"}
-	//var user = model.User{}
 	var accessToken = model.Token{}
+	var password string
 	var exist bool
 	var valid bool
 	var layout string
@@ -172,6 +172,7 @@ func main() {
 				if err != nil {
 					labelAlertAuth.SetText(errors.ErrLogin)
 				} else {
+					password = passwordLoginEntry.Text
 					dataTblText, dataTblCart = client.Sync(accessToken.UserID)
 					window.SetContent(containerTabs)
 					window.Resize(fyne.NewSize(1250, 300))
@@ -193,6 +194,7 @@ func main() {
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrRegistration)
 					} else {
+						password = passwordRegistrationEntry.Text
 						window.SetContent(containerTabs)
 						window.Resize(fyne.NewSize(1250, 300))
 						window.Show()
@@ -208,18 +210,23 @@ func main() {
 		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) //ищем в мапке
 		valid = form.ValidateText(exist, textNameEntry, textEntry, textDescriptionEntry, labelAlertText)
 		if valid {
-			dataTblText = append(dataTblText, []string{textNameEntry.Text, textEntry.Text, textDescriptionEntry.Text,
-				time.Now().Format(layout), time.Now().Format(layout)})
+			err = client.CreateText("name", textNameEntry.Text, password, textEntry.Text, accessToken)
+			if err != nil {
+				labelAlertAuth.SetText(errors.ErrTextAdd)
+			} else {
+				dataTblText = append(dataTblText, []string{textNameEntry.Text, textEntry.Text, textDescriptionEntry.Text,
+					time.Now().Format(layout), time.Now().Format(layout)})
 
-			form.ClearText(textNameEntry, textEntry, textDescriptionEntry)
-			log.Print("Текст добавлен")
+				form.ClearText(textNameEntry, textEntry, textDescriptionEntry)
+				log.Info("Текст добавлен")
 
-			labelAlertText.Hide()
-			formText.Refresh()
-			window.SetContent(containerTabs)
-			window.Show()
+				labelAlertText.Hide()
+				formText.Refresh()
+				window.SetContent(containerTabs)
+				window.Show()
+			}
 		}
-		log.Print(dataTblText)
+		log.Debug(dataTblText)
 	})
 	//---------------------------------------------------------------------- cart event
 	buttonCartAdd = widget.NewButton(labels.BtnAdd, func() {
@@ -233,14 +240,14 @@ func main() {
 				cvcEntry.Text, endDateEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
 			form.ClearCart(cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
-			log.Print("Карта добавлена")
+			log.Info("Карта добавлена")
 
 			labelAlertCart.Hide()
 			formCart.Refresh()
 			window.SetContent(containerTabs)
 			window.Show()
 		}
-		log.Print(dataTblCart)
+		log.Debug(dataTblCart)
 	})
 	//---------------------------------------------------------------------- containers init
 	containerRadio = container.NewVBox(radioAuth)
