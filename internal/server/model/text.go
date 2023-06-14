@@ -1,17 +1,22 @@
 package model
 
 import (
-	"github.com/golang/protobuf/ptypes/timestamp"
+	"time"
+
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
 
 type Text struct {
-	ID        int64
-	UserID    int64
-	Text      []byte
-	CreatedAt timestamp.Timestamp
-	UpdatedAt timestamp.Timestamp
-	DeletedAt timestamp.Timestamp
+	ID     int64
+	UserID int64
+	Text   []byte
+	//CreatedAt timestamp.Timestamp
+	//UpdatedAt timestamp.Timestamp
+	//DeletedAt timestamp.Timestamp
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
 }
 
 type CreateTextRequest struct {
@@ -50,19 +55,29 @@ type GetListTextResponse struct {
 }
 
 func GetTextData(data *Text) *grpc.Text {
+
+	created, _ := service.ConvertTimeToTimestamp(data.CreatedAt)
+	updated, _ := service.ConvertTimeToTimestamp(data.UpdatedAt)
+	deleted, _ := service.ConvertTimeToTimestamp(data.DeletedAt)
+
 	return &grpc.Text{
-		UserId:    data.UserID,
-		Text:      data.Text,
-		CreatedAt: &data.CreatedAt,
-		UpdatedAt: &data.UpdatedAt,
-		DeletedAt: &data.DeletedAt,
+		UserId: data.UserID,
+		Text:   data.Text,
+		//CreatedAt: &data.CreatedAt,
+		//UpdatedAt: &data.UpdatedAt,
+		//DeletedAt: &data.DeletedAt,
+		CreatedAt: created,
+		UpdatedAt: updated,
+		DeletedAt: deleted,
 	}
 }
 
 func GetListData(data []Text) []*grpc.Text {
 	items := make([]*grpc.Text, len(data))
 	for i := range data {
-		items[i] = &grpc.Text{Text: data[i].Text}
+		created, _ := service.ConvertTimeToTimestamp(data[i].CreatedAt)
+		updated, _ := service.ConvertTimeToTimestamp(data[i].UpdatedAt)
+		items[i] = &grpc.Text{Text: data[i].Text, CreatedAt: created, UpdatedAt: updated}
 	}
 	return items
 }

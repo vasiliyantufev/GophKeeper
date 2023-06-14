@@ -120,8 +120,10 @@ func (c Client) CreateText(key, value, password, plaintext string, token model.T
 //		return plaintext, nil
 //	}
 
-func (c Client) Synchronization(password string, token model.Token) ([][]string, error) {
-	data := [][]string{}
+func (c Client) Synchronization(password string, token model.Token) ([][]string, [][]string, error) {
+	dataTblText := [][]string{}
+	dataTblCart := [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
+
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	nodes, err := c.grpc.HandleGetListText(c.context,
@@ -129,28 +131,33 @@ func (c Client) Synchronization(password string, token model.Token) ([][]string,
 			CreatedAt: created, EndDateAt: endDate}})
 	if err != nil {
 		c.logger.Error(err)
-		return data, err
+		return dataTblText, dataTblCart, err
 	}
 
 	var plaintext string
-	data = table.InitTblText(cap(nodes.Node))
+	dataTblText = table.InitTblText(cap(nodes.Node))
+	dataTblText[0] = []string{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"} //заголовки
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
 	for index, node := range nodes.Node {
 		plaintext, err = encryption.Decrypt(string(node.Text), secretKey)
 		if err != nil {
 			c.logger.Error(err)
-			return data, err
+			return dataTblText, dataTblCart, err
 		}
-		data[index] = []string{"NAME", plaintext, "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}
+		layout := "01/02/2006 15:04:05"
+		created, _ := service.ConvertTimestampToTime(node.CreatedAt)
+		updated, _ := service.ConvertTimestampToTime(node.UpdatedAt)
+		dataTblText[index+1] = []string{"NAME", plaintext, "DESCRIPTION", created.Format(layout), updated.Format(layout)}
+		//////data[index] = []string{"NAME", plaintext, "DESCRIPTION", "111", "222"}
 	}
-	return data, nil
+	return dataTblText, dataTblCart, nil
 }
 
-func (c Client) Sync(userId int64) ([][]string, [][]string) {
-	dataTblText := [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"},
-		{"NAME_1", "DATA", "DESCRIPTION", "01/01/2000", "01/01/2000"}}
-	dataTblCart := [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"},
-		{"NAME_1", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "01/01/2000", "01/01/2000", "01/01/2000"}}
-
-	return dataTblText, dataTblCart
-}
+//func (c Client) Sync(userId int64) ([][]string, [][]string) {
+//	dataTblText := [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"},
+//		{"NAME_1", "DATA", "DESCRIPTION", "01/01/2000", "01/01/2000"}}
+//	dataTblCart := [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"},
+//		{"NAME_1", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "01/01/2000", "01/01/2000", "01/01/2000"}}
+//
+//	return dataTblText, dataTblCart
+//}

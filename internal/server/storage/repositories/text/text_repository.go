@@ -22,10 +22,12 @@ func New(db *database.DB) *Text {
 func (t *Text) CreateText(textRequest *model.CreateTextRequest) (*model.Text, error) {
 	text := &model.Text{}
 	if err := t.db.Pool.QueryRow(
-		"INSERT INTO text (user_id, text, created_at) VALUES ($1, $2, $3) "+
+		//"INSERT INTO text (user_id, text, created_at) VALUES ($1, $2, $3) "+
+		"INSERT INTO text (user_id, text, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
 			"RETURNING text_id, text",
 		textRequest.UserID,
 		textRequest.Text,
+		time.Now(),
 		time.Now(),
 	).Scan(&text.ID, &text.Text); err != nil {
 		return nil, err
@@ -55,7 +57,8 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 	ListText := []model.Text{}
 
-	rows, err := t.db.Pool.Query("SELECT text.text FROM metadata "+
+	rows, err := t.db.Pool.Query("SELECT text.text, text.created_at, text.updated_at FROM metadata "+
+		//rows, err := t.db.Pool.Query("SELECT text.text FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
 		"where users.user_id = $1", userId)
@@ -70,7 +73,10 @@ func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 	defer rows.Close()
 	for rows.Next() {
 		text := model.Text{}
-		err = rows.Scan(&text.Text)
+
+		//text.CreatedAt := rows.
+
+		err = rows.Scan(&text.Text, &text.CreatedAt, &text.UpdatedAt /**/)
 
 		if err != nil {
 			return nil, err

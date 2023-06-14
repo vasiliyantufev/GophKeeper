@@ -13,7 +13,7 @@ func SearchByColumn(slice [][]string, targetColumn int, targetValue string) bool
 }
 
 func InitTblText(row int) [][]string {
-	matrix := make([][]string, row)
+	matrix := make([][]string, row+1)
 	for i := range matrix {
 		matrix[i] = make([]string, ColTblText)
 	}
@@ -21,7 +21,7 @@ func InitTblText(row int) [][]string {
 }
 
 func InitTblCart(row int) [][]string {
-	matrix := make([][]string, row)
+	matrix := make([][]string, row+1)
 	for i := range matrix {
 		matrix[i] = make([]string, ColTblCart)
 	}
