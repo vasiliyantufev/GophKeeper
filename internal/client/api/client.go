@@ -149,9 +149,9 @@ func (c Client) Synchronization(password string, token model.Token) ([][]string,
 		}
 		dataTblTextPointer := &dataTblText
 		index := table.GetIndexText(dataTblText, table.ColText, plaintext)
-		if index == 0 { // entry does not exist, add
+		if index == 0 { // text does not exist, add
 			table.AppendText(node, dataTblTextPointer, plaintext)
-		} else { // entry exists, update tags
+		} else { // text exists, update tags
 			table.UpdateText(node, dataTblTextPointer, index)
 		}
 	}
