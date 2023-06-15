@@ -1,4 +1,4 @@
-package types
+package consts
 
 type Types string
 
