@@ -118,7 +118,6 @@ func main() {
 	})
 	//---------------------------------------------------------------------- buttons event
 	buttonTop = widget.NewButton(labels.BtnUpdateData, func() {
-		//dataTblText, dataTblCart = client.Sync(accessToken.UserID)
 		dataTblText, dataTblCart, err = client.Synchronization(password, accessToken)
 		if err != nil {
 			labelAlertAuth.SetText(errors.ErrLogin)
@@ -178,12 +177,10 @@ func main() {
 					labelAlertAuth.SetText(errors.ErrLogin)
 				} else {
 					password = passwordLoginEntry.Text
-					//dataTblText, dataTblCart = client.Sync(accessToken.UserID)
 					dataTblText, dataTblCart, err = client.Synchronization(password, accessToken)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrLogin)
 					} else {
-						//dataTblText, dataTblCart = client.Sync(accessToken.UserID)
 						window.SetContent(containerTabs)
 						window.Resize(fyne.NewSize(1250, 300))
 						window.Show()

@@ -7,6 +7,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 )
 
 type Text struct {
@@ -41,7 +42,7 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
 		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3",
-		textRequest.Key, textRequest.Value, textRequest.UserID).Scan(
+		string(variables.Name), textRequest.Value, textRequest.UserID).Scan(
 		&text.Text,
 	)
 	if err != nil {
@@ -57,10 +58,10 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 	ListText := []model.Text{}
 
-	rows, err := t.db.Pool.Query("SELECT text.text, text.created_at, text.updated_at FROM metadata "+
+	rows, err := t.db.Pool.Query("SELECT metadata.key, text.text, metadata.value, text.created_at, text.updated_at FROM metadata "+
 		//rows, err := t.db.Pool.Query("SELECT text.text FROM metadata "+
-		"inner join text on metadata.entity_id = text.text_id "+
-		"inner join users on text.user_id  = users.user_id "+
+		"left join text on metadata.entity_id = text.text_id "+
+		"left join users on text.user_id  = users.user_id "+
 		"where users.user_id = $1", userId)
 
 	if err != nil {
@@ -73,11 +74,7 @@ func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 	defer rows.Close()
 	for rows.Next() {
 		text := model.Text{}
-
-		//text.CreatedAt := rows.
-
-		err = rows.Scan(&text.Text, &text.CreatedAt, &text.UpdatedAt /**/)
-
+		err = rows.Scan(&text.Key, &text.Text, &text.Value, &text.CreatedAt, &text.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -91,7 +88,7 @@ func (t *Text) KeyExists(textRequest *model.CreateTextRequest) (bool, error) {
 	row := t.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
-		"where metadata.key = $1 and users.user_id = $2)", textRequest.Key, textRequest.UserID)
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3)", string(variables.Name), textRequest.Name, textRequest.UserID)
 	if err := row.Scan(&exists); err != nil {
 		return exists, err
 	}

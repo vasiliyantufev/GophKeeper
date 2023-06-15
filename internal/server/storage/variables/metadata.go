@@ -1,4 +1,4 @@
-package consts
+package variables
 
 type Metadata string
 

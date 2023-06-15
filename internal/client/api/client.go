@@ -83,7 +83,7 @@ func (c Client) Authentication(username, password string) (model.Token, error) {
 	return token, nil
 }
 
-func (c Client) CreateText(key, value, password, plaintext string, token model.Token) error {
+func (c Client) CreateText(name, description, password, plaintext string, token model.Token) error {
 	c.logger.Info("create text")
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
 	encryptText, err := encryption.Encrypt(plaintext, secretKey)
@@ -94,7 +94,7 @@ func (c Client) CreateText(key, value, password, plaintext string, token model.T
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	createdText, err := c.grpc.HandleCreateText(context.Background(),
-		&grpc.CreateTextRequest{Key: key, Value: value, Text: []byte(encryptText),
+		&grpc.CreateTextRequest{Name: name, Description: description, Text: []byte(encryptText),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
 	if err != nil {
 		c.logger.Error(err)
@@ -135,29 +135,41 @@ func (c Client) Synchronization(password string, token model.Token) ([][]string,
 	}
 
 	var plaintext string
-	dataTblText = table.InitTblText(cap(nodes.Node))
-	dataTblText[0] = []string{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"} //заголовки
+	//dataTblText = table.InitTblText(cap(nodes.Node))
+	//dataTblText[0] = []string{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"} //add row title
+
+	title := []string{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}
+	dataTblText = append(dataTblText, title)
+
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
-	for index, node := range nodes.Node {
+	for _, node := range nodes.Node {
 		plaintext, err = encryption.Decrypt(string(node.Text), secretKey)
 		if err != nil {
 			c.logger.Error(err)
 			return dataTblText, dataTblCart, err
 		}
-		layout := "01/02/2006 15:04:05"
-		created, _ := service.ConvertTimestampToTime(node.CreatedAt)
-		updated, _ := service.ConvertTimestampToTime(node.UpdatedAt)
-		dataTblText[index+1] = []string{"NAME", plaintext, "DESCRIPTION", created.Format(layout), updated.Format(layout)}
-		//////data[index] = []string{"NAME", plaintext, "DESCRIPTION", "111", "222"}
+		//layout := "01/02/2006 15:04:05"
+		//created, _ := service.ConvertTimestampToTime(node.CreatedAt)
+		//updated, _ := service.ConvertTimestampToTime(node.UpdatedAt)
+
+		myPointer := &dataTblText
+
+		index := table.GetIndexText(dataTblText, table.ColText, plaintext)
+		if index == 0 { // если записи не существует, то добавляем
+			table.AppendText(node, myPointer, plaintext)
+		} else { // если существует, то обновляем теги
+			table.UpdateText(node, myPointer, index)
+		}
+
+		//if node.Key == string(variables.Name) {
+		//	//dataTblText[index+1] = []string{node.Value, plaintext, "", created.Format(layout), updated.Format(layout)}
+		//	row := []string{node.Value, plaintext, "", created.Format(layout), updated.Format(layout)}
+		//	dataTblText = append(dataTblText, row)
+		//} else if node.Key == string(variables.Description) {
+		//	//dataTblText[index+1] = []string{"", plaintext, node.Value, created.Format(layout), updated.Format(layout)}
+		//	row := []string{"", plaintext, node.Value, created.Format(layout), updated.Format(layout)}
+		//	dataTblText = append(dataTblText, row)
+		//}
 	}
 	return dataTblText, dataTblCart, nil
 }
-
-//func (c Client) Sync(userId int64) ([][]string, [][]string) {
-//	dataTblText := [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"},
-//		{"NAME_1", "DATA", "DESCRIPTION", "01/01/2000", "01/01/2000"}}
-//	dataTblCart := [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"},
-//		{"NAME_1", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "01/01/2000", "01/01/2000", "01/01/2000"}}
-//
-//	return dataTblText, dataTblCart
-//}

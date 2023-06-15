@@ -57,6 +57,7 @@ func main() {
 	log.Info(accessToken)
 
 	randName := randomizer.RandStringRunes(10)
+	randDescription := randomizer.RandStringRunes(10)
 	plaintext := "Hi my sweetly friends!!!!!!!TeST ВСЕМПРИВЕТ!"
 
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
@@ -65,13 +66,13 @@ func main() {
 		log.Fatal(err)
 	}
 	createdText, err := client.HandleCreateText(context.Background(),
-		&gophkeeper.CreateTextRequest{Key: "name1", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
+		&gophkeeper.CreateTextRequest{Name: randName, Description: randDescription, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Info(createdText.Text)
 
-	getNodeText, err := client.HandleGetNodeText(context.Background(), &gophkeeper.GetNodeTextRequest{Key: "name1", Value: randName, AccessToken: authenticatedUser.AccessToken})
+	getNodeText, err := client.HandleGetNodeText(context.Background(), &gophkeeper.GetNodeTextRequest{Name: randName, AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -81,8 +82,10 @@ func main() {
 	}
 	log.Info(plaintext)
 
+	randName = randomizer.RandStringRunes(10)
+	randDescription = randomizer.RandStringRunes(10)
 	createdText2, err := client.HandleCreateText(context.Background(),
-		&gophkeeper.CreateTextRequest{Key: "name2", Value: randName, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
+		&gophkeeper.CreateTextRequest{Name: randName, Description: randDescription, Text: []byte(encryptText), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}

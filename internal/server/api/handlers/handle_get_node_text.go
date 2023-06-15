@@ -6,6 +6,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -24,8 +25,8 @@ func (h *Handler) HandleGetNodeText(ctx context.Context, req *grpc.GetNodeTextRe
 
 	TextData := &model.GetNodeTextRequest{}
 	TextData.UserID = req.AccessToken.UserId
-	TextData.Key = req.Key
-	TextData.Value = req.Value
+	TextData.Key = string(variables.Name)
+	TextData.Value = req.Name
 	GetNodeText, err := h.text.GetNodeText(TextData)
 	if err != nil {
 		h.logger.Error(err)

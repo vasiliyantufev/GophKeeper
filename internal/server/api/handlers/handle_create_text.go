@@ -6,6 +6,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -24,10 +25,10 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 
 	TextData := &model.CreateTextRequest{}
 	TextData.UserID = req.AccessToken.UserId
-	TextData.Key = req.Key
-	TextData.Value = req.Value
+	TextData.Name = req.Name
+	TextData.Description = req.Description
 	TextData.Text = req.Text
-	if TextData.Key == "" || TextData.Value == "" {
+	if TextData.Name == "" || TextData.Description == "" {
 		err := errors.ErrNoMetadataSet
 		h.logger.Error(err)
 		return &grpc.CreateTextResponse{}, status.Errorf(
@@ -60,10 +61,22 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 
 	Metadata := &model.CreateMetadataRequest{}
 	Metadata.EntityId = CreatedText.ID
-	Metadata.Key = TextData.Key
-	Metadata.Value = TextData.Value
-	Metadata.Type = TextData.Type
-	CreatedMetadata, err := h.metadata.CreateMetadata(Metadata)
+	Metadata.Key = string(variables.Name)
+	Metadata.Value = TextData.Name
+	Metadata.Type = string(variables.Text)
+	CreatedMetadataName, err := h.metadata.CreateMetadata(Metadata)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.CreateTextResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+	Metadata = &model.CreateMetadataRequest{}
+	Metadata.EntityId = CreatedText.ID
+	Metadata.Key = string(variables.Description)
+	Metadata.Value = TextData.Description
+	Metadata.Type = string(variables.Text)
+	CreatedMetadataDescription, err := h.metadata.CreateMetadata(Metadata)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.CreateTextResponse{}, status.Errorf(
@@ -72,6 +85,7 @@ func (h *Handler) HandleCreateText(ctx context.Context, req *grpc.CreateTextRequ
 	}
 
 	h.logger.Debug(CreatedText)
-	h.logger.Debug(CreatedMetadata)
+	h.logger.Debug(CreatedMetadataName)
+	h.logger.Debug(CreatedMetadataDescription)
 	return &grpc.CreateTextResponse{Text: text}, nil
 }
