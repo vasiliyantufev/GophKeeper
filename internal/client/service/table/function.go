@@ -21,22 +21,6 @@ func SearchByColumn(slice [][]string, targetColumn int, targetValue string) bool
 	return false
 }
 
-func InitTblText(row int) [][]string {
-	matrix := make([][]string, row+1) //add row title
-	for i := range matrix {
-		matrix[i] = make([]string, ColTblText)
-	}
-	return matrix
-}
-
-func InitTblCart(row int) [][]string {
-	matrix := make([][]string, row+1) //add row title
-	for i := range matrix {
-		matrix[i] = make([]string, ColTblCart)
-	}
-	return matrix
-}
-
 func GetIndexText(slice [][]string, targetColumn int, targetValue string) (index int) {
 	for index = 1; index < len(slice) && len(slice) > 1; index++ {
 		if slice[index][targetColumn] == targetValue {

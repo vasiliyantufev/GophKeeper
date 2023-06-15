@@ -122,8 +122,7 @@ func (c Client) CreateText(name, description, password, plaintext string, token 
 
 func (c Client) Synchronization(password string, token model.Token) ([][]string, [][]string, error) {
 	dataTblText := [][]string{}
-	dataTblCart := [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
-
+	dataTblCart := [][]string{}
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	nodes, err := c.grpc.HandleGetListText(c.context,
@@ -135,11 +134,11 @@ func (c Client) Synchronization(password string, token model.Token) ([][]string,
 	}
 
 	var plaintext string
-	//dataTblText = table.InitTblText(cap(nodes.Node))
-	//dataTblText[0] = []string{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"} //add row title
 
-	title := []string{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}
-	dataTblText = append(dataTblText, title)
+	titleText := []string{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}
+	titleCart := []string{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}
+	dataTblText = append(dataTblText, titleText)
+	dataTblCart = append(dataTblText, titleCart)
 
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
 	for _, node := range nodes.Node {
@@ -148,28 +147,14 @@ func (c Client) Synchronization(password string, token model.Token) ([][]string,
 			c.logger.Error(err)
 			return dataTblText, dataTblCart, err
 		}
-		//layout := "01/02/2006 15:04:05"
-		//created, _ := service.ConvertTimestampToTime(node.CreatedAt)
-		//updated, _ := service.ConvertTimestampToTime(node.UpdatedAt)
-
-		myPointer := &dataTblText
-
+		dataTblTextPointer := &dataTblText
 		index := table.GetIndexText(dataTblText, table.ColText, plaintext)
-		if index == 0 { // если записи не существует, то добавляем
-			table.AppendText(node, myPointer, plaintext)
-		} else { // если существует, то обновляем теги
-			table.UpdateText(node, myPointer, index)
+		if index == 0 { // entry does not exist, add
+			table.AppendText(node, dataTblTextPointer, plaintext)
+		} else { // entry exists, update tags
+			table.UpdateText(node, dataTblTextPointer, index)
 		}
-
-		//if node.Key == string(variables.Name) {
-		//	//dataTblText[index+1] = []string{node.Value, plaintext, "", created.Format(layout), updated.Format(layout)}
-		//	row := []string{node.Value, plaintext, "", created.Format(layout), updated.Format(layout)}
-		//	dataTblText = append(dataTblText, row)
-		//} else if node.Key == string(variables.Description) {
-		//	//dataTblText[index+1] = []string{"", plaintext, node.Value, created.Format(layout), updated.Format(layout)}
-		//	row := []string{"", plaintext, node.Value, created.Format(layout), updated.Format(layout)}
-		//	dataTblText = append(dataTblText, row)
-		//}
 	}
+
 	return dataTblText, dataTblCart, nil
 }
