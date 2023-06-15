@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/theme"
 	"github.com/sirupsen/logrus"
@@ -35,7 +34,5 @@ func main() {
 	//---------------------------------------------------------------------- fyne.app init
 	application := app.New()
 	application.Settings().SetTheme(theme.LightTheme())
-	window := application.NewWindow("GophKeeper")
-	window.Resize(fyne.NewSize(250, 80))
-	gui.InitGUI(log, window, client)
+	gui.InitGUI(log, application, client)
 }

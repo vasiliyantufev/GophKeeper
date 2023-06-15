@@ -16,7 +16,9 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/labels"
 )
 
-func InitGUI(log *logrus.Logger, window fyne.Window, client *api.Client) {
+func InitGUI(log *logrus.Logger, application fyne.App, client *api.Client) {
+	window := application.NewWindow("GophKeeper")
+	window.Resize(fyne.NewSize(250, 80))
 	var dataTblText = [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}}
 	var dataTblCart = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
 	var radioOptions = []string{"Login", "Registration"}
