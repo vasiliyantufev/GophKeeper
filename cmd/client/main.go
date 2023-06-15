@@ -220,7 +220,7 @@ func main() {
 		if valid {
 			err = client.CreateText(textNameEntry.Text, textDescriptionEntry.Text, password, textEntry.Text, accessToken)
 			if err != nil {
-				labelAlertAuth.SetText(errors.ErrTextAdd)
+				labelAlertText.SetText(errors.ErrTextAdd)
 			} else {
 				dataTblText = append(dataTblText, []string{textNameEntry.Text, textEntry.Text, textDescriptionEntry.Text,
 					time.Now().Format(layout), time.Now().Format(layout)})
