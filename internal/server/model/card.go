@@ -14,3 +14,15 @@ type Card struct {
 	UpdatedAt         time.Time
 	DeletedAt         time.Time
 }
+
+type CreateCardRequest struct {
+	UserID      int64
+	Name        string
+	Type        string
+	Card        []byte
+	AccessToken string
+}
+
+type CreateCardResponse struct {
+	Card Card
+}

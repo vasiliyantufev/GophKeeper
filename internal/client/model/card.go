@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type Cart struct {
+type Card struct {
 	Name          string
 	PaymentSystem string
 	Number        string
