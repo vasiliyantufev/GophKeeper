@@ -113,6 +113,7 @@ func (c Client) CreateCard(name, password, paymentSystem, number, holder, endDat
 	//	c.logger.Error(err)
 	//	return err
 	//}
+
 	//created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	//endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	//createdText, err := c.grpc.HandleCreateText(context.Background(),
