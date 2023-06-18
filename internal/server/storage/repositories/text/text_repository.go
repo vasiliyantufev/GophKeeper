@@ -58,10 +58,11 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 	ListText := []model.Text{}
 
-	rows, err := t.db.Pool.Query("SELECT metadata.key, text.text, metadata.value, text.created_at, text.updated_at FROM metadata "+
+	rows, err := t.db.Pool.Query("SELECT metadata.entity_id, metadata.key, text.text, metadata.value, text.created_at, "+
+		"text.updated_at FROM metadata "+
 		//rows, err := t.db.Pool.Query("SELECT text.text FROM metadata "+
-		"left join text on metadata.entity_id = text.text_id "+
-		"left join users on text.user_id  = users.user_id "+
+		"inner join text on metadata.entity_id = text.text_id "+
+		"inner join users on text.user_id  = users.user_id "+
 		"where users.user_id = $1", userId)
 
 	if err != nil {
@@ -74,7 +75,7 @@ func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 	defer rows.Close()
 	for rows.Next() {
 		text := model.Text{}
-		err = rows.Scan(&text.Key, &text.Text, &text.Value, &text.CreatedAt, &text.UpdatedAt)
+		err = rows.Scan(&text.ID, &text.Key, &text.Text, &text.Value, &text.CreatedAt, &text.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}

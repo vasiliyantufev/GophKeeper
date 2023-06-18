@@ -1,14 +1,17 @@
 package table
 
 import (
+	"strconv"
+
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 )
 
-const ColName = 0
-const ColText = 1
-const ColDescription = 2
+const ColId = 0
+const ColName = 1
+const ColText = 2
+const ColDescription = 3
 const ColTblText = 5
 const ColTblCart = 9
 
@@ -35,10 +38,10 @@ func AppendText(node *grpc.Text, dataTblText *[][]string, plaintext string) {
 	created, _ := service.ConvertTimestampToTime(node.CreatedAt)
 	updated, _ := service.ConvertTimestampToTime(node.UpdatedAt)
 	if node.Key == string(variables.Name) {
-		row := []string{node.Value, plaintext, "", created.Format(layout), updated.Format(layout)}
+		row := []string{strconv.Itoa(int(node.Id)), node.Value, plaintext, "", created.Format(layout), updated.Format(layout)}
 		*dataTblText = append(*dataTblText, row)
 	} else if node.Key == string(variables.Description) {
-		row := []string{"", plaintext, node.Value, created.Format(layout), updated.Format(layout)}
+		row := []string{strconv.Itoa(int(node.Id)), "", plaintext, node.Value, created.Format(layout), updated.Format(layout)}
 		*dataTblText = append(*dataTblText, row)
 	}
 }
@@ -48,5 +51,11 @@ func UpdateText(node *grpc.Text, dataTblText *[][]string, index int) {
 		(*dataTblText)[index][ColName] = node.Value
 	} else if node.Key == string(variables.Description) {
 		(*dataTblText)[index][ColDescription] = node.Value
+	}
+}
+
+func DeleteTextColId(dataTblText *[][]string) {
+	for index := range *dataTblText {
+		(*dataTblText)[index] = (*dataTblText)[index][1:]
 	}
 }

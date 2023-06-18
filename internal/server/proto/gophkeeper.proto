@@ -57,13 +57,14 @@ message UserExistResponse {
 }
 //------------------------------------
 message Text {
-  int64  userId = 1;
-  string key = 2;
-  string value = 3;
-  bytes text = 4;
-  google.protobuf.Timestamp createdAt = 5;
-  google.protobuf.Timestamp updatedAt = 6;
-  google.protobuf.Timestamp deletedAt = 7;
+  int64  id = 1;
+  int64  userId = 2;
+  string key = 3;
+  string value = 4;
+  bytes text = 5;
+  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp updatedAt = 7;
+  google.protobuf.Timestamp deletedAt = 8;
 }
 message CreateTextRequest {
   string name = 1;
