@@ -13,8 +13,8 @@
 
 # Binaries
 bin/
-cmd/gophkeeper/client
-cmd/gophkeeper/server
+cmd/client
+cmd/server
 
 # Dependency directories (remove the comment below to include it)
 vendor/
