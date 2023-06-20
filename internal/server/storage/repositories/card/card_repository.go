@@ -1,10 +1,12 @@
 package card
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 )
 
@@ -48,4 +50,23 @@ func (c *Card) KeyExists(cardRequest *model.CreateCardRequest) (bool, error) {
 		return exists, err
 	}
 	return exists, nil
+}
+
+func (c *Card) GetNodeCard(cardRequest *model.GetNodeCardRequest) (*model.Card, error) {
+	card := &model.Card{}
+	err := c.db.Pool.QueryRow("SELECT card.card_data FROM metadata "+
+		"inner join card on metadata.entity_id = card.card_id "+
+		"inner join users on card.user_id  = users.user_id "+
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3",
+		string(variables.Name), cardRequest.Value, cardRequest.UserID).Scan(
+		&card.CardData,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrRecordNotFound
+		} else {
+			return nil, err
+		}
+	}
+	return card, nil
 }

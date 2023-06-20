@@ -28,6 +28,22 @@ type CreateCardResponse struct {
 	Card Card
 }
 
+// ----------------------------------------
+type GetNodeCardRequest struct {
+	UserID      int64
+	Key         string
+	Value       string
+	AccessToken string
+}
+
+type GetNodeCardResponse struct {
+	Key   string
+	Value string
+	Card  Card
+}
+
+// ----------------------------------------
+
 func GetCardData(data *Card) *grpc.Card {
 	created, _ := service.ConvertTimeToTimestamp(data.CreatedAt)
 	updated, _ := service.ConvertTimeToTimestamp(data.UpdatedAt)
