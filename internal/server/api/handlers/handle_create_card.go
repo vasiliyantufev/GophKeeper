@@ -6,13 +6,14 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-// HandleCreateCart - create card
+// HandleCreateCard - create card
 func (h *Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequest) (*grpc.CreateCardResponse, error) {
-	h.logger.Info("Create cart")
+	h.logger.Info("Create card")
 
 	valid := h.token.Validate(req.AccessToken)
 	if !valid {
@@ -25,7 +26,7 @@ func (h *Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequ
 	CardData := &model.CreateCardRequest{}
 	CardData.UserID = req.AccessToken.UserId
 	CardData.Name = req.Name
-	CardData.Card = req.Data
+	CardData.CardData = req.Data
 	if CardData.Name == "" {
 		err := errors.ErrNoMetadataSet
 		h.logger.Error(err)
@@ -33,44 +34,44 @@ func (h *Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequ
 			codes.InvalidArgument, err.Error(),
 		)
 	}
-	//exists, err := h.text.KeyExists(TextData)
-	//if err != nil {
-	//	h.logger.Error(err)
-	//	return &grpc.CreateTextResponse{}, status.Errorf(
-	//		codes.Internal, err.Error(),
-	//	)
-	//}
-	//if exists == true {
-	//	err = errors.ErrKeyAlreadyExists
-	//	h.logger.Error(err)
-	//	return &grpc.CreateTextResponse{}, status.Errorf(
-	//		codes.AlreadyExists, err.Error(),
-	//	)
-	//}
+	exists, err := h.card.KeyExists(CardData)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.CreateCardResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+	if exists == true {
+		err = errors.ErrKeyAlreadyExists
+		h.logger.Error(err)
+		return &grpc.CreateCardResponse{}, status.Errorf(
+			codes.AlreadyExists, err.Error(),
+		)
+	}
 
-	//CreatedCard, err := h.text.CreateText(CardData)
-	//if err != nil {
-	//	h.logger.Error(err)
-	//	return &grpc.CreateCardResponse{}, status.Errorf(
-	//		codes.Internal, err.Error(),
-	//	)
-	//}
-	//text := model.GetTextData(CreatedText)
-	//
-	//Metadata := &model.CreateMetadataRequest{}
-	//Metadata.EntityId = CreatedText.ID
-	//Metadata.Key = string(variables.Name)
-	//Metadata.Value = TextData.Name
-	//Metadata.Type = string(variables.Text)
-	//CreatedMetadataName, err := h.metadata.CreateMetadata(Metadata)
-	//if err != nil {
-	//	h.logger.Error(err)
-	//	return &grpc.CreateCardResponse{}, status.Errorf(
-	//		codes.Internal, err.Error(),
-	//	)
-	//}
-	//
-	//h.logger.Debug(CreatedText)
-	//h.logger.Debug(CreatedMetadataName)
-	return &grpc.CreateCardResponse{}, nil
+	CreatedCard, err := h.card.CreateCard(CardData)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.CreateCardResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+	card := model.GetCardData(CreatedCard)
+
+	Metadata := &model.CreateMetadataRequest{}
+	Metadata.EntityId = CreatedCard.ID
+	Metadata.Key = string(variables.Name)
+	Metadata.Value = CardData.Name
+	Metadata.Type = string(variables.Card)
+	CreatedMetadataName, err := h.metadata.CreateMetadata(Metadata)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.CreateCardResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
+	h.logger.Debug(CreatedCard)
+	h.logger.Debug(CreatedMetadataName)
+	return &grpc.CreateCardResponse{Data: card}, nil
 }

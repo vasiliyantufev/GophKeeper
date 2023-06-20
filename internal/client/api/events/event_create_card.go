@@ -12,7 +12,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
 
-func (c Event) CreateCard(name, password, paymentSystem, number, holder, endData, cvc string, token model.Token) error {
+func (c Event) EventCreateCard(name, password, paymentSystem, number, holder, endData, cvc string, token model.Token) error {
 	c.logger.Info("create card")
 
 	intCvc, err := strconv.Atoi(cvc)

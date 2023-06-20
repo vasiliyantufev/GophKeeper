@@ -217,7 +217,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		exist = table.SearchByColumn(dataTblCard, 0, cartNameEntry.Text) //ищем в мапке
 		valid = form.ValidateCart(exist, cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCart)
 		if valid {
-			err = client.CreateCard(cartNameEntry.Text, password, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
+			err = client.EventCreateCard(cartNameEntry.Text, password, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
 				endDateEntry.Text, cvcEntry.Text, accessToken)
 			if err != nil {
 				labelAlertCart.SetText(errors.ErrTextAdd)
