@@ -56,11 +56,9 @@ type GetListTextResponse struct {
 }
 
 func GetTextData(data *Text) *grpc.Text {
-
 	created, _ := service.ConvertTimeToTimestamp(data.CreatedAt)
 	updated, _ := service.ConvertTimeToTimestamp(data.UpdatedAt)
 	deleted, _ := service.ConvertTimeToTimestamp(data.DeletedAt)
-
 	return &grpc.Text{
 		UserId:    data.UserID,
 		Text:      data.Text,

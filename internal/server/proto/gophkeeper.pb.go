@@ -1175,7 +1175,7 @@ func (x *Card) GetDeletedAt() *timestamp.Timestamp {
 	return nil
 }
 
-type CreateCartRequest struct {
+type CreateCardRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -1185,8 +1185,8 @@ type CreateCartRequest struct {
 	AccessToken *Token `protobuf:"bytes,4,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
 }
 
-func (x *CreateCartRequest) Reset() {
-	*x = CreateCartRequest{}
+func (x *CreateCardRequest) Reset() {
+	*x = CreateCardRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_gophkeeper_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1194,13 +1194,13 @@ func (x *CreateCartRequest) Reset() {
 	}
 }
 
-func (x *CreateCartRequest) String() string {
+func (x *CreateCardRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateCartRequest) ProtoMessage() {}
+func (*CreateCardRequest) ProtoMessage() {}
 
-func (x *CreateCartRequest) ProtoReflect() protoreflect.Message {
+func (x *CreateCardRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_gophkeeper_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1212,33 +1212,33 @@ func (x *CreateCartRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateCartRequest.ProtoReflect.Descriptor instead.
-func (*CreateCartRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateCardRequest.ProtoReflect.Descriptor instead.
+func (*CreateCardRequest) Descriptor() ([]byte, []int) {
 	return file_gophkeeper_proto_rawDescGZIP(), []int{19}
 }
 
-func (x *CreateCartRequest) GetName() string {
+func (x *CreateCardRequest) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *CreateCartRequest) GetData() []byte {
+func (x *CreateCardRequest) GetData() []byte {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *CreateCartRequest) GetAccessToken() *Token {
+func (x *CreateCardRequest) GetAccessToken() *Token {
 	if x != nil {
 		return x.AccessToken
 	}
 	return nil
 }
 
-type CreateCartResponse struct {
+type CreateCardResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -1246,8 +1246,8 @@ type CreateCartResponse struct {
 	Data *Card `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (x *CreateCartResponse) Reset() {
-	*x = CreateCartResponse{}
+func (x *CreateCardResponse) Reset() {
+	*x = CreateCardResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_gophkeeper_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1255,13 +1255,13 @@ func (x *CreateCartResponse) Reset() {
 	}
 }
 
-func (x *CreateCartResponse) String() string {
+func (x *CreateCardResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateCartResponse) ProtoMessage() {}
+func (*CreateCardResponse) ProtoMessage() {}
 
-func (x *CreateCartResponse) ProtoReflect() protoreflect.Message {
+func (x *CreateCardResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_gophkeeper_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1273,12 +1273,12 @@ func (x *CreateCartResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateCartResponse.ProtoReflect.Descriptor instead.
-func (*CreateCartResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateCardResponse.ProtoReflect.Descriptor instead.
+func (*CreateCardResponse) Descriptor() ([]byte, []int) {
 	return file_gophkeeper_proto_rawDescGZIP(), []int{20}
 }
 
-func (x *CreateCartResponse) GetData() *Card {
+func (x *CreateCardResponse) GetData() *Card {
 	if x != nil {
 		return x.Data
 	}
@@ -1427,16 +1427,16 @@ var file_gophkeeper_proto_rawDesc = []byte{
 	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
 	0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65,
 	0x74, 0x65, 0x64, 0x41, 0x74, 0x22, 0x69, 0x0a, 0x11, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43,
-	0x61, 0x72, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61,
+	0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61,
 	0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x12,
 	0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61,
 	0x74, 0x61, 0x12, 0x2c, 0x0a, 0x0b, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x54, 0x6f, 0x6b, 0x65,
 	0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x54, 0x6f,
 	0x6b, 0x65, 0x6e, 0x52, 0x0b, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x54, 0x6f, 0x6b, 0x65, 0x6e,
-	0x22, 0x33, 0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x72, 0x74, 0x52, 0x65,
+	0x22, 0x33, 0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65,
 	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1d, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x43, 0x61, 0x72, 0x64, 0x52,
-	0x04, 0x64, 0x61, 0x74, 0x61, 0x32, 0x80, 0x04, 0x0a, 0x0a, 0x47, 0x6f, 0x70, 0x68, 0x6b, 0x65,
+	0x04, 0x64, 0x61, 0x74, 0x61, 0x32, 0xc7, 0x04, 0x0a, 0x0a, 0x47, 0x6f, 0x70, 0x68, 0x6b, 0x65,
 	0x65, 0x70, 0x65, 0x72, 0x12, 0x51, 0x0a, 0x14, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x41, 0x75,
 	0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x2e, 0x61,
 	0x70, 0x69, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f,
@@ -1468,8 +1468,13 @@ var file_gophkeeper_proto_rawDesc = []byte{
 	0x65, 0x72, 0x45, 0x78, 0x69, 0x73, 0x74, 0x12, 0x15, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x55, 0x73,
 	0x65, 0x72, 0x45, 0x78, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16,
 	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x45, 0x78, 0x69, 0x73, 0x74, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x0e, 0x5a, 0x0c, 0x2e, 0x2f, 0x67, 0x6f,
-	0x70, 0x68, 0x6b, 0x65, 0x65, 0x70, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x10, 0x48, 0x61, 0x6e, 0x64,
+	0x6c, 0x65, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x72, 0x64, 0x12, 0x16, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42,
+	0x0e, 0x5a, 0x0c, 0x2e, 0x2f, 0x67, 0x6f, 0x70, 0x68, 0x6b, 0x65, 0x65, 0x70, 0x65, 0x72, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1505,8 +1510,8 @@ var file_gophkeeper_proto_goTypes = []interface{}{
 	(*GetListTextResponse)(nil),    // 16: api.GetListTextResponse
 	(*Metadata)(nil),               // 17: api.Metadata
 	(*Card)(nil),                   // 18: api.Card
-	(*CreateCartRequest)(nil),      // 19: api.CreateCartRequest
-	(*CreateCartResponse)(nil),     // 20: api.CreateCartResponse
+	(*CreateCardRequest)(nil),      // 19: api.CreateCardRequest
+	(*CreateCardResponse)(nil),     // 20: api.CreateCardResponse
 	(*timestamp.Timestamp)(nil),    // 21: google.protobuf.Timestamp
 }
 var file_gophkeeper_proto_depIdxs = []int32{
@@ -1532,8 +1537,8 @@ var file_gophkeeper_proto_depIdxs = []int32{
 	21, // 19: api.Card.createdAt:type_name -> google.protobuf.Timestamp
 	21, // 20: api.Card.updatedAt:type_name -> google.protobuf.Timestamp
 	21, // 21: api.Card.deletedAt:type_name -> google.protobuf.Timestamp
-	2,  // 22: api.CreateCartRequest.accessToken:type_name -> api.Token
-	18, // 23: api.CreateCartResponse.data:type_name -> api.Card
+	2,  // 22: api.CreateCardRequest.accessToken:type_name -> api.Token
+	18, // 23: api.CreateCardResponse.data:type_name -> api.Card
 	4,  // 24: api.Gophkeeper.HandleAuthentication:input_type -> api.AuthenticationRequest
 	6,  // 25: api.Gophkeeper.HandleRegistration:input_type -> api.RegistrationRequest
 	11, // 26: api.Gophkeeper.HandleCreateText:input_type -> api.CreateTextRequest
@@ -1541,15 +1546,17 @@ var file_gophkeeper_proto_depIdxs = []int32{
 	13, // 28: api.Gophkeeper.HandleGetNodeText:input_type -> api.GetNodeTextRequest
 	0,  // 29: api.Gophkeeper.HandlePing:input_type -> api.PingRequest
 	8,  // 30: api.Gophkeeper.HandleUserExist:input_type -> api.UserExistRequest
-	5,  // 31: api.Gophkeeper.HandleAuthentication:output_type -> api.AuthenticationResponse
-	7,  // 32: api.Gophkeeper.HandleRegistration:output_type -> api.RegistrationResponse
-	12, // 33: api.Gophkeeper.HandleCreateText:output_type -> api.CreateTextResponse
-	16, // 34: api.Gophkeeper.HandleGetListText:output_type -> api.GetListTextResponse
-	14, // 35: api.Gophkeeper.HandleGetNodeText:output_type -> api.GetNodeTextResponse
-	1,  // 36: api.Gophkeeper.HandlePing:output_type -> api.PingResponse
-	9,  // 37: api.Gophkeeper.HandleUserExist:output_type -> api.UserExistResponse
-	31, // [31:38] is the sub-list for method output_type
-	24, // [24:31] is the sub-list for method input_type
+	19, // 31: api.Gophkeeper.HandleCreateCard:input_type -> api.CreateCardRequest
+	5,  // 32: api.Gophkeeper.HandleAuthentication:output_type -> api.AuthenticationResponse
+	7,  // 33: api.Gophkeeper.HandleRegistration:output_type -> api.RegistrationResponse
+	12, // 34: api.Gophkeeper.HandleCreateText:output_type -> api.CreateTextResponse
+	16, // 35: api.Gophkeeper.HandleGetListText:output_type -> api.GetListTextResponse
+	14, // 36: api.Gophkeeper.HandleGetNodeText:output_type -> api.GetNodeTextResponse
+	1,  // 37: api.Gophkeeper.HandlePing:output_type -> api.PingResponse
+	9,  // 38: api.Gophkeeper.HandleUserExist:output_type -> api.UserExistResponse
+	20, // 39: api.Gophkeeper.HandleCreateCard:output_type -> api.CreateCardResponse
+	32, // [32:40] is the sub-list for method output_type
+	24, // [24:32] is the sub-list for method input_type
 	24, // [24:24] is the sub-list for extension type_name
 	24, // [24:24] is the sub-list for extension extendee
 	0,  // [0:24] is the sub-list for field type_name
@@ -1790,7 +1797,7 @@ func file_gophkeeper_proto_init() {
 			}
 		}
 		file_gophkeeper_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateCartRequest); i {
+			switch v := v.(*CreateCardRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1802,7 +1809,7 @@ func file_gophkeeper_proto_init() {
 			}
 		}
 		file_gophkeeper_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateCartResponse); i {
+			switch v := v.(*CreateCardResponse); i {
 			case 0:
 				return &v.state
 			case 1:

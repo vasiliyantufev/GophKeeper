@@ -14,6 +14,7 @@ service Gophkeeper {
   rpc HandleGetNodeText(GetNodeTextRequest) returns (GetNodeTextResponse) {}
   rpc HandlePing(PingRequest) returns (PingResponse) {}
   rpc HandleUserExist(UserExistRequest) returns (UserExistResponse) {}
+  rpc HandleCreateCard(CreateCardRequest) returns (CreateCardResponse) {}
 }
 //------------------------------------
 message PingRequest {}
@@ -109,12 +110,12 @@ message Card {
   google.protobuf.Timestamp updatedAt = 7;
   google.protobuf.Timestamp deletedAt = 8;
 }
-message CreateCartRequest {
+message CreateCardRequest {
   string name = 1;
   bytes  data = 3;
   Token  accessToken = 4;
 }
-message CreateCartResponse {
+message CreateCardResponse {
   Card data = 1;
 }
 //------------------------------------

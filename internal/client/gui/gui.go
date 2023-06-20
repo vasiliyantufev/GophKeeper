@@ -7,7 +7,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	"github.com/sirupsen/logrus"
-	"github.com/vasiliyantufev/gophkeeper/internal/client/api"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/api/events"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/component"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/component/form"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
@@ -16,11 +16,11 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/labels"
 )
 
-func InitGUI(log *logrus.Logger, application fyne.App, client *api.Client) {
+func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	window := application.NewWindow("GophKeeper")
 	window.Resize(fyne.NewSize(250, 80))
 	var dataTblText = [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}}
-	var dataTblCart = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
+	var dataTblCard = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
 	var radioOptions = []string{"Login", "Registration"}
 	var accessToken = model.Token{}
 	var password string
@@ -92,13 +92,13 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *api.Client) {
 	})
 	//---------------------------------------------------------------------- buttons event
 	buttonTop = widget.NewButton(labels.BtnUpdateData, func() {
-		dataTblText, dataTblCart, err = client.Synchronization(password, accessToken)
+		dataTblText, dataTblCard, err = client.Synchronization(password, accessToken)
 		if err != nil {
 			labelAlertAuth.SetText(errors.ErrLogin)
 		} else {
 			tblText.Resize(fyne.NewSize(float32(len(dataTblText)), float32(len(dataTblText[0]))))
 			tblText.Refresh()
-			tblCart.Resize(fyne.NewSize(float32(len(dataTblCart)), float32(len(dataTblCart[0]))))
+			tblCart.Resize(fyne.NewSize(float32(len(dataTblCard)), float32(len(dataTblCard[0]))))
 			tblCart.Refresh()
 			window.SetContent(containerTabs)
 		}
@@ -126,13 +126,13 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *api.Client) {
 	//---------------------------------------------------------------------- table cart init
 	tblCart = widget.NewTable(
 		func() (int, int) {
-			return len(dataTblCart), len(dataTblCart[0])
+			return len(dataTblCard), len(dataTblCard[0])
 		},
 		func() fyne.CanvasObject {
 			return widget.NewLabel(labels.TblLabel)
 		},
 		func(i widget.TableCellID, o fyne.CanvasObject) {
-			o.(*widget.Label).SetText(dataTblCart[i.Row][i.Col])
+			o.(*widget.Label).SetText(dataTblCard[i.Row][i.Col])
 		})
 	form.SetDefaultColumnsWidthCart(tblCart)
 	//---------------------------------------------------------------------- containerTabs
@@ -151,7 +151,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *api.Client) {
 					labelAlertAuth.SetText(errors.ErrLogin)
 				} else {
 					password = passwordLoginEntry.Text
-					dataTblText, dataTblCart, err = client.Synchronization(password, accessToken)
+					dataTblText, dataTblCard, err = client.Synchronization(password, accessToken)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrLogin)
 					} else {
@@ -214,22 +214,29 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *api.Client) {
 	buttonCartAdd = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertCart.Show()
 		valid = false
-		exist = table.SearchByColumn(dataTblCart, 0, cartNameEntry.Text) //ищем в мапке
+		exist = table.SearchByColumn(dataTblCard, 0, cartNameEntry.Text) //ищем в мапке
 		valid = form.ValidateCart(exist, cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCart)
 		if valid {
-			layout := "01/02/2006 15:04:05"
-			dataTblCart = append(dataTblCart, []string{cartNameEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
-				cvcEntry.Text, endDateEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
+			err = client.CreateCard(cartNameEntry.Text, password, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
+				endDateEntry.Text, cvcEntry.Text, accessToken)
+			if err != nil {
+				labelAlertCart.SetText(errors.ErrTextAdd)
+			} else {
+				layout := "01/02/2006 15:04:05"
+				dataTblCard = append(dataTblCard, []string{cartNameEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
+					cvcEntry.Text, endDateEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
-			form.ClearCart(cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
-			log.Info("Карта добавлена")
+				form.ClearCart(cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+				log.Info("Карта добавлена")
 
-			labelAlertCart.Hide()
-			formCart.Refresh()
-			window.SetContent(containerTabs)
-			window.Show()
+				labelAlertCart.Hide()
+				formCart.Refresh()
+				window.SetContent(containerTabs)
+				window.Show()
+			}
+
 		}
-		log.Debug(dataTblCart)
+		log.Debug(dataTblCard)
 	})
 	//---------------------------------------------------------------------- containers init
 	containerRadio = container.NewVBox(radioAuth)
