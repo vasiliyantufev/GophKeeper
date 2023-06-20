@@ -27,6 +27,7 @@ const (
 	Gophkeeper_HandlePing_FullMethodName           = "/api.Gophkeeper/HandlePing"
 	Gophkeeper_HandleUserExist_FullMethodName      = "/api.Gophkeeper/HandleUserExist"
 	Gophkeeper_HandleCreateCard_FullMethodName     = "/api.Gophkeeper/HandleCreateCard"
+	Gophkeeper_HandleGetNodeCard_FullMethodName    = "/api.Gophkeeper/HandleGetNodeCard"
 )
 
 // GophkeeperClient is the client API for Gophkeeper service.
@@ -41,6 +42,7 @@ type GophkeeperClient interface {
 	HandlePing(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 	HandleUserExist(ctx context.Context, in *UserExistRequest, opts ...grpc.CallOption) (*UserExistResponse, error)
 	HandleCreateCard(ctx context.Context, in *CreateCardRequest, opts ...grpc.CallOption) (*CreateCardResponse, error)
+	HandleGetNodeCard(ctx context.Context, in *GetNodeCardRequest, opts ...grpc.CallOption) (*GetNodeCardResponse, error)
 }
 
 type gophkeeperClient struct {
@@ -123,6 +125,15 @@ func (c *gophkeeperClient) HandleCreateCard(ctx context.Context, in *CreateCardR
 	return out, nil
 }
 
+func (c *gophkeeperClient) HandleGetNodeCard(ctx context.Context, in *GetNodeCardRequest, opts ...grpc.CallOption) (*GetNodeCardResponse, error) {
+	out := new(GetNodeCardResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetNodeCard_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GophkeeperServer is the server API for Gophkeeper service.
 // All implementations must embed UnimplementedGophkeeperServer
 // for forward compatibility
@@ -135,6 +146,7 @@ type GophkeeperServer interface {
 	HandlePing(context.Context, *PingRequest) (*PingResponse, error)
 	HandleUserExist(context.Context, *UserExistRequest) (*UserExistResponse, error)
 	HandleCreateCard(context.Context, *CreateCardRequest) (*CreateCardResponse, error)
+	HandleGetNodeCard(context.Context, *GetNodeCardRequest) (*GetNodeCardResponse, error)
 	mustEmbedUnimplementedGophkeeperServer()
 }
 
@@ -165,6 +177,9 @@ func (UnimplementedGophkeeperServer) HandleUserExist(context.Context, *UserExist
 }
 func (UnimplementedGophkeeperServer) HandleCreateCard(context.Context, *CreateCardRequest) (*CreateCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateCard not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleGetNodeCard(context.Context, *GetNodeCardRequest) (*GetNodeCardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleGetNodeCard not implemented")
 }
 func (UnimplementedGophkeeperServer) mustEmbedUnimplementedGophkeeperServer() {}
 
@@ -323,6 +338,24 @@ func _Gophkeeper_HandleCreateCard_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gophkeeper_HandleGetNodeCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNodeCardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleGetNodeCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleGetNodeCard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleGetNodeCard(ctx, req.(*GetNodeCardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Gophkeeper_ServiceDesc is the grpc.ServiceDesc for Gophkeeper service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -361,6 +394,10 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HandleCreateCard",
 			Handler:    _Gophkeeper_HandleCreateCard_Handler,
+		},
+		{
+			MethodName: "HandleGetNodeCard",
+			Handler:    _Gophkeeper_HandleGetNodeCard_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

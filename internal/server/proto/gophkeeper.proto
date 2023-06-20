@@ -15,6 +15,7 @@ service Gophkeeper {
   rpc HandlePing(PingRequest) returns (PingResponse) {}
   rpc HandleUserExist(UserExistRequest) returns (UserExistResponse) {}
   rpc HandleCreateCard(CreateCardRequest) returns (CreateCardResponse) {}
+  rpc HandleGetNodeCard(GetNodeCardRequest) returns (GetNodeCardResponse) {}
 }
 //------------------------------------
 message PingRequest {}
@@ -116,6 +117,13 @@ message CreateCardRequest {
   Token  accessToken = 4;
 }
 message CreateCardResponse {
+  Card data = 1;
+}
+message GetNodeCardRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message GetNodeCardResponse {
   Card data = 1;
 }
 //------------------------------------
