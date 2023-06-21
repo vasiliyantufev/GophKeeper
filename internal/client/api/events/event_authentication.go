@@ -8,7 +8,7 @@ import (
 )
 
 func (c Event) EventAuthentication(username, password string) (model.Token, error) {
-	c.logger.Info("authentication")
+	c.logger.Info("Authentication")
 	token := model.Token{}
 	password, err := encryption.HashPassword(password)
 	if err != nil {

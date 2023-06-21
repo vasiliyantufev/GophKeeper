@@ -5,7 +5,7 @@ import (
 )
 
 func (c Event) EventPing() (string, error) {
-	c.logger.Info("ping")
+	c.logger.Info("Ping")
 	msg, err := c.grpc.HandlePing(c.context, &grpc.PingRequest{})
 	if err != nil {
 		c.logger.Error(err)

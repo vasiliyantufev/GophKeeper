@@ -8,9 +8,9 @@ func ClearText(textNameEntry *widget.Entry, textEntry *widget.Entry, textDescrip
 	textDescriptionEntry.SetText("")
 }
 
-func ClearCart(cartNameEntry *widget.Entry, paymentSystemEntry *widget.Entry, numberEntry *widget.Entry,
+func ClearCard(cardNameEntry *widget.Entry, paymentSystemEntry *widget.Entry, numberEntry *widget.Entry,
 	holderEntry *widget.Entry, endDateEntry *widget.Entry, cvcEntry *widget.Entry) {
-	cartNameEntry.SetText("")
+	cardNameEntry.SetText("")
 	paymentSystemEntry.SetText("")
 	numberEntry.SetText("")
 	holderEntry.SetText("")

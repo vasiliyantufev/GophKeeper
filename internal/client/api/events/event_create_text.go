@@ -10,7 +10,7 @@ import (
 )
 
 func (c Event) EventCreateText(name, description, password, plaintext string, token model.Token) error {
-	c.logger.Info("create text")
+	c.logger.Info("Create text")
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
 	encryptText, err := encryption.Encrypt(plaintext, secretKey)
 	if err != nil {

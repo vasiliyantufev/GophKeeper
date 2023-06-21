@@ -21,7 +21,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	window.Resize(fyne.NewSize(250, 80))
 	var dataTblText = [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}}
 	var dataTblCard = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
-	var radioOptions = []string{"Login", "EventRegistration"}
+	var radioOptions = []string{"Login", "Registration"}
 	var accessToken = model.Token{}
 	var password string
 	var exist bool
@@ -34,20 +34,20 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var containerFormLogin *fyne.Container
 	var containerFormRegistration *fyne.Container
 	var containerFormText *fyne.Container
-	var containerFormCart *fyne.Container
+	var containerFormCard *fyne.Container
 	//---------------------------------------------------------------------- buttons
 	var buttonAuth *widget.Button
 	var buttonTop *widget.Button
 	var buttonText *widget.Button
-	var buttonCart *widget.Button
+	var buttonCard *widget.Button
 	var buttonTextAdd *widget.Button
-	var buttonCartAdd *widget.Button
+	var buttonCardAdd *widget.Button
 	//---------------------------------------------------------------------- tabs
 	var containerTabs *container.AppTabs
 	var tblText *widget.Table
-	var tblCart *widget.Table
+	var tblCard *widget.Table
 	var tabText *container.TabItem
-	var tabCart *container.TabItem
+	var tabCard *container.TabItem
 	//---------------------------------------------------------------------- entries init
 	separator := widget.NewSeparator()
 	usernameLoginEntry := widget.NewEntry()
@@ -58,7 +58,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	textNameEntry := widget.NewEntry()
 	textEntry := widget.NewEntry()
 	textDescriptionEntry := widget.NewEntry()
-	cartNameEntry := widget.NewEntry()
+	cardNameEntry := widget.NewEntry()
 	paymentSystemEntry := widget.NewEntry()
 	numberEntry := widget.NewEntry()
 	holderEntry := widget.NewEntry()
@@ -67,15 +67,15 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- labels init
 	labelAlertAuth := widget.NewLabel("")
 	labelAlertText := widget.NewLabel("")
-	labelAlertCart := widget.NewLabel("")
+	labelAlertCard := widget.NewLabel("")
 	labelAlertAuth.Hide()
 	labelAlertText.Hide()
-	labelAlertCart.Hide()
+	labelAlertCard.Hide()
 	//---------------------------------------------------------------------- forms init
 	formLogin := component.GetFormLogin(usernameLoginEntry, passwordLoginEntry)
 	formRegistration := component.GetFormRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
 	formText := component.GetFormText(textNameEntry, textEntry, textDescriptionEntry)
-	formCart := component.GetFormCart(cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+	formCard := component.GetFormCard(cardNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 	//---------------------------------------------------------------------- radio event
 	radioAuth := widget.NewRadioGroup(radioOptions, func(value string) {
 		log.Println("Radio set to ", value)
@@ -84,7 +84,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			window.Resize(fyne.NewSize(500, 100))
 			window.Show()
 		}
-		if value == "EventRegistration" {
+		if value == "Registration" {
 			window.SetContent(containerFormRegistration)
 			window.Resize(fyne.NewSize(500, 100))
 			window.Show()
@@ -98,8 +98,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		} else {
 			tblText.Resize(fyne.NewSize(float32(len(dataTblText)), float32(len(dataTblText[0]))))
 			tblText.Refresh()
-			tblCart.Resize(fyne.NewSize(float32(len(dataTblCard)), float32(len(dataTblCard[0]))))
-			tblCart.Refresh()
+			tblCard.Resize(fyne.NewSize(float32(len(dataTblCard)), float32(len(dataTblCard[0]))))
+			tblCard.Refresh()
 			window.SetContent(containerTabs)
 		}
 	})
@@ -107,8 +107,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		window.SetContent(containerFormText)
 		window.Show()
 	})
-	buttonCart = widget.NewButton(labels.BtnAddCart, func() {
-		window.SetContent(containerFormCart)
+	buttonCard = widget.NewButton(labels.BtnAddCard, func() {
+		window.SetContent(containerFormCard)
 		window.Show()
 	})
 	//---------------------------------------------------------------------- table text init
@@ -123,8 +123,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			o.(*widget.Label).SetText(dataTblText[i.Row][i.Col])
 		})
 	form.SetDefaultColumnsWidthText(tblText)
-	//---------------------------------------------------------------------- table cart init
-	tblCart = widget.NewTable(
+	//---------------------------------------------------------------------- table card init
+	tblCard = widget.NewTable(
 		func() (int, int) {
 			return len(dataTblCard), len(dataTblCard[0])
 		},
@@ -134,11 +134,11 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblCard[i.Row][i.Col])
 		})
-	form.SetDefaultColumnsWidthCart(tblCart)
+	form.SetDefaultColumnsWidthCard(tblCard)
 	//---------------------------------------------------------------------- containerTabs
 	tabText = component.GetTabTexts(tblText, buttonTop, buttonText)
-	tabCart = component.GetTabCarts(tblCart, buttonTop, buttonCart)
-	containerTabs = container.NewAppTabs(tabText, tabCart)
+	tabCard = component.GetTabCards(tblCard, buttonTop, buttonCard)
+	containerTabs = container.NewAppTabs(tabText, tabCard)
 	//---------------------------------------------------------------------- auth event
 	buttonAuth = widget.NewButton("Submit", func() {
 		labelAlertAuth.Show()
@@ -162,7 +162,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				}
 			}
 		}
-		if radioAuth.Selected == "EventRegistration" {
+		if radioAuth.Selected == "Registration" {
 			valid = form.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
 			if valid {
 				exist, err = client.EventUserExist(usernameRegistrationEntry.Text)
@@ -210,27 +210,27 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		}
 		log.Debug(dataTblText)
 	})
-	//---------------------------------------------------------------------- cart event
-	buttonCartAdd = widget.NewButton(labels.BtnAdd, func() {
-		labelAlertCart.Show()
+	//---------------------------------------------------------------------- card event
+	buttonCardAdd = widget.NewButton(labels.BtnAdd, func() {
+		labelAlertCard.Show()
 		valid = false
-		exist = table.SearchByColumn(dataTblCard, 0, cartNameEntry.Text) //ищем в мапке
-		valid = form.ValidateCart(exist, cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCart)
+		exist = table.SearchByColumn(dataTblCard, 0, cardNameEntry.Text) //ищем в мапке
+		valid = form.ValidateCard(exist, cardNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCard)
 		if valid {
-			err = client.EventCreateCard(cartNameEntry.Text, password, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
+			err = client.EventCreateCard(cardNameEntry.Text, password, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
 				endDateEntry.Text, cvcEntry.Text, accessToken)
 			if err != nil {
-				labelAlertCart.SetText(errors.ErrTextAdd)
+				labelAlertCard.SetText(errors.ErrTextAdd)
 			} else {
 				layout := "01/02/2006 15:04:05"
-				dataTblCard = append(dataTblCard, []string{cartNameEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
+				dataTblCard = append(dataTblCard, []string{cardNameEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
 					cvcEntry.Text, endDateEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
-				form.ClearCart(cartNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+				form.ClearCard(cardNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 				log.Info("Карта добавлена")
 
-				labelAlertCart.Hide()
-				formCart.Refresh()
+				labelAlertCard.Hide()
+				formCard.Refresh()
 				window.SetContent(containerTabs)
 				window.Show()
 			}
@@ -243,7 +243,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	containerFormLogin = container.NewVBox(formLogin, buttonAuth, labelAlertAuth, separator, radioAuth)
 	containerFormRegistration = container.NewVBox(formRegistration, buttonAuth, labelAlertAuth, separator, radioAuth)
 	containerFormText = container.NewVBox(formText, buttonTextAdd, labelAlertText)
-	containerFormCart = container.NewVBox(formCart, buttonCartAdd, labelAlertCart)
+	containerFormCard = container.NewVBox(formCard, buttonCardAdd, labelAlertCard)
 	//----------------------------------------------------------------------
 	window.SetContent(containerRadio)
 	window.ShowAndRun()

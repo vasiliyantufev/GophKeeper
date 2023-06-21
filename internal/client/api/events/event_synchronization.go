@@ -12,6 +12,7 @@ import (
 )
 
 func (c Event) EventSynchronization(password string, token model.Token) ([][]string, [][]string, error) {
+	c.logger.Info("Synchronization")
 	dataTblText := [][]string{}
 	dataTblCard := [][]string{}
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
@@ -27,10 +28,10 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 	var plaintext string
 
 	titleText := []string{"ID", "NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}
-	titleCart := []string{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC",
+	titleCard := []string{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC",
 		"END DATE", "CREATED_AT", "UPDATED_AT"}
 	dataTblText = append(dataTblText, titleText)
-	dataTblCard = append(dataTblCard, titleCart)
+	dataTblCard = append(dataTblCard, titleCard)
 	dataTblTextPointer := &dataTblText
 
 	secretKey := encryption.AesKeySecureRandom([]byte(password))

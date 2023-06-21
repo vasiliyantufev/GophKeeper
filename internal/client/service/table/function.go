@@ -13,7 +13,7 @@ const ColName = 1
 const ColText = 2
 const ColDescription = 3
 const ColTblText = 5
-const ColTblCart = 9
+const ColTblCard = 9
 
 func SearchByColumn(slice [][]string, targetColumn int, targetValue string) bool {
 	for i := 1; i < len(slice) && len(slice) > 1; i++ {

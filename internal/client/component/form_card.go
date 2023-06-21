@@ -2,8 +2,8 @@ package component
 
 import "fyne.io/fyne/v2/widget"
 
-func GetFormCart(name *widget.Entry, paymentSystem *widget.Entry, number *widget.Entry, holder *widget.Entry, endDate *widget.Entry, cvc *widget.Entry) *widget.Form {
-	formCart := widget.NewForm(
+func GetFormCard(name *widget.Entry, paymentSystem *widget.Entry, number *widget.Entry, holder *widget.Entry, endDate *widget.Entry, cvc *widget.Entry) *widget.Form {
+	formCard := widget.NewForm(
 		widget.NewFormItem("Name", name),
 		widget.NewFormItem("Payment System", paymentSystem),
 		widget.NewFormItem("Number", number),
@@ -11,5 +11,5 @@ func GetFormCart(name *widget.Entry, paymentSystem *widget.Entry, number *widget
 		widget.NewFormItem("End Date", endDate),
 		widget.NewFormItem("CVC", cvc),
 	)
-	return formCart
+	return formCard
 }

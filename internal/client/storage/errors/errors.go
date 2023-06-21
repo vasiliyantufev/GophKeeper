@@ -11,7 +11,7 @@ var (
 	ErrTextEmpty          = "Text не заполнен"
 	ErrDescriptionEmpty   = "Description не заполнен"
 	ErrTextExist          = "Текст с таким name уже существует"
-	ErrCartExist          = "Карта с таким name уже существует"
+	ErrCardExist          = "Карта с таким name уже существует"
 	ErrPaymentSystemEmpty = "Payment System не заполнен"
 	ErrNumberEmpty        = "Number не заполнен"
 	ErrHolderEmpty        = "Holder не заполнен"

@@ -13,7 +13,7 @@ import (
 )
 
 func (c Event) EventCreateCard(name, password, paymentSystem, number, holder, endData, cvc string, token model.Token) error {
-	c.logger.Info("create card")
+	c.logger.Info("Create card")
 
 	intCvc, err := strconv.Atoi(cvc)
 	if err != nil {

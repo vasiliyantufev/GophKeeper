@@ -8,7 +8,7 @@ import (
 )
 
 func (c Event) EventRegistration(username, password string) (model.Token, error) {
-	c.logger.Info("registration")
+	c.logger.Info("Registration")
 	token := model.Token{}
 	password, err := encryption.HashPassword(password)
 	if err != nil {
