@@ -2,11 +2,11 @@ package component
 
 import "fyne.io/fyne/v2/widget"
 
-func GetFormText(textName *widget.Entry, text *widget.Entry, textDescription *widget.Entry) *widget.Form {
+func GetFormText(textName *widget.Entry, textDescription *widget.Entry, text *widget.Entry) *widget.Form {
 	formText := widget.NewForm(
 		widget.NewFormItem("Name", textName),
-		widget.NewFormItem("Text", text),
 		widget.NewFormItem("Description", textDescription),
+		widget.NewFormItem("Data", text),
 	)
 	return formText
 }

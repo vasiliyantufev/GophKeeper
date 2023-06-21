@@ -19,8 +19,8 @@ import (
 func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	window := application.NewWindow("GophKeeper")
 	window.Resize(fyne.NewSize(250, 80))
-	var dataTblText = [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED AT", "UPDATED AT"}}
-	var dataTblCard = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}}
+	var dataTblText = [][]string{{"NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}}
+	var dataTblCard = [][]string{{"NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}}
 	var radioOptions = []string{"Login", "Registration"}
 	var accessToken = model.Token{}
 	var password string
@@ -58,6 +58,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	textNameEntry := widget.NewEntry()
 	textEntry := widget.NewEntry()
 	textDescriptionEntry := widget.NewEntry()
+	cardDescriptionEntry := widget.NewEntry()
 	cardNameEntry := widget.NewEntry()
 	paymentSystemEntry := widget.NewEntry()
 	numberEntry := widget.NewEntry()
@@ -74,8 +75,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- forms init
 	formLogin := component.GetFormLogin(usernameLoginEntry, passwordLoginEntry)
 	formRegistration := component.GetFormRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
-	formText := component.GetFormText(textNameEntry, textEntry, textDescriptionEntry)
-	formCard := component.GetFormCard(cardNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+	formText := component.GetFormText(textNameEntry, textDescriptionEntry, textEntry)
+	formCard := component.GetFormCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 	//---------------------------------------------------------------------- radio event
 	radioAuth := widget.NewRadioGroup(radioOptions, func(value string) {
 		log.Println("Radio set to ", value)
@@ -189,8 +190,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonTextAdd = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertText.Show()
 		valid = false
-		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) //ищем в мапке
-		valid = form.ValidateText(exist, textNameEntry, textEntry, textDescriptionEntry, labelAlertText)
+		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) // search in map
+		valid = form.ValidateText(exist, textNameEntry, textDescriptionEntry, textEntry, labelAlertText)
 		if valid {
 			err = client.EventCreateText(textNameEntry.Text, textDescriptionEntry.Text, password, textEntry.Text, accessToken)
 			if err != nil {
@@ -214,19 +215,19 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonCardAdd = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertCard.Show()
 		valid = false
-		exist = table.SearchByColumn(dataTblCard, 0, cardNameEntry.Text) //ищем в мапке
-		valid = form.ValidateCard(exist, cardNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCard)
+		exist = table.SearchByColumn(dataTblCard, 0, cardNameEntry.Text) // search in map
+		valid = form.ValidateCard(exist, cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCard)
 		if valid {
-			err = client.EventCreateCard(cardNameEntry.Text, password, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
+			err = client.EventCreateCard(cardNameEntry.Text, cardDescriptionEntry.Text, password, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
 				endDateEntry.Text, cvcEntry.Text, accessToken)
 			if err != nil {
 				labelAlertCard.SetText(errors.ErrTextAdd)
 			} else {
 				layout := "01/02/2006 15:04:05"
-				dataTblCard = append(dataTblCard, []string{cardNameEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
+				dataTblCard = append(dataTblCard, []string{cardNameEntry.Text, cardDescriptionEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
 					cvcEntry.Text, endDateEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
-				form.ClearCard(cardNameEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+				form.ClearCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 				log.Info("Карта добавлена")
 
 				labelAlertCard.Hide()

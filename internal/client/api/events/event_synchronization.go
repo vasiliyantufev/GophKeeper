@@ -39,8 +39,8 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 	var plaintext string
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
 
-	titleText := []string{"ID", "NAME", "DATA", "DESCRIPTION", "CREATED AT", "UPDATED AT"}
-	titleCard := []string{"ID", "NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC",
+	titleText := []string{"ID", "NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}
+	titleCard := []string{"ID", "NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC",
 		"END DATE", "CREATED AT", "UPDATED AT"}
 	dataTblText = append(dataTblText, titleText)
 	dataTblCard = append(dataTblCard, titleCard)
@@ -75,14 +75,13 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 			return dataTblText, dataTblCard, err
 		}
 
-		table.AppendCard(node, dataTblCardPointer, card)
-
-		//index := table.GetIndex(dataTblCard, table.ColId, strconv.Itoa(int(node.Id)))
-		//if index == 0 { // entity_id does not exist, add record
-		//	table.AppendCard(node, dataTblCardPointer, card)
-		//} else { // entity_id exists, update tags
-		//	table.UpdateCard(node, dataTblCardPointer, index)
-		//}
+		//table.AppendCard(node, dataTblCardPointer, card)
+		index := table.GetIndex(dataTblCard, table.ColId, strconv.Itoa(int(node.Id)))
+		if index == 0 { // entity_id does not exist, add record
+			table.AppendCard(node, dataTblCardPointer, card)
+		} else { // entity_id exists, update tags
+			table.UpdateCard(node, dataTblCardPointer, index)
+		}
 	}
 
 	table.DeleteColId(dataTblTextPointer)

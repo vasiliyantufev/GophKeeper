@@ -37,11 +37,6 @@ func ValidateRegistration(usernameRegistrationEntry *widget.Entry, passwordRegis
 		log.Print(labelAlertAuth.Text)
 		return false
 	}
-	//if utf8.RuneCountInString(passwordRegistrationEntry.Text) < 6 {
-	//	labelAlertAuth.SetText(errors.ErrPasswordIncorrect)
-	//	log.Print(labelAlertAuth.Text)
-	//	return false
-	//}
 	if passwordRegistrationEntry.Text != passwordConfirmationRegistrationEntry.Text {
 		labelAlertAuth.SetText(errors.ErrPasswordDifferent)
 		log.Print(labelAlertAuth.Text)
@@ -61,21 +56,21 @@ func ValidateText(exists bool, textNameEntry *widget.Entry, textEntry *widget.En
 		log.Print(labelAlertText.Text)
 		return false
 	}
-	if textEntry.Text == "" {
-		labelAlertText.SetText(errors.ErrTextEmpty)
+	if textDescriptionEntry.Text == "" {
+		labelAlertText.SetText(errors.ErrDescriptionEmpty)
 		log.Print(labelAlertText.Text)
 		return false
 	}
-	if textDescriptionEntry.Text == "" {
-		labelAlertText.SetText(errors.ErrDescriptionEmpty)
+	if textEntry.Text == "" {
+		labelAlertText.SetText(errors.ErrTextEmpty)
 		log.Print(labelAlertText.Text)
 		return false
 	}
 	return true
 }
 
-func ValidateCard(exists bool, cardNameEntry *widget.Entry, paymentSystemEntry *widget.Entry, numberEntry *widget.Entry,
-	holderEntry *widget.Entry, endDateEntry *widget.Entry, cvcEntry *widget.Entry, labelAlertCard *widget.Label) bool {
+func ValidateCard(exists bool, cardNameEntry *widget.Entry, cardDescriptionEntry *widget.Entry, paymentSystemEntry *widget.Entry,
+	numberEntry *widget.Entry, holderEntry *widget.Entry, endDateEntry *widget.Entry, cvcEntry *widget.Entry, labelAlertCard *widget.Label) bool {
 	var err error
 	if exists {
 		labelAlertCard.SetText(errors.ErrCardExist)
@@ -84,6 +79,11 @@ func ValidateCard(exists bool, cardNameEntry *widget.Entry, paymentSystemEntry *
 	}
 	if cardNameEntry.Text == "" {
 		labelAlertCard.SetText(errors.ErrNameEmpty)
+		log.Print(labelAlertCard.Text)
+		return false
+	}
+	if cardDescriptionEntry.Text == "" {
+		labelAlertCard.SetText(errors.ErrDescriptionEmpty)
 		log.Print(labelAlertCard.Text)
 		return false
 	}
