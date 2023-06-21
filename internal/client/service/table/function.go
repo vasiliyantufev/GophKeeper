@@ -3,6 +3,7 @@ package table
 import (
 	"strconv"
 
+	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
@@ -24,7 +25,7 @@ func SearchByColumn(slice [][]string, targetColumn int, targetValue string) bool
 	return false
 }
 
-func GetIndexText(slice [][]string, targetColumn int, targetValue string) (index int) {
+func GetIndex(slice [][]string, targetColumn int, targetValue string) (index int) {
 	for index = 1; index < len(slice) && len(slice) > 1; index++ {
 		if slice[index][targetColumn] == targetValue {
 			return index
@@ -54,7 +55,31 @@ func UpdateText(node *grpc.Text, dataTblText *[][]string, index int) {
 	}
 }
 
-func DeleteTextColId(dataTblText *[][]string) {
+func AppendCard(node *grpc.Card, dataTblText *[][]string, jsonCard model.Card) {
+	layoutEndData := "01/02/2006"
+	layout := "01/02/2006 15:04:05"
+	created, _ := service.ConvertTimestampToTime(node.CreatedAt)
+	updated, _ := service.ConvertTimestampToTime(node.UpdatedAt)
+	//if node.Key == string(variables.Name) {
+	row := []string{strconv.Itoa(int(node.Id)), node.Value, jsonCard.PaymentSystem, jsonCard.Number,
+		jsonCard.Holder, strconv.Itoa(jsonCard.CVC), jsonCard.EndData.Format(layoutEndData),
+		created.Format(layout), updated.Format(layout)}
+	*dataTblText = append(*dataTblText, row)
+	//} else if node.Key == string(variables.Description) {
+	//	row := []string{strconv.Itoa(int(node.Id)), "", node.Value, created.Format(layout), updated.Format(layout)}
+	//	*dataTblText = append(*dataTblText, row)
+	//}
+}
+
+//func UpdateCard(node *grpc.Card, dataTblText *[][]string, index int) {
+//	if node.Key == string(variables.Name) {
+//		(*dataTblText)[index][ColName] = node.Value
+//	} else if node.Key == string(variables.Description) {
+//		(*dataTblText)[index][ColDescription] = node.Value
+//	}
+//}
+
+func DeleteColId(dataTblText *[][]string) {
 	for index := range *dataTblText {
 		(*dataTblText)[index] = (*dataTblText)[index][1:]
 	}

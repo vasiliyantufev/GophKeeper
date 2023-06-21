@@ -1,6 +1,7 @@
 package events
 
 import (
+	"encoding/json"
 	"strconv"
 
 	"github.com/sirupsen/logrus"
@@ -13,11 +14,13 @@ import (
 
 func (c Event) EventSynchronization(password string, token model.Token) ([][]string, [][]string, error) {
 	c.logger.Info("Synchronization")
+
 	dataTblText := [][]string{}
 	dataTblCard := [][]string{}
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
-	nodes, err := c.grpc.HandleGetListText(c.context,
+
+	nodesText, err := c.grpc.HandleGetListText(c.context,
 		&grpc.GetListTextRequest{AccessToken: &grpc.Token{Token: token.AccessToken,
 			UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
 	if err != nil {
@@ -25,31 +28,67 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 		return dataTblText, dataTblCard, err
 	}
 
-	var plaintext string
+	nodesCard, err := c.grpc.HandleGetListCard(c.context,
+		&grpc.GetListCardRequest{AccessToken: &grpc.Token{Token: token.AccessToken,
+			UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
+	if err != nil {
+		c.logger.Error(err)
+		return dataTblText, dataTblCard, err
+	}
 
-	titleText := []string{"ID", "NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}
-	titleCard := []string{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC",
-		"END DATE", "CREATED_AT", "UPDATED_AT"}
+	var plaintext string
+	secretKey := encryption.AesKeySecureRandom([]byte(password))
+
+	titleText := []string{"ID", "NAME", "DATA", "DESCRIPTION", "CREATED AT", "UPDATED AT"}
+	titleCard := []string{"ID", "NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC",
+		"END DATE", "CREATED AT", "UPDATED AT"}
 	dataTblText = append(dataTblText, titleText)
 	dataTblCard = append(dataTblCard, titleCard)
 	dataTblTextPointer := &dataTblText
+	dataTblCardPointer := &dataTblCard
 
-	secretKey := encryption.AesKeySecureRandom([]byte(password))
-	for _, node := range nodes.Node {
+	for _, node := range nodesText.Node {
 		plaintext, err = encryption.Decrypt(string(node.Text), secretKey)
 		if err != nil {
 			c.logger.Error(err)
 			return dataTblText, dataTblCard, err
 		}
-		index := table.GetIndexText(dataTblText, table.ColId, strconv.Itoa(int(node.Id)))
+		index := table.GetIndex(dataTblText, table.ColId, strconv.Itoa(int(node.Id)))
 		if index == 0 { // entity_id does not exist, add record
 			table.AppendText(node, dataTblTextPointer, plaintext)
 		} else { // entity_id exists, update tags
 			table.UpdateText(node, dataTblTextPointer, index)
 		}
 	}
-	table.DeleteTextColId(dataTblTextPointer)
+
+	for _, node := range nodesCard.Node {
+		plaintext, err = encryption.Decrypt(string(node.Data), secretKey)
+		if err != nil {
+			c.logger.Error(err)
+			return dataTblText, dataTblCard, err
+		}
+
+		var card model.Card
+		err = json.Unmarshal([]byte(plaintext), &card)
+		if err != nil {
+			c.logger.Error(err)
+			return dataTblText, dataTblCard, err
+		}
+
+		table.AppendCard(node, dataTblCardPointer, card)
+
+		//index := table.GetIndex(dataTblCard, table.ColId, strconv.Itoa(int(node.Id)))
+		//if index == 0 { // entity_id does not exist, add record
+		//	table.AppendCard(node, dataTblCardPointer, card)
+		//} else { // entity_id exists, update tags
+		//	table.UpdateCard(node, dataTblCardPointer, index)
+		//}
+	}
+
+	table.DeleteColId(dataTblTextPointer)
+	table.DeleteColId(dataTblCardPointer)
 	logrus.Debug(dataTblText)
+	logrus.Debug(dataTblCard)
 
 	return dataTblText, dataTblCard, nil
 }

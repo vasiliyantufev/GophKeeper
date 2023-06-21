@@ -19,8 +19,8 @@ import (
 func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	window := application.NewWindow("GophKeeper")
 	window.Resize(fyne.NewSize(250, 80))
-	var dataTblText = [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}}
-	var dataTblCard = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
+	var dataTblText = [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED AT", "UPDATED AT"}}
+	var dataTblCard = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}}
 	var radioOptions = []string{"Login", "Registration"}
 	var accessToken = model.Token{}
 	var password string

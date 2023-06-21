@@ -35,17 +35,13 @@ func (c *Card) CreateCard(cardRequest *model.CreateCardRequest) (*model.Card, er
 	return card, nil
 }
 
-func (t *Card) GetListText(userId int64) ([]model.Card, error) {
-	ListCard := []model.Card{}
-	return ListCard, nil
-}
-
 func (c *Card) KeyExists(cardRequest *model.CreateCardRequest) (bool, error) {
 	var exists bool
 	row := c.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM metadata "+
 		"inner join card on metadata.entity_id = card.card_id "+
 		"inner join users on card.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3)", string(variables.Name), cardRequest.Name, cardRequest.UserID)
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4)",
+		string(variables.Name), cardRequest.Name, cardRequest.UserID, string(variables.Card))
 	if err := row.Scan(&exists); err != nil {
 		return exists, err
 	}
@@ -57,8 +53,8 @@ func (c *Card) GetNodeCard(cardRequest *model.GetNodeCardRequest) (*model.Card, 
 	err := c.db.Pool.QueryRow("SELECT card.card_data FROM metadata "+
 		"inner join card on metadata.entity_id = card.card_id "+
 		"inner join users on card.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3",
-		string(variables.Name), cardRequest.Value, cardRequest.UserID).Scan(
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		string(variables.Name), cardRequest.Value, cardRequest.UserID, string(variables.Card)).Scan(
 		&card.CardData,
 	)
 	if err != nil {
@@ -74,12 +70,12 @@ func (c *Card) GetNodeCard(cardRequest *model.GetNodeCardRequest) (*model.Card, 
 func (c *Card) GetListCard(userId int64) ([]model.Card, error) {
 	ListCard := []model.Card{}
 
-	rows, err := c.db.Pool.Query("SELECT metadata.entity_id, metadata.key, text.text, metadata.value, text.created_at, "+
-		"text.updated_at FROM metadata "+
-		//rows, err := t.db.Pool.Query("SELECT text.text FROM metadata "+
-		"inner join text on metadata.entity_id = text.text_id "+
-		"inner join users on text.user_id  = users.user_id "+
-		"where users.user_id = $1", userId)
+	rows, err := c.db.Pool.Query("SELECT metadata.entity_id, metadata.key, card.card_data, metadata.value, card.created_at, "+
+		"card.updated_at FROM metadata "+
+		"inner join card on metadata.entity_id = card.card_id "+
+		"inner join users on card.user_id  = users.user_id "+
+		"where users.user_id = $1 and metadata.type = $2",
+		userId, string(variables.Card))
 
 	if err != nil {
 		if err == sql.ErrNoRows {
