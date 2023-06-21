@@ -14,6 +14,7 @@ var (
 	ErrCardExist          = "Карта с таким name уже существует"
 	ErrPaymentSystemEmpty = "Payment System не заполнен"
 	ErrNumberEmpty        = "Number не заполнен"
+	ErrNumberIncorrect    = "Number некорректный (пример: 4532015112830366)"
 	ErrHolderEmpty        = "Holder не заполнен"
 	ErrEndDateEmpty       = "End date не заполнен"
 	ErrEndDataIncorrect   = "End Date некорректный (пример: 01/02/2006)"

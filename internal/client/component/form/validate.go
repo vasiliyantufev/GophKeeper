@@ -7,6 +7,7 @@ import (
 	"unicode/utf8"
 
 	"fyne.io/fyne/v2/widget"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/algorithm"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
 )
@@ -94,6 +95,17 @@ func ValidateCard(exists bool, cardNameEntry *widget.Entry, cardDescriptionEntry
 	}
 	if numberEntry.Text == "" {
 		labelAlertCard.SetText(errors.ErrNumberEmpty)
+		log.Print(labelAlertCard.Text)
+		return false
+	}
+	intNumber, err := strconv.Atoi(numberEntry.Text)
+	if err != nil {
+		labelAlertCard.SetText(errors.ErrNumberIncorrect)
+		log.Print(labelAlertCard.Text)
+		return false
+	}
+	if !algorithm.ValidLuhn(intNumber) {
+		labelAlertCard.SetText(errors.ErrNumberIncorrect)
 		log.Print(labelAlertCard.Text)
 		return false
 	}
