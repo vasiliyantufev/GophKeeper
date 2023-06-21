@@ -10,6 +10,8 @@ import (
 type Card struct {
 	ID        int64
 	UserID    int64
+	Key       string
+	Value     string
 	CardData  []byte
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -55,4 +57,14 @@ func GetCardData(data *Card) *grpc.Card {
 		UpdatedAt: updated,
 		DeletedAt: deleted,
 	}
+}
+
+func GetListCard(data []Card) []*grpc.Card {
+	items := make([]*grpc.Card, len(data))
+	for i := range data {
+		created, _ := service.ConvertTimeToTimestamp(data[i].CreatedAt)
+		updated, _ := service.ConvertTimeToTimestamp(data[i].UpdatedAt)
+		items[i] = &grpc.Card{Id: data[i].ID, Key: data[i].Key, Data: data[i].CardData, Value: data[i].Value, CreatedAt: created, UpdatedAt: updated}
+	}
+	return items
 }

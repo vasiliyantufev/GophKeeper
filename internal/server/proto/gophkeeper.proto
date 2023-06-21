@@ -16,6 +16,7 @@ service Gophkeeper {
   rpc HandleUserExist(UserExistRequest) returns (UserExistResponse) {}
   rpc HandleCreateCard(CreateCardRequest) returns (CreateCardResponse) {}
   rpc HandleGetNodeCard(GetNodeCardRequest) returns (GetNodeCardResponse) {}
+  rpc HandleGetListCard(GetListCardRequest) returns (GetListCardResponse) {}
 }
 //------------------------------------
 message PingRequest {}
@@ -125,5 +126,11 @@ message GetNodeCardRequest {
 }
 message GetNodeCardResponse {
   Card data = 1;
+}
+message GetListCardRequest {
+  Token accessToken = 1;
+}
+message GetListCardResponse {
+  repeated Card node = 1;
 }
 //------------------------------------

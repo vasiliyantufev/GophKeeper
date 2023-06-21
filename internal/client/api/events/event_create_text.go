@@ -9,7 +9,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
 
-func (c Event) CreateText(name, description, password, plaintext string, token model.Token) error {
+func (c Event) EventCreateText(name, description, password, plaintext string, token model.Token) error {
 	c.logger.Info("create text")
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
 	encryptText, err := encryption.Encrypt(plaintext, secretKey)

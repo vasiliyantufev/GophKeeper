@@ -26,7 +26,7 @@ func main() {
 	}
 	grpc := gophkeeper.NewGophkeeperClient(conn)
 	client := events.NewEvent(ctx, log, grpc)
-	ping, err := client.Ping()
+	ping, err := client.EventPing()
 	if err != nil {
 		log.Fatal(err)
 	}

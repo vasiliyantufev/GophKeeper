@@ -2,7 +2,7 @@ package events
 
 import grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 
-func (c Event) UserExist(username string) (bool, error) {
+func (c Event) EventUserExist(username string) (bool, error) {
 	c.logger.Info("user exist")
 	user, err := c.grpc.HandleUserExist(c.context, &grpc.UserExistRequest{Username: username})
 	if err != nil {

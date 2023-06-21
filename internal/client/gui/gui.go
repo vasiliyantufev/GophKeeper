@@ -21,7 +21,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	window.Resize(fyne.NewSize(250, 80))
 	var dataTblText = [][]string{{"NAME", "DATA", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"}}
 	var dataTblCard = [][]string{{"NAME", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED_AT", "UPDATED_AT"}}
-	var radioOptions = []string{"Login", "Registration"}
+	var radioOptions = []string{"Login", "EventRegistration"}
 	var accessToken = model.Token{}
 	var password string
 	var exist bool
@@ -84,7 +84,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			window.Resize(fyne.NewSize(500, 100))
 			window.Show()
 		}
-		if value == "Registration" {
+		if value == "EventRegistration" {
 			window.SetContent(containerFormRegistration)
 			window.Resize(fyne.NewSize(500, 100))
 			window.Show()
@@ -92,7 +92,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	})
 	//---------------------------------------------------------------------- buttons event
 	buttonTop = widget.NewButton(labels.BtnUpdateData, func() {
-		dataTblText, dataTblCard, err = client.Synchronization(password, accessToken)
+		dataTblText, dataTblCard, err = client.EventSynchronization(password, accessToken)
 		if err != nil {
 			labelAlertAuth.SetText(errors.ErrLogin)
 		} else {
@@ -146,12 +146,12 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		if radioAuth.Selected == "Login" {
 			valid = form.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
 			if valid {
-				accessToken, err = client.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
+				accessToken, err = client.EventAuthentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
 				if err != nil {
 					labelAlertAuth.SetText(errors.ErrLogin)
 				} else {
 					password = passwordLoginEntry.Text
-					dataTblText, dataTblCard, err = client.Synchronization(password, accessToken)
+					dataTblText, dataTblCard, err = client.EventSynchronization(password, accessToken)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrLogin)
 					} else {
@@ -162,17 +162,17 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				}
 			}
 		}
-		if radioAuth.Selected == "Registration" {
+		if radioAuth.Selected == "EventRegistration" {
 			valid = form.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
 			if valid {
-				exist, err = client.UserExist(usernameRegistrationEntry.Text)
+				exist, err = client.EventUserExist(usernameRegistrationEntry.Text)
 				if err != nil {
 					labelAlertAuth.SetText(errors.ErrRegistration)
 				}
 				if exist {
 					labelAlertAuth.SetText(errors.ErrUserExist)
 				} else {
-					accessToken, err = client.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
+					accessToken, err = client.EventRegistration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrRegistration)
 					} else {
@@ -192,7 +192,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) //ищем в мапке
 		valid = form.ValidateText(exist, textNameEntry, textEntry, textDescriptionEntry, labelAlertText)
 		if valid {
-			err = client.CreateText(textNameEntry.Text, textDescriptionEntry.Text, password, textEntry.Text, accessToken)
+			err = client.EventCreateText(textNameEntry.Text, textDescriptionEntry.Text, password, textEntry.Text, accessToken)
 			if err != nil {
 				labelAlertText.SetText(errors.ErrTextAdd)
 			} else {

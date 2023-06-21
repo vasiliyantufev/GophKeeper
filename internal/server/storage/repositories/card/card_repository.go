@@ -70,3 +70,32 @@ func (c *Card) GetNodeCard(cardRequest *model.GetNodeCardRequest) (*model.Card, 
 	}
 	return card, nil
 }
+
+func (c *Card) GetListCard(userId int64) ([]model.Card, error) {
+	ListCard := []model.Card{}
+
+	rows, err := c.db.Pool.Query("SELECT metadata.entity_id, metadata.key, text.text, metadata.value, text.created_at, "+
+		"text.updated_at FROM metadata "+
+		//rows, err := t.db.Pool.Query("SELECT text.text FROM metadata "+
+		"inner join text on metadata.entity_id = text.text_id "+
+		"inner join users on text.user_id  = users.user_id "+
+		"where users.user_id = $1", userId)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrRecordNotFound
+		} else {
+			return nil, err
+		}
+	}
+	defer rows.Close()
+	for rows.Next() {
+		card := model.Card{}
+		err = rows.Scan(&card.ID, &card.Key, &card.CardData, &card.Value, &card.CreatedAt, &card.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+		ListCard = append(ListCard, card)
+	}
+	return ListCard, nil
+}

@@ -4,7 +4,7 @@ import (
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 )
 
-func (c Event) Ping() (string, error) {
+func (c Event) EventPing() (string, error) {
 	c.logger.Info("ping")
 	msg, err := c.grpc.HandlePing(c.context, &grpc.PingRequest{})
 	if err != nil {

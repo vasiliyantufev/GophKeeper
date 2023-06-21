@@ -11,7 +11,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
 
-func (c Event) Synchronization(password string, token model.Token) ([][]string, [][]string, error) {
+func (c Event) EventSynchronization(password string, token model.Token) ([][]string, [][]string, error) {
 	dataTblText := [][]string{}
 	dataTblCard := [][]string{}
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)

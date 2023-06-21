@@ -7,7 +7,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
 
-func (c Event) Authentication(username, password string) (model.Token, error) {
+func (c Event) EventAuthentication(username, password string) (model.Token, error) {
 	c.logger.Info("authentication")
 	token := model.Token{}
 	password, err := encryption.HashPassword(password)

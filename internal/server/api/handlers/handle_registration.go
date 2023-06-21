@@ -13,7 +13,7 @@ import (
 
 // HandleRegistration - registration new user
 func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.RegistrationRequest) (*grpc.RegistrationResponse, error) {
-	h.logger.Info("Registration")
+	h.logger.Info("EventRegistration")
 
 	UserData := &model.UserRequest{}
 	UserData.Username = req.Username
