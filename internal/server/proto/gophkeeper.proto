@@ -114,6 +114,7 @@ message Card {
 }
 message CreateCardRequest {
   string name = 1;
+  string description = 2;
   bytes  data = 3;
   Token  accessToken = 4;
 }

@@ -21,6 +21,7 @@ type Card struct {
 type CreateCardRequest struct {
 	UserID      int64
 	Name        string
+	Description string
 	Type        string
 	CardData    []byte
 	AccessToken string

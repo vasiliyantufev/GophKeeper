@@ -27,6 +27,7 @@ func (h *Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequ
 	CardData.UserID = req.AccessToken.UserId
 	CardData.Name = req.Name
 	CardData.CardData = req.Data
+	CardData.Description = req.Description
 	if CardData.Name == "" {
 		err := errors.ErrNoMetadataSet
 		h.logger.Error(err)
@@ -71,7 +72,21 @@ func (h *Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequ
 		)
 	}
 
+	Metadata = &model.CreateMetadataRequest{}
+	Metadata.EntityId = CreatedCard.ID
+	Metadata.Key = string(variables.Description)
+	Metadata.Value = CardData.Description
+	Metadata.Type = string(variables.Text)
+	CreatedMetadataDescription, err := h.metadata.CreateMetadata(Metadata)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.CreateCardResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
 	h.logger.Debug(CreatedCard)
 	h.logger.Debug(CreatedMetadataName)
+	h.logger.Debug(CreatedMetadataDescription)
 	return &grpc.CreateCardResponse{Data: card}, nil
 }
