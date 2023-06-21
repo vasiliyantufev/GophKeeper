@@ -43,7 +43,7 @@ func (c Event) EventCreateCard(name, description, password, paymentSystem, numbe
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	createdCard, err := c.grpc.HandleCreateCard(context.Background(),
-		&grpc.CreateCardRequest{Name: name, Data: []byte(encryptCard),
+		&grpc.CreateCardRequest{Name: name, Description: description, Data: []byte(encryptCard),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
 	if err != nil {
 		c.logger.Error(err)

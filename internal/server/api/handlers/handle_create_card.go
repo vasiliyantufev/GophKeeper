@@ -76,7 +76,7 @@ func (h *Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequ
 	Metadata.EntityId = CreatedCard.ID
 	Metadata.Key = string(variables.Description)
 	Metadata.Value = CardData.Description
-	Metadata.Type = string(variables.Text)
+	Metadata.Type = string(variables.Card)
 	CreatedMetadataDescription, err := h.metadata.CreateMetadata(Metadata)
 	if err != nil {
 		h.logger.Error(err)

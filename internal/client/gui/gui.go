@@ -197,10 +197,10 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			if err != nil {
 				labelAlertText.SetText(errors.ErrTextAdd)
 			} else {
-				dataTblText = append(dataTblText, []string{textNameEntry.Text, textEntry.Text, textDescriptionEntry.Text,
+				dataTblText = append(dataTblText, []string{textNameEntry.Text, textDescriptionEntry.Text, textEntry.Text,
 					time.Now().Format(layout), time.Now().Format(layout)})
 
-				form.ClearText(textNameEntry, textEntry, textDescriptionEntry)
+				form.ClearText(textNameEntry, textDescriptionEntry, textEntry)
 				log.Info("Текст добавлен")
 
 				labelAlertText.Hide()
