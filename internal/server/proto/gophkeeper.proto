@@ -64,7 +64,7 @@ message Text {
   int64  userId = 2;
   string key = 3;
   string value = 4;
-  bytes text = 5;
+  bytes data = 5;
   google.protobuf.Timestamp createdAt = 6;
   google.protobuf.Timestamp updatedAt = 7;
   google.protobuf.Timestamp deletedAt = 8;
@@ -133,5 +133,38 @@ message GetListCardRequest {
 }
 message GetListCardResponse {
   repeated Card node = 1;
+}
+//------------------------------------
+message LoginPassword {
+  int64  id = 1;
+  int64  userId = 2;
+  string key = 3;
+  string value = 4;
+  bytes  data = 5;
+  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp updatedAt = 7;
+  google.protobuf.Timestamp deletedAt = 8;
+}
+message CreateLoginPasswordRequest {
+  string name = 1;
+  string description = 2;
+  bytes  data = 3;
+  Token  accessToken = 4;
+}
+message CreateLoginPasswordResponse {
+  LoginPassword data = 1;
+}
+message GetNodeLoginPasswordRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message GetNodeLoginPasswordResponse {
+  LoginPassword data = 1;
+}
+message GetListLoginPasswordRequest {
+  Token accessToken = 1;
+}
+message GetListLoginPasswordResponse {
+  repeated LoginPassword node = 1;
 }
 //------------------------------------

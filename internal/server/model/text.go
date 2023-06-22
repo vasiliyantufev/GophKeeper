@@ -61,19 +61,19 @@ func GetText(text *Text) *grpc.Text {
 	deleted, _ := service.ConvertTimeToTimestamp(text.DeletedAt)
 	return &grpc.Text{
 		UserId:    text.UserID,
-		Text:      text.Data,
+		Data:      text.Data,
 		CreatedAt: created,
 		UpdatedAt: updated,
 		DeletedAt: deleted,
 	}
 }
 
-func GetListText(texts []Text) []*grpc.Text {
-	items := make([]*grpc.Text, len(texts))
-	for i := range texts {
-		created, _ := service.ConvertTimeToTimestamp(texts[i].CreatedAt)
-		updated, _ := service.ConvertTimeToTimestamp(texts[i].UpdatedAt)
-		items[i] = &grpc.Text{Id: texts[i].ID, Key: texts[i].Key, Text: texts[i].Data, Value: texts[i].Value, CreatedAt: created, UpdatedAt: updated}
+func GetListText(text []Text) []*grpc.Text {
+	items := make([]*grpc.Text, len(text))
+	for i := range text {
+		created, _ := service.ConvertTimeToTimestamp(text[i].CreatedAt)
+		updated, _ := service.ConvertTimeToTimestamp(text[i].UpdatedAt)
+		items[i] = &grpc.Text{Id: text[i].ID, Key: text[i].Key, Data: text[i].Data, Value: text[i].Value, CreatedAt: created, UpdatedAt: updated}
 	}
 	return items
 }

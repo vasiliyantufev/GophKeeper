@@ -567,7 +567,7 @@ type Text struct {
 	UserId    int64                `protobuf:"varint,2,opt,name=userId,proto3" json:"userId,omitempty"`
 	Key       string               `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
 	Value     string               `protobuf:"bytes,4,opt,name=value,proto3" json:"value,omitempty"`
-	Text      []byte               `protobuf:"bytes,5,opt,name=text,proto3" json:"text,omitempty"`
+	Data      []byte               `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
 	CreatedAt *timestamp.Timestamp `protobuf:"bytes,6,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
 	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,7,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
 	DeletedAt *timestamp.Timestamp `protobuf:"bytes,8,opt,name=deletedAt,proto3" json:"deletedAt,omitempty"`
@@ -633,9 +633,9 @@ func (x *Text) GetValue() string {
 	return ""
 }
 
-func (x *Text) GetText() []byte {
+func (x *Text) GetData() []byte {
 	if x != nil {
-		return x.Text
+		return x.Data
 	}
 	return nil
 }
@@ -1489,6 +1489,424 @@ func (x *GetListCardResponse) GetNode() []*Card {
 	return nil
 }
 
+//------------------------------------
+type LoginPassword struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id        int64                `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId    int64                `protobuf:"varint,2,opt,name=userId,proto3" json:"userId,omitempty"`
+	Key       string               `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
+	Value     string               `protobuf:"bytes,4,opt,name=value,proto3" json:"value,omitempty"`
+	Data      []byte               `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
+	CreatedAt *timestamp.Timestamp `protobuf:"bytes,6,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
+	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,7,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
+	DeletedAt *timestamp.Timestamp `protobuf:"bytes,8,opt,name=deletedAt,proto3" json:"deletedAt,omitempty"`
+}
+
+func (x *LoginPassword) Reset() {
+	*x = LoginPassword{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gophkeeper_proto_msgTypes[25]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LoginPassword) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoginPassword) ProtoMessage() {}
+
+func (x *LoginPassword) ProtoReflect() protoreflect.Message {
+	mi := &file_gophkeeper_proto_msgTypes[25]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoginPassword.ProtoReflect.Descriptor instead.
+func (*LoginPassword) Descriptor() ([]byte, []int) {
+	return file_gophkeeper_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *LoginPassword) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *LoginPassword) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *LoginPassword) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *LoginPassword) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+func (x *LoginPassword) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *LoginPassword) GetCreatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *LoginPassword) GetUpdatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *LoginPassword) GetDeletedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.DeletedAt
+	}
+	return nil
+}
+
+type CreateLoginPasswordRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Data        []byte `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	AccessToken *Token `protobuf:"bytes,4,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
+}
+
+func (x *CreateLoginPasswordRequest) Reset() {
+	*x = CreateLoginPasswordRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gophkeeper_proto_msgTypes[26]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateLoginPasswordRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateLoginPasswordRequest) ProtoMessage() {}
+
+func (x *CreateLoginPasswordRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gophkeeper_proto_msgTypes[26]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateLoginPasswordRequest.ProtoReflect.Descriptor instead.
+func (*CreateLoginPasswordRequest) Descriptor() ([]byte, []int) {
+	return file_gophkeeper_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *CreateLoginPasswordRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateLoginPasswordRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *CreateLoginPasswordRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *CreateLoginPasswordRequest) GetAccessToken() *Token {
+	if x != nil {
+		return x.AccessToken
+	}
+	return nil
+}
+
+type CreateLoginPasswordResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *LoginPassword `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *CreateLoginPasswordResponse) Reset() {
+	*x = CreateLoginPasswordResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gophkeeper_proto_msgTypes[27]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateLoginPasswordResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateLoginPasswordResponse) ProtoMessage() {}
+
+func (x *CreateLoginPasswordResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_gophkeeper_proto_msgTypes[27]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateLoginPasswordResponse.ProtoReflect.Descriptor instead.
+func (*CreateLoginPasswordResponse) Descriptor() ([]byte, []int) {
+	return file_gophkeeper_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *CreateLoginPasswordResponse) GetData() *LoginPassword {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type GetNodeLoginPasswordRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	AccessToken *Token `protobuf:"bytes,2,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
+}
+
+func (x *GetNodeLoginPasswordRequest) Reset() {
+	*x = GetNodeLoginPasswordRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gophkeeper_proto_msgTypes[28]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetNodeLoginPasswordRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetNodeLoginPasswordRequest) ProtoMessage() {}
+
+func (x *GetNodeLoginPasswordRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gophkeeper_proto_msgTypes[28]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetNodeLoginPasswordRequest.ProtoReflect.Descriptor instead.
+func (*GetNodeLoginPasswordRequest) Descriptor() ([]byte, []int) {
+	return file_gophkeeper_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *GetNodeLoginPasswordRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GetNodeLoginPasswordRequest) GetAccessToken() *Token {
+	if x != nil {
+		return x.AccessToken
+	}
+	return nil
+}
+
+type GetNodeLoginPasswordResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *LoginPassword `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *GetNodeLoginPasswordResponse) Reset() {
+	*x = GetNodeLoginPasswordResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gophkeeper_proto_msgTypes[29]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetNodeLoginPasswordResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetNodeLoginPasswordResponse) ProtoMessage() {}
+
+func (x *GetNodeLoginPasswordResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_gophkeeper_proto_msgTypes[29]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetNodeLoginPasswordResponse.ProtoReflect.Descriptor instead.
+func (*GetNodeLoginPasswordResponse) Descriptor() ([]byte, []int) {
+	return file_gophkeeper_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *GetNodeLoginPasswordResponse) GetData() *LoginPassword {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type GetListLoginPasswordRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	AccessToken *Token `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
+}
+
+func (x *GetListLoginPasswordRequest) Reset() {
+	*x = GetListLoginPasswordRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gophkeeper_proto_msgTypes[30]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetListLoginPasswordRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetListLoginPasswordRequest) ProtoMessage() {}
+
+func (x *GetListLoginPasswordRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gophkeeper_proto_msgTypes[30]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetListLoginPasswordRequest.ProtoReflect.Descriptor instead.
+func (*GetListLoginPasswordRequest) Descriptor() ([]byte, []int) {
+	return file_gophkeeper_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *GetListLoginPasswordRequest) GetAccessToken() *Token {
+	if x != nil {
+		return x.AccessToken
+	}
+	return nil
+}
+
+type GetListLoginPasswordResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Node []*LoginPassword `protobuf:"bytes,1,rep,name=node,proto3" json:"node,omitempty"`
+}
+
+func (x *GetListLoginPasswordResponse) Reset() {
+	*x = GetListLoginPasswordResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gophkeeper_proto_msgTypes[31]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetListLoginPasswordResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetListLoginPasswordResponse) ProtoMessage() {}
+
+func (x *GetListLoginPasswordResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_gophkeeper_proto_msgTypes[31]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetListLoginPasswordResponse.ProtoReflect.Descriptor instead.
+func (*GetListLoginPasswordResponse) Descriptor() ([]byte, []int) {
+	return file_gophkeeper_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *GetListLoginPasswordResponse) GetNode() []*LoginPassword {
+	if x != nil {
+		return x.Node
+	}
+	return nil
+}
+
 var File_gophkeeper_proto protoreflect.FileDescriptor
 
 var file_gophkeeper_proto_rawDesc = []byte{
@@ -1554,8 +1972,8 @@ var file_gophkeeper_proto_rawDesc = []byte{
 	0x65, 0x72, 0x49, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72,
 	0x49, 0x64, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
 	0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x04, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x65,
-	0x78, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x74, 0x65, 0x78, 0x74, 0x12, 0x38,
+	0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61,
+	0x74, 0x61, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x12, 0x38,
 	0x0a, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28,
 	0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x63,
@@ -1659,6 +2077,58 @@ var file_gophkeeper_proto_rawDesc = []byte{
 	0x74, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
 	0x65, 0x12, 0x1d, 0x0a, 0x04, 0x6e, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
 	0x09, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x43, 0x61, 0x72, 0x64, 0x52, 0x04, 0x6e, 0x6f, 0x64, 0x65,
+	0x22, 0xa1, 0x02, 0x0a, 0x0d, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f,
+	0x72, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02,
+	0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65,
+	0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05,
+	0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c,
+	0x75, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c,
+	0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x12, 0x38, 0x0a, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x64, 0x41, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65,
+	0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74,
+	0x12, 0x38, 0x0a, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x18, 0x07, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52,
+	0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x38, 0x0a, 0x09, 0x64, 0x65,
+	0x6c, 0x65, 0x74, 0x65, 0x64, 0x41, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x74,
+	0x65, 0x64, 0x41, 0x74, 0x22, 0x94, 0x01, 0x0a, 0x1a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c,
+	0x6f, 0x67, 0x69, 0x6e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72,
+	0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65,
+	0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74,
+	0x61, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x12, 0x2c, 0x0a,
+	0x0b, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x0a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x52, 0x0b,
+	0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x45, 0x0a, 0x1b, 0x43,
+	0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f,
+	0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x26, 0x0a, 0x04, 0x64, 0x61,
+	0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4c,
+	0x6f, 0x67, 0x69, 0x6e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x04, 0x64, 0x61,
+	0x74, 0x61, 0x22, 0x5f, 0x0a, 0x1b, 0x47, 0x65, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x4c, 0x6f, 0x67,
+	0x69, 0x6e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x2c, 0x0a, 0x0b, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x54,
+	0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0a, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x52, 0x0b, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x54, 0x6f,
+	0x6b, 0x65, 0x6e, 0x22, 0x46, 0x0a, 0x1c, 0x47, 0x65, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x4c, 0x6f,
+	0x67, 0x69, 0x6e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x26, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x12, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x50, 0x61, 0x73,
+	0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x4b, 0x0a, 0x1b, 0x47,
+	0x65, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x50, 0x61, 0x73, 0x73, 0x77,
+	0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2c, 0x0a, 0x0b, 0x61, 0x63,
+	0x63, 0x65, 0x73, 0x73, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x0a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x52, 0x0b, 0x61, 0x63, 0x63,
+	0x65, 0x73, 0x73, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x46, 0x0a, 0x1c, 0x47, 0x65, 0x74, 0x4c,
+	0x69, 0x73, 0x74, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x26, 0x0a, 0x04, 0x6e, 0x6f, 0x64, 0x65,
+	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4c, 0x6f, 0x67,
+	0x69, 0x6e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x04, 0x6e, 0x6f, 0x64, 0x65,
 	0x32, 0xdb, 0x05, 0x0a, 0x0a, 0x47, 0x6f, 0x70, 0x68, 0x6b, 0x65, 0x65, 0x70, 0x65, 0x72, 0x12,
 	0x51, 0x0a, 0x14, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74,
 	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x41, 0x75,
@@ -1721,89 +2191,105 @@ func file_gophkeeper_proto_rawDescGZIP() []byte {
 	return file_gophkeeper_proto_rawDescData
 }
 
-var file_gophkeeper_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
+var file_gophkeeper_proto_msgTypes = make([]protoimpl.MessageInfo, 32)
 var file_gophkeeper_proto_goTypes = []interface{}{
-	(*PingRequest)(nil),            // 0: api.PingRequest
-	(*PingResponse)(nil),           // 1: api.PingResponse
-	(*Token)(nil),                  // 2: api.Token
-	(*User)(nil),                   // 3: api.User
-	(*AuthenticationRequest)(nil),  // 4: api.AuthenticationRequest
-	(*AuthenticationResponse)(nil), // 5: api.AuthenticationResponse
-	(*RegistrationRequest)(nil),    // 6: api.RegistrationRequest
-	(*RegistrationResponse)(nil),   // 7: api.RegistrationResponse
-	(*UserExistRequest)(nil),       // 8: api.UserExistRequest
-	(*UserExistResponse)(nil),      // 9: api.UserExistResponse
-	(*Text)(nil),                   // 10: api.Text
-	(*CreateTextRequest)(nil),      // 11: api.CreateTextRequest
-	(*CreateTextResponse)(nil),     // 12: api.CreateTextResponse
-	(*GetNodeTextRequest)(nil),     // 13: api.GetNodeTextRequest
-	(*GetNodeTextResponse)(nil),    // 14: api.GetNodeTextResponse
-	(*GetListTextRequest)(nil),     // 15: api.GetListTextRequest
-	(*GetListTextResponse)(nil),    // 16: api.GetListTextResponse
-	(*Metadata)(nil),               // 17: api.Metadata
-	(*Card)(nil),                   // 18: api.Card
-	(*CreateCardRequest)(nil),      // 19: api.CreateCardRequest
-	(*CreateCardResponse)(nil),     // 20: api.CreateCardResponse
-	(*GetNodeCardRequest)(nil),     // 21: api.GetNodeCardRequest
-	(*GetNodeCardResponse)(nil),    // 22: api.GetNodeCardResponse
-	(*GetListCardRequest)(nil),     // 23: api.GetListCardRequest
-	(*GetListCardResponse)(nil),    // 24: api.GetListCardResponse
-	(*timestamp.Timestamp)(nil),    // 25: google.protobuf.Timestamp
+	(*PingRequest)(nil),                  // 0: api.PingRequest
+	(*PingResponse)(nil),                 // 1: api.PingResponse
+	(*Token)(nil),                        // 2: api.Token
+	(*User)(nil),                         // 3: api.User
+	(*AuthenticationRequest)(nil),        // 4: api.AuthenticationRequest
+	(*AuthenticationResponse)(nil),       // 5: api.AuthenticationResponse
+	(*RegistrationRequest)(nil),          // 6: api.RegistrationRequest
+	(*RegistrationResponse)(nil),         // 7: api.RegistrationResponse
+	(*UserExistRequest)(nil),             // 8: api.UserExistRequest
+	(*UserExistResponse)(nil),            // 9: api.UserExistResponse
+	(*Text)(nil),                         // 10: api.Text
+	(*CreateTextRequest)(nil),            // 11: api.CreateTextRequest
+	(*CreateTextResponse)(nil),           // 12: api.CreateTextResponse
+	(*GetNodeTextRequest)(nil),           // 13: api.GetNodeTextRequest
+	(*GetNodeTextResponse)(nil),          // 14: api.GetNodeTextResponse
+	(*GetListTextRequest)(nil),           // 15: api.GetListTextRequest
+	(*GetListTextResponse)(nil),          // 16: api.GetListTextResponse
+	(*Metadata)(nil),                     // 17: api.Metadata
+	(*Card)(nil),                         // 18: api.Card
+	(*CreateCardRequest)(nil),            // 19: api.CreateCardRequest
+	(*CreateCardResponse)(nil),           // 20: api.CreateCardResponse
+	(*GetNodeCardRequest)(nil),           // 21: api.GetNodeCardRequest
+	(*GetNodeCardResponse)(nil),          // 22: api.GetNodeCardResponse
+	(*GetListCardRequest)(nil),           // 23: api.GetListCardRequest
+	(*GetListCardResponse)(nil),          // 24: api.GetListCardResponse
+	(*LoginPassword)(nil),                // 25: api.LoginPassword
+	(*CreateLoginPasswordRequest)(nil),   // 26: api.CreateLoginPasswordRequest
+	(*CreateLoginPasswordResponse)(nil),  // 27: api.CreateLoginPasswordResponse
+	(*GetNodeLoginPasswordRequest)(nil),  // 28: api.GetNodeLoginPasswordRequest
+	(*GetNodeLoginPasswordResponse)(nil), // 29: api.GetNodeLoginPasswordResponse
+	(*GetListLoginPasswordRequest)(nil),  // 30: api.GetListLoginPasswordRequest
+	(*GetListLoginPasswordResponse)(nil), // 31: api.GetListLoginPasswordResponse
+	(*timestamp.Timestamp)(nil),          // 32: google.protobuf.Timestamp
 }
 var file_gophkeeper_proto_depIdxs = []int32{
-	25, // 0: api.Token.createdAt:type_name -> google.protobuf.Timestamp
-	25, // 1: api.Token.endDateAt:type_name -> google.protobuf.Timestamp
-	25, // 2: api.User.createdAt:type_name -> google.protobuf.Timestamp
-	25, // 3: api.User.updatedAt:type_name -> google.protobuf.Timestamp
-	25, // 4: api.User.deletedAt:type_name -> google.protobuf.Timestamp
+	32, // 0: api.Token.createdAt:type_name -> google.protobuf.Timestamp
+	32, // 1: api.Token.endDateAt:type_name -> google.protobuf.Timestamp
+	32, // 2: api.User.createdAt:type_name -> google.protobuf.Timestamp
+	32, // 3: api.User.updatedAt:type_name -> google.protobuf.Timestamp
+	32, // 4: api.User.deletedAt:type_name -> google.protobuf.Timestamp
 	2,  // 5: api.AuthenticationResponse.accessToken:type_name -> api.Token
 	2,  // 6: api.RegistrationResponse.accessToken:type_name -> api.Token
-	25, // 7: api.Text.createdAt:type_name -> google.protobuf.Timestamp
-	25, // 8: api.Text.updatedAt:type_name -> google.protobuf.Timestamp
-	25, // 9: api.Text.deletedAt:type_name -> google.protobuf.Timestamp
+	32, // 7: api.Text.createdAt:type_name -> google.protobuf.Timestamp
+	32, // 8: api.Text.updatedAt:type_name -> google.protobuf.Timestamp
+	32, // 9: api.Text.deletedAt:type_name -> google.protobuf.Timestamp
 	2,  // 10: api.CreateTextRequest.accessToken:type_name -> api.Token
 	10, // 11: api.CreateTextResponse.text:type_name -> api.Text
 	2,  // 12: api.GetNodeTextRequest.accessToken:type_name -> api.Token
 	10, // 13: api.GetNodeTextResponse.text:type_name -> api.Text
 	2,  // 14: api.GetListTextRequest.accessToken:type_name -> api.Token
 	10, // 15: api.GetListTextResponse.node:type_name -> api.Text
-	25, // 16: api.Metadata.createdAt:type_name -> google.protobuf.Timestamp
-	25, // 17: api.Metadata.updatedAt:type_name -> google.protobuf.Timestamp
-	25, // 18: api.Metadata.deletedAt:type_name -> google.protobuf.Timestamp
-	25, // 19: api.Card.createdAt:type_name -> google.protobuf.Timestamp
-	25, // 20: api.Card.updatedAt:type_name -> google.protobuf.Timestamp
-	25, // 21: api.Card.deletedAt:type_name -> google.protobuf.Timestamp
+	32, // 16: api.Metadata.createdAt:type_name -> google.protobuf.Timestamp
+	32, // 17: api.Metadata.updatedAt:type_name -> google.protobuf.Timestamp
+	32, // 18: api.Metadata.deletedAt:type_name -> google.protobuf.Timestamp
+	32, // 19: api.Card.createdAt:type_name -> google.protobuf.Timestamp
+	32, // 20: api.Card.updatedAt:type_name -> google.protobuf.Timestamp
+	32, // 21: api.Card.deletedAt:type_name -> google.protobuf.Timestamp
 	2,  // 22: api.CreateCardRequest.accessToken:type_name -> api.Token
 	18, // 23: api.CreateCardResponse.data:type_name -> api.Card
 	2,  // 24: api.GetNodeCardRequest.accessToken:type_name -> api.Token
 	18, // 25: api.GetNodeCardResponse.data:type_name -> api.Card
 	2,  // 26: api.GetListCardRequest.accessToken:type_name -> api.Token
 	18, // 27: api.GetListCardResponse.node:type_name -> api.Card
-	4,  // 28: api.Gophkeeper.HandleAuthentication:input_type -> api.AuthenticationRequest
-	6,  // 29: api.Gophkeeper.HandleRegistration:input_type -> api.RegistrationRequest
-	11, // 30: api.Gophkeeper.HandleCreateText:input_type -> api.CreateTextRequest
-	15, // 31: api.Gophkeeper.HandleGetListText:input_type -> api.GetListTextRequest
-	13, // 32: api.Gophkeeper.HandleGetNodeText:input_type -> api.GetNodeTextRequest
-	0,  // 33: api.Gophkeeper.HandlePing:input_type -> api.PingRequest
-	8,  // 34: api.Gophkeeper.HandleUserExist:input_type -> api.UserExistRequest
-	19, // 35: api.Gophkeeper.HandleCreateCard:input_type -> api.CreateCardRequest
-	21, // 36: api.Gophkeeper.HandleGetNodeCard:input_type -> api.GetNodeCardRequest
-	23, // 37: api.Gophkeeper.HandleGetListCard:input_type -> api.GetListCardRequest
-	5,  // 38: api.Gophkeeper.HandleAuthentication:output_type -> api.AuthenticationResponse
-	7,  // 39: api.Gophkeeper.HandleRegistration:output_type -> api.RegistrationResponse
-	12, // 40: api.Gophkeeper.HandleCreateText:output_type -> api.CreateTextResponse
-	16, // 41: api.Gophkeeper.HandleGetListText:output_type -> api.GetListTextResponse
-	14, // 42: api.Gophkeeper.HandleGetNodeText:output_type -> api.GetNodeTextResponse
-	1,  // 43: api.Gophkeeper.HandlePing:output_type -> api.PingResponse
-	9,  // 44: api.Gophkeeper.HandleUserExist:output_type -> api.UserExistResponse
-	20, // 45: api.Gophkeeper.HandleCreateCard:output_type -> api.CreateCardResponse
-	22, // 46: api.Gophkeeper.HandleGetNodeCard:output_type -> api.GetNodeCardResponse
-	24, // 47: api.Gophkeeper.HandleGetListCard:output_type -> api.GetListCardResponse
-	38, // [38:48] is the sub-list for method output_type
-	28, // [28:38] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	32, // 28: api.LoginPassword.createdAt:type_name -> google.protobuf.Timestamp
+	32, // 29: api.LoginPassword.updatedAt:type_name -> google.protobuf.Timestamp
+	32, // 30: api.LoginPassword.deletedAt:type_name -> google.protobuf.Timestamp
+	2,  // 31: api.CreateLoginPasswordRequest.accessToken:type_name -> api.Token
+	25, // 32: api.CreateLoginPasswordResponse.data:type_name -> api.LoginPassword
+	2,  // 33: api.GetNodeLoginPasswordRequest.accessToken:type_name -> api.Token
+	25, // 34: api.GetNodeLoginPasswordResponse.data:type_name -> api.LoginPassword
+	2,  // 35: api.GetListLoginPasswordRequest.accessToken:type_name -> api.Token
+	25, // 36: api.GetListLoginPasswordResponse.node:type_name -> api.LoginPassword
+	4,  // 37: api.Gophkeeper.HandleAuthentication:input_type -> api.AuthenticationRequest
+	6,  // 38: api.Gophkeeper.HandleRegistration:input_type -> api.RegistrationRequest
+	11, // 39: api.Gophkeeper.HandleCreateText:input_type -> api.CreateTextRequest
+	15, // 40: api.Gophkeeper.HandleGetListText:input_type -> api.GetListTextRequest
+	13, // 41: api.Gophkeeper.HandleGetNodeText:input_type -> api.GetNodeTextRequest
+	0,  // 42: api.Gophkeeper.HandlePing:input_type -> api.PingRequest
+	8,  // 43: api.Gophkeeper.HandleUserExist:input_type -> api.UserExistRequest
+	19, // 44: api.Gophkeeper.HandleCreateCard:input_type -> api.CreateCardRequest
+	21, // 45: api.Gophkeeper.HandleGetNodeCard:input_type -> api.GetNodeCardRequest
+	23, // 46: api.Gophkeeper.HandleGetListCard:input_type -> api.GetListCardRequest
+	5,  // 47: api.Gophkeeper.HandleAuthentication:output_type -> api.AuthenticationResponse
+	7,  // 48: api.Gophkeeper.HandleRegistration:output_type -> api.RegistrationResponse
+	12, // 49: api.Gophkeeper.HandleCreateText:output_type -> api.CreateTextResponse
+	16, // 50: api.Gophkeeper.HandleGetListText:output_type -> api.GetListTextResponse
+	14, // 51: api.Gophkeeper.HandleGetNodeText:output_type -> api.GetNodeTextResponse
+	1,  // 52: api.Gophkeeper.HandlePing:output_type -> api.PingResponse
+	9,  // 53: api.Gophkeeper.HandleUserExist:output_type -> api.UserExistResponse
+	20, // 54: api.Gophkeeper.HandleCreateCard:output_type -> api.CreateCardResponse
+	22, // 55: api.Gophkeeper.HandleGetNodeCard:output_type -> api.GetNodeCardResponse
+	24, // 56: api.Gophkeeper.HandleGetListCard:output_type -> api.GetListCardResponse
+	47, // [47:57] is the sub-list for method output_type
+	37, // [37:47] is the sub-list for method input_type
+	37, // [37:37] is the sub-list for extension type_name
+	37, // [37:37] is the sub-list for extension extendee
+	0,  // [0:37] is the sub-list for field type_name
 }
 
 func init() { file_gophkeeper_proto_init() }
@@ -2112,6 +2598,90 @@ func file_gophkeeper_proto_init() {
 				return nil
 			}
 		}
+		file_gophkeeper_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LoginPassword); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gophkeeper_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateLoginPasswordRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gophkeeper_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateLoginPasswordResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gophkeeper_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetNodeLoginPasswordRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gophkeeper_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetNodeLoginPasswordResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gophkeeper_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetListLoginPasswordRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gophkeeper_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetListLoginPasswordResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2119,7 +2689,7 @@ func file_gophkeeper_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_gophkeeper_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   25,
+			NumMessages:   32,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
