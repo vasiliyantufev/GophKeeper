@@ -23,8 +23,8 @@ func New(db *database.DB) *Text {
 func (t *Text) CreateText(textRequest *model.CreateTextRequest) (*model.Text, error) {
 	text := &model.Text{}
 	if err := t.db.Pool.QueryRow(
-		"INSERT INTO text (user_id, text, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
-			"RETURNING text_id, text",
+		"INSERT INTO text (user_id, data, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
+			"RETURNING text_id, data",
 		textRequest.UserID,
 		textRequest.Text,
 		time.Now(),
@@ -37,13 +37,12 @@ func (t *Text) CreateText(textRequest *model.CreateTextRequest) (*model.Text, er
 
 func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, error) {
 	text := &model.Text{}
-	err := t.db.Pool.QueryRow("SELECT text.text FROM metadata "+
+	err := t.db.Pool.QueryRow("SELECT text.data FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
 		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
-		string(variables.Name), textRequest.Value, textRequest.UserID, string(variables.Text)).Scan(
-		&text.Text,
-	)
+		string(variables.Name), textRequest.Value, textRequest.UserID, string(variables.Text)).
+		Scan(&text.Text)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrRecordNotFound
@@ -57,7 +56,7 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 	ListText := []model.Text{}
 
-	rows, err := t.db.Pool.Query("SELECT metadata.entity_id, metadata.key, text.text, metadata.value, text.created_at, "+
+	rows, err := t.db.Pool.Query("SELECT metadata.entity_id, metadata.key, text.data, metadata.value, text.created_at, "+
 		"text.updated_at FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+

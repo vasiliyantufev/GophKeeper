@@ -23,8 +23,8 @@ func New(db *database.DB) *Card {
 func (c *Card) CreateCard(cardRequest *model.CreateCardRequest) (*model.Card, error) {
 	card := &model.Card{}
 	if err := c.db.Pool.QueryRow(
-		"INSERT INTO card (user_id, card_data, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
-			"RETURNING card_id, card_data",
+		"INSERT INTO card (user_id, data, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
+			"RETURNING card_id, data",
 		cardRequest.UserID,
 		cardRequest.CardData,
 		time.Now(),
@@ -50,7 +50,7 @@ func (c *Card) KeyExists(cardRequest *model.CreateCardRequest) (bool, error) {
 
 func (c *Card) GetNodeCard(cardRequest *model.GetNodeCardRequest) (*model.Card, error) {
 	card := &model.Card{}
-	err := c.db.Pool.QueryRow("SELECT card.card_data FROM metadata "+
+	err := c.db.Pool.QueryRow("SELECT card.data FROM metadata "+
 		"inner join card on metadata.entity_id = card.card_id "+
 		"inner join users on card.user_id  = users.user_id "+
 		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
@@ -70,7 +70,7 @@ func (c *Card) GetNodeCard(cardRequest *model.GetNodeCardRequest) (*model.Card, 
 func (c *Card) GetListCard(userId int64) ([]model.Card, error) {
 	ListCard := []model.Card{}
 
-	rows, err := c.db.Pool.Query("SELECT metadata.entity_id, metadata.key, card.card_data, metadata.value, card.created_at, "+
+	rows, err := c.db.Pool.Query("SELECT metadata.entity_id, metadata.key, card.data, metadata.value, card.created_at, "+
 		"card.updated_at FROM metadata "+
 		"inner join card on metadata.entity_id = card.card_id "+
 		"inner join users on card.user_id  = users.user_id "+
