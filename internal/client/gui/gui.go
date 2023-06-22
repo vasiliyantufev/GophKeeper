@@ -216,8 +216,12 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			}
 		}
 	})
-	//---------------------------------------------------------------------- text event
+	//---------------------------------------------------------------------- login password event
 	buttonLoginPasswordAdd = widget.NewButton(labels.BtnAdd, func() {
+		labelAlertLoginPassword.Show()
+		valid = form.ValidateLoginPassword(false, loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry,
+			passwordEntry, labelAlertLoginPassword)
+
 		log.Debug(dataTblLoginPassword)
 	})
 	//---------------------------------------------------------------------- text event
@@ -237,7 +241,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				form.ClearText(textNameEntry, textDescriptionEntry, textEntry)
 				log.Info("Текст добавлен")
 
-				labelAlertText.Hide()
 				formText.Refresh()
 				window.SetContent(containerTabs)
 				window.Show()
@@ -264,7 +267,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				form.ClearCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 				log.Info("Карта добавлена")
 
-				labelAlertCard.Hide()
 				formCard.Refresh()
 				window.SetContent(containerTabs)
 				window.Show()
