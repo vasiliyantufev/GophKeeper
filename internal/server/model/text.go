@@ -8,14 +8,11 @@ import (
 )
 
 type Text struct {
-	ID     int64
-	UserID int64
-	Key    string
-	Value  string
-	Text   []byte
-	//CreatedAt timestamp.Timestamp
-	//UpdatedAt timestamp.Timestamp
-	//DeletedAt timestamp.Timestamp
+	ID        int64
+	UserID    int64
+	Key       string
+	Value     string
+	Text      []byte
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt time.Time
@@ -59,24 +56,19 @@ type GetListTextResponse struct {
 }
 
 func GetTextData(data *Text) *grpc.Text {
-
 	created, _ := service.ConvertTimeToTimestamp(data.CreatedAt)
 	updated, _ := service.ConvertTimeToTimestamp(data.UpdatedAt)
 	deleted, _ := service.ConvertTimeToTimestamp(data.DeletedAt)
-
 	return &grpc.Text{
-		UserId: data.UserID,
-		Text:   data.Text,
-		//CreatedAt: &data.CreatedAt,
-		//UpdatedAt: &data.UpdatedAt,
-		//DeletedAt: &data.DeletedAt,
+		UserId:    data.UserID,
+		Text:      data.Text,
 		CreatedAt: created,
 		UpdatedAt: updated,
 		DeletedAt: deleted,
 	}
 }
 
-func GetListData(data []Text) []*grpc.Text {
+func GetListText(data []Text) []*grpc.Text {
 	items := make([]*grpc.Text, len(data))
 	for i := range data {
 		created, _ := service.ConvertTimeToTimestamp(data[i].CreatedAt)

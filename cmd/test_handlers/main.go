@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/config"
@@ -96,4 +98,58 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(getListText)
+	//-----------------------------------------------------------------
+	randName = randomizer.RandStringRunes(10)
+	card := model.Card{Name: randName, PaymentSystem: randName, Number: randName, Holder: randName, EndData: time.Now(), CVC: 13579}
+	jsonCard, err := json.Marshal(card)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	secretKey = encryption.AesKeySecureRandom([]byte(password))
+	encryptCard, err := encryption.Encrypt(string(jsonCard), secretKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	createdCard, err := client.HandleCreateCard(context.Background(),
+		&gophkeeper.CreateCardRequest{Name: randName, Data: []byte(encryptCard), AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(createdCard.Data)
+
+	getNodeCard, err := client.HandleGetNodeCard(context.Background(), &gophkeeper.GetNodeCardRequest{Name: randName, AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	plaintext, err = encryption.Decrypt(string(getNodeCard.Data.Data), secretKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(plaintext)
+
+	randName = randomizer.RandStringRunes(10)
+	card = model.Card{Name: randName, PaymentSystem: randName, Number: randName, Holder: randName, EndData: time.Now(), CVC: 13579}
+	jsonCard, err = json.Marshal(card)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	secretKey = encryption.AesKeySecureRandom([]byte(password))
+	encryptCard, err = encryption.Encrypt(string(jsonCard), secretKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	createdCard2, err := client.HandleCreateCard(context.Background(),
+		&gophkeeper.CreateCardRequest{Name: randName, Data: []byte(encryptCard), AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(createdCard2.Data)
+
+	getListCard, err := client.HandleGetListCard(context.Background(), &gophkeeper.GetListCardRequest{AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(getListCard)
 }

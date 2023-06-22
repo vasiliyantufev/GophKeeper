@@ -6,7 +6,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/theme"
 	"github.com/sirupsen/logrus"
-	"github.com/vasiliyantufev/gophkeeper/internal/client/api"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/api/events"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/gui"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/proto"
@@ -25,8 +25,8 @@ func main() {
 		log.Fatal(err)
 	}
 	grpc := gophkeeper.NewGophkeeperClient(conn)
-	client := api.NewClient(ctx, log, grpc)
-	ping, err := client.Ping()
+	client := events.NewEvent(ctx, log, grpc)
+	ping, err := client.EventPing()
 	if err != nil {
 		log.Fatal(err)
 	}
