@@ -12,7 +12,7 @@ type Card struct {
 	UserID    int64
 	Key       string
 	Value     string
-	CardData  []byte
+	Data      []byte
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt time.Time
@@ -23,7 +23,7 @@ type CreateCardRequest struct {
 	Name        string
 	Description string
 	Type        string
-	CardData    []byte
+	Data        []byte
 	AccessToken string
 }
 
@@ -53,7 +53,7 @@ func GetCardData(data *Card) *grpc.Card {
 	deleted, _ := service.ConvertTimeToTimestamp(data.DeletedAt)
 	return &grpc.Card{
 		UserId:    data.UserID,
-		Data:      data.CardData,
+		Data:      data.Data,
 		CreatedAt: created,
 		UpdatedAt: updated,
 		DeletedAt: deleted,
@@ -65,7 +65,7 @@ func GetListCard(data []Card) []*grpc.Card {
 	for i := range data {
 		created, _ := service.ConvertTimeToTimestamp(data[i].CreatedAt)
 		updated, _ := service.ConvertTimeToTimestamp(data[i].UpdatedAt)
-		items[i] = &grpc.Card{Id: data[i].ID, Key: data[i].Key, Data: data[i].CardData, Value: data[i].Value, CreatedAt: created, UpdatedAt: updated}
+		items[i] = &grpc.Card{Id: data[i].ID, Key: data[i].Key, Data: data[i].Data, Value: data[i].Value, CreatedAt: created, UpdatedAt: updated}
 	}
 	return items
 }

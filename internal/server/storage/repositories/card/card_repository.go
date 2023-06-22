@@ -26,10 +26,10 @@ func (c *Card) CreateCard(cardRequest *model.CreateCardRequest) (*model.Card, er
 		"INSERT INTO card (user_id, data, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
 			"RETURNING card_id, data",
 		cardRequest.UserID,
-		cardRequest.CardData,
+		cardRequest.Data,
 		time.Now(),
 		time.Now(),
-	).Scan(&card.ID, &card.CardData); err != nil {
+	).Scan(&card.ID, &card.Data); err != nil {
 		return nil, err
 	}
 	return card, nil
@@ -55,7 +55,7 @@ func (c *Card) GetNodeCard(cardRequest *model.GetNodeCardRequest) (*model.Card, 
 		"inner join users on card.user_id  = users.user_id "+
 		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
 		string(variables.Name), cardRequest.Value, cardRequest.UserID, string(variables.Card)).Scan(
-		&card.CardData,
+		&card.Data,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -87,7 +87,7 @@ func (c *Card) GetListCard(userId int64) ([]model.Card, error) {
 	defer rows.Close()
 	for rows.Next() {
 		card := model.Card{}
-		err = rows.Scan(&card.ID, &card.Key, &card.CardData, &card.Value, &card.CreatedAt, &card.UpdatedAt)
+		err = rows.Scan(&card.ID, &card.Key, &card.Data, &card.Value, &card.CreatedAt, &card.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}

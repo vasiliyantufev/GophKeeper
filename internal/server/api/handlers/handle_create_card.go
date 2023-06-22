@@ -26,7 +26,7 @@ func (h *Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequ
 	CardData := &model.CreateCardRequest{}
 	CardData.UserID = req.AccessToken.UserId
 	CardData.Name = req.Name
-	CardData.CardData = req.Data
+	CardData.Data = req.Data
 	CardData.Description = req.Description
 	if CardData.Name == "" {
 		err := errors.ErrNoMetadataSet
