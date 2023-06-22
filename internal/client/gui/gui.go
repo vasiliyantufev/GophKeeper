@@ -19,6 +19,7 @@ import (
 func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	window := application.NewWindow("GophKeeper")
 	window.Resize(fyne.NewSize(250, 80))
+	var dataTblLoginPassword = [][]string{{"NAME", "DESCRIPTION", "LOGIN", "PASSWORD", "CREATED AT", "UPDATED AT"}}
 	var dataTblText = [][]string{{"NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}}
 	var dataTblCard = [][]string{{"NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}}
 	var radioOptions = []string{"Login", "Registration"}
@@ -33,19 +34,24 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var containerRadio *fyne.Container
 	var containerFormLogin *fyne.Container
 	var containerFormRegistration *fyne.Container
+	var containerFormLoginPassword *fyne.Container
 	var containerFormText *fyne.Container
 	var containerFormCard *fyne.Container
 	//---------------------------------------------------------------------- buttons
 	var buttonAuth *widget.Button
 	var buttonTop *widget.Button
+	var buttonLoginPassword *widget.Button
 	var buttonText *widget.Button
 	var buttonCard *widget.Button
+	var buttonLoginPasswordAdd *widget.Button
 	var buttonTextAdd *widget.Button
 	var buttonCardAdd *widget.Button
 	//---------------------------------------------------------------------- tabs
 	var containerTabs *container.AppTabs
+	var tblLoginPassword *widget.Table
 	var tblText *widget.Table
 	var tblCard *widget.Table
+	var tabLoginPassword *container.TabItem
 	var tabText *container.TabItem
 	var tabCard *container.TabItem
 	//---------------------------------------------------------------------- entries init
@@ -58,6 +64,10 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	textNameEntry := widget.NewEntry()
 	textEntry := widget.NewEntry()
 	textDescriptionEntry := widget.NewEntry()
+	loginPasswordNameEntry := widget.NewEntry()
+	loginEntry := widget.NewEntry()
+	passwordEntry := widget.NewEntry()
+	loginPasswordDescriptionEntry := widget.NewEntry()
 	cardDescriptionEntry := widget.NewEntry()
 	cardNameEntry := widget.NewEntry()
 	paymentSystemEntry := widget.NewEntry()
@@ -67,14 +77,17 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	cvcEntry := widget.NewEntry()
 	//---------------------------------------------------------------------- labels init
 	labelAlertAuth := widget.NewLabel("")
+	labelAlertLoginPassword := widget.NewLabel("")
 	labelAlertText := widget.NewLabel("")
 	labelAlertCard := widget.NewLabel("")
 	labelAlertAuth.Hide()
+	labelAlertLoginPassword.Hide()
 	labelAlertText.Hide()
 	labelAlertCard.Hide()
 	//---------------------------------------------------------------------- forms init
 	formLogin := component.GetFormLogin(usernameLoginEntry, passwordLoginEntry)
 	formRegistration := component.GetFormRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
+	formLoginPassword := component.GetFormLoginPassword(loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry, passwordEntry)
 	formText := component.GetFormText(textNameEntry, textDescriptionEntry, textEntry)
 	formCard := component.GetFormCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 	//---------------------------------------------------------------------- radio event
@@ -104,6 +117,10 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			window.SetContent(containerTabs)
 		}
 	})
+	buttonLoginPassword = widget.NewButton(labels.BtnAddLoginPassword, func() {
+		window.SetContent(containerFormLoginPassword)
+		window.Show()
+	})
 	buttonText = widget.NewButton(labels.BtnAddText, func() {
 		window.SetContent(containerFormText)
 		window.Show()
@@ -112,6 +129,18 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		window.SetContent(containerFormCard)
 		window.Show()
 	})
+	//---------------------------------------------------------------------- table login password init
+	tblLoginPassword = widget.NewTable(
+		func() (int, int) {
+			return len(dataTblLoginPassword), len(dataTblLoginPassword[0])
+		},
+		func() fyne.CanvasObject {
+			return widget.NewLabel(labels.TblLabel)
+		},
+		func(i widget.TableCellID, o fyne.CanvasObject) {
+			o.(*widget.Label).SetText(dataTblLoginPassword[i.Row][i.Col])
+		})
+	form.SetDefaultColumnsWidthLoginPassword(tblLoginPassword)
 	//---------------------------------------------------------------------- table text init
 	tblText = widget.NewTable(
 		func() (int, int) {
@@ -137,9 +166,10 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		})
 	form.SetDefaultColumnsWidthCard(tblCard)
 	//---------------------------------------------------------------------- containerTabs
+	tabLoginPassword = component.GetTabLoginPassword(tblLoginPassword, buttonTop, buttonLoginPassword)
 	tabText = component.GetTabTexts(tblText, buttonTop, buttonText)
 	tabCard = component.GetTabCards(tblCard, buttonTop, buttonCard)
-	containerTabs = container.NewAppTabs(tabText, tabCard)
+	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard)
 	//---------------------------------------------------------------------- auth event
 	buttonAuth = widget.NewButton("Submit", func() {
 		labelAlertAuth.Show()
@@ -185,6 +215,10 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				}
 			}
 		}
+	})
+	//---------------------------------------------------------------------- text event
+	buttonLoginPasswordAdd = widget.NewButton(labels.BtnAdd, func() {
+		log.Debug(dataTblLoginPassword)
 	})
 	//---------------------------------------------------------------------- text event
 	buttonTextAdd = widget.NewButton(labels.BtnAdd, func() {
@@ -243,6 +277,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	containerRadio = container.NewVBox(radioAuth)
 	containerFormLogin = container.NewVBox(formLogin, buttonAuth, labelAlertAuth, separator, radioAuth)
 	containerFormRegistration = container.NewVBox(formRegistration, buttonAuth, labelAlertAuth, separator, radioAuth)
+	containerFormLoginPassword = container.NewVBox(formLoginPassword, buttonLoginPasswordAdd, labelAlertLoginPassword)
 	containerFormText = container.NewVBox(formText, buttonTextAdd, labelAlertText)
 	containerFormCard = container.NewVBox(formCard, buttonCardAdd, labelAlertCard)
 	//----------------------------------------------------------------------

@@ -52,7 +52,7 @@ type GetListTextRequest struct {
 }
 
 type GetListTextResponse struct {
-	Texts []Text
+	Text []Text
 }
 
 func GetText(text *Text) *grpc.Text {
