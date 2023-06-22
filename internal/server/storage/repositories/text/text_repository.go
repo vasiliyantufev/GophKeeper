@@ -26,10 +26,10 @@ func (t *Text) CreateText(textRequest *model.CreateTextRequest) (*model.Text, er
 		"INSERT INTO text (user_id, data, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
 			"RETURNING text_id, data",
 		textRequest.UserID,
-		textRequest.Text,
+		textRequest.Data,
 		time.Now(),
 		time.Now(),
-	).Scan(&text.ID, &text.Text); err != nil {
+	).Scan(&text.ID, &text.Data); err != nil {
 		return nil, err
 	}
 	return text, nil
@@ -42,7 +42,7 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 		"inner join users on text.user_id  = users.user_id "+
 		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
 		string(variables.Name), textRequest.Value, textRequest.UserID, string(variables.Text)).
-		Scan(&text.Text)
+		Scan(&text.Data)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrRecordNotFound
@@ -73,7 +73,7 @@ func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 	defer rows.Close()
 	for rows.Next() {
 		text := model.Text{}
-		err = rows.Scan(&text.ID, &text.Key, &text.Text, &text.Value, &text.CreatedAt, &text.UpdatedAt)
+		err = rows.Scan(&text.ID, &text.Key, &text.Data, &text.Value, &text.CreatedAt, &text.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}

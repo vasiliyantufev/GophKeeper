@@ -12,7 +12,7 @@ type Text struct {
 	UserID    int64
 	Key       string
 	Value     string
-	Text      []byte
+	Data      []byte
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt time.Time
@@ -23,7 +23,7 @@ type CreateTextRequest struct {
 	Name        string
 	Description string
 	Type        string
-	Text        []byte
+	Data        []byte
 	AccessToken string
 }
 
@@ -42,7 +42,7 @@ type GetNodeTextRequest struct {
 type GetNodeTextResponse struct {
 	Key   string
 	Value string
-	Text  Text
+	Data  Text
 }
 
 // ----------------------------------------
@@ -52,28 +52,28 @@ type GetListTextRequest struct {
 }
 
 type GetListTextResponse struct {
-	Text []Text
+	Texts []Text
 }
 
-func GetTextData(data *Text) *grpc.Text {
-	created, _ := service.ConvertTimeToTimestamp(data.CreatedAt)
-	updated, _ := service.ConvertTimeToTimestamp(data.UpdatedAt)
-	deleted, _ := service.ConvertTimeToTimestamp(data.DeletedAt)
+func GetText(text *Text) *grpc.Text {
+	created, _ := service.ConvertTimeToTimestamp(text.CreatedAt)
+	updated, _ := service.ConvertTimeToTimestamp(text.UpdatedAt)
+	deleted, _ := service.ConvertTimeToTimestamp(text.DeletedAt)
 	return &grpc.Text{
-		UserId:    data.UserID,
-		Text:      data.Text,
+		UserId:    text.UserID,
+		Text:      text.Data,
 		CreatedAt: created,
 		UpdatedAt: updated,
 		DeletedAt: deleted,
 	}
 }
 
-func GetListText(data []Text) []*grpc.Text {
-	items := make([]*grpc.Text, len(data))
-	for i := range data {
-		created, _ := service.ConvertTimeToTimestamp(data[i].CreatedAt)
-		updated, _ := service.ConvertTimeToTimestamp(data[i].UpdatedAt)
-		items[i] = &grpc.Text{Id: data[i].ID, Key: data[i].Key, Text: data[i].Text, Value: data[i].Value, CreatedAt: created, UpdatedAt: updated}
+func GetListText(texts []Text) []*grpc.Text {
+	items := make([]*grpc.Text, len(texts))
+	for i := range texts {
+		created, _ := service.ConvertTimeToTimestamp(texts[i].CreatedAt)
+		updated, _ := service.ConvertTimeToTimestamp(texts[i].UpdatedAt)
+		items[i] = &grpc.Text{Id: texts[i].ID, Key: texts[i].Key, Text: texts[i].Data, Value: texts[i].Value, CreatedAt: created, UpdatedAt: updated}
 	}
 	return items
 }
