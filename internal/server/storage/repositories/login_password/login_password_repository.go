@@ -1,10 +1,12 @@
 package loginPassword
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 )
 
@@ -48,6 +50,19 @@ func (lp *LoginPassword) KeyExists(loginPasswordRequest *model.CreateLoginPasswo
 
 func (lp *LoginPassword) GetNodeLoginPassword(loginPasswordRequest *model.GetNodeLoginPasswordRequest) (*model.LoginPassword, error) {
 	loginPassword := &model.LoginPassword{}
+	err := lp.db.Pool.QueryRow("SELECT login_password.data FROM metadata "+
+		"inner join login_password on metadata.entity_id = login_password.login_password_id "+
+		"inner join users on login_password.user_id  = users.user_id "+
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		string(variables.Name), loginPasswordRequest.Value, loginPasswordRequest.UserID, string(variables.LoginPassword)).
+		Scan(&loginPassword.Data)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrRecordNotFound
+		} else {
+			return nil, err
+		}
+	}
 	return loginPassword, nil
 }
 
