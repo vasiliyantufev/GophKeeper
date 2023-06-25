@@ -58,6 +58,8 @@ func main() {
 		CreatedAt: created, EndDateAt: endDate}
 	log.Info(accessToken)
 
+	//----------------------------------------------------------------- text
+
 	randName := randomizer.RandStringRunes(10)
 	randDescription := randomizer.RandStringRunes(10)
 	plaintext := "Hi my sweetly friends!!!!!!!TeST ВСЕМПРИВЕТ!"
@@ -78,7 +80,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	plaintext, err = encryption.Decrypt(string(getNodeText.Text.Text), secretKey)
+	plaintext, err = encryption.Decrypt(string(getNodeText.Text.Data), secretKey)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,7 +100,7 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(getListText)
-	//-----------------------------------------------------------------
+	//----------------------------------------------------------------- card
 	randName = randomizer.RandStringRunes(10)
 	card := model.Card{Name: randName, PaymentSystem: randName, Number: randName, Holder: randName, EndData: time.Now(), CVC: 13579}
 	jsonCard, err := json.Marshal(card)
@@ -152,4 +154,23 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(getListCard)
+	//----------------------------------------------------------------- login password
+	randName = randomizer.RandStringRunes(10)
+	loginPassword := model.LoginPassword{}
+	jsonLoginPassword, err := json.Marshal(loginPassword)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	secretKey = encryption.AesKeySecureRandom([]byte(password))
+	encryptLoginPassword, err := encryption.Encrypt(string(jsonLoginPassword), secretKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	createdLoginPassword, err := client.HandleCreateLoginPassword(context.Background(),
+		&gophkeeper.CreateLoginPasswordRequest{Name: randName, Data: []byte(encryptLoginPassword), AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(createdLoginPassword.Data)
 }

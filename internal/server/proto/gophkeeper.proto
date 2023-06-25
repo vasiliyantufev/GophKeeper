@@ -17,6 +17,9 @@ service Gophkeeper {
   rpc HandleCreateCard(CreateCardRequest) returns (CreateCardResponse) {}
   rpc HandleGetNodeCard(GetNodeCardRequest) returns (GetNodeCardResponse) {}
   rpc HandleGetListCard(GetListCardRequest) returns (GetListCardResponse) {}
+  rpc HandleCreateLoginPassword(CreateLoginPasswordRequest) returns (CreateLoginPasswordResponse) {}
+  rpc HandleGetNodeLoginPassword(GetNodeLoginPasswordRequest) returns (GetNodeLoginPasswordResponse) {}
+  rpc HandleGetListLoginPassword(GetListLoginPasswordRequest) returns (GetListLoginPasswordResponse) {}
 }
 //------------------------------------
 message PingRequest {}

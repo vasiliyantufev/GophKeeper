@@ -19,16 +19,19 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Gophkeeper_HandleAuthentication_FullMethodName = "/api.Gophkeeper/HandleAuthentication"
-	Gophkeeper_HandleRegistration_FullMethodName   = "/api.Gophkeeper/HandleRegistration"
-	Gophkeeper_HandleCreateText_FullMethodName     = "/api.Gophkeeper/HandleCreateText"
-	Gophkeeper_HandleGetListText_FullMethodName    = "/api.Gophkeeper/HandleGetListText"
-	Gophkeeper_HandleGetNodeText_FullMethodName    = "/api.Gophkeeper/HandleGetNodeText"
-	Gophkeeper_HandlePing_FullMethodName           = "/api.Gophkeeper/HandlePing"
-	Gophkeeper_HandleUserExist_FullMethodName      = "/api.Gophkeeper/HandleUserExist"
-	Gophkeeper_HandleCreateCard_FullMethodName     = "/api.Gophkeeper/HandleCreateCard"
-	Gophkeeper_HandleGetNodeCard_FullMethodName    = "/api.Gophkeeper/HandleGetNodeCard"
-	Gophkeeper_HandleGetListCard_FullMethodName    = "/api.Gophkeeper/HandleGetListCard"
+	Gophkeeper_HandleAuthentication_FullMethodName       = "/api.Gophkeeper/HandleAuthentication"
+	Gophkeeper_HandleRegistration_FullMethodName         = "/api.Gophkeeper/HandleRegistration"
+	Gophkeeper_HandleCreateText_FullMethodName           = "/api.Gophkeeper/HandleCreateText"
+	Gophkeeper_HandleGetListText_FullMethodName          = "/api.Gophkeeper/HandleGetListText"
+	Gophkeeper_HandleGetNodeText_FullMethodName          = "/api.Gophkeeper/HandleGetNodeText"
+	Gophkeeper_HandlePing_FullMethodName                 = "/api.Gophkeeper/HandlePing"
+	Gophkeeper_HandleUserExist_FullMethodName            = "/api.Gophkeeper/HandleUserExist"
+	Gophkeeper_HandleCreateCard_FullMethodName           = "/api.Gophkeeper/HandleCreateCard"
+	Gophkeeper_HandleGetNodeCard_FullMethodName          = "/api.Gophkeeper/HandleGetNodeCard"
+	Gophkeeper_HandleGetListCard_FullMethodName          = "/api.Gophkeeper/HandleGetListCard"
+	Gophkeeper_HandleCreateLoginPassword_FullMethodName  = "/api.Gophkeeper/HandleCreateLoginPassword"
+	Gophkeeper_HandleGetNodeLoginPassword_FullMethodName = "/api.Gophkeeper/HandleGetNodeLoginPassword"
+	Gophkeeper_HandleGetListLoginPassword_FullMethodName = "/api.Gophkeeper/HandleGetListLoginPassword"
 )
 
 // GophkeeperClient is the client API for Gophkeeper service.
@@ -45,6 +48,9 @@ type GophkeeperClient interface {
 	HandleCreateCard(ctx context.Context, in *CreateCardRequest, opts ...grpc.CallOption) (*CreateCardResponse, error)
 	HandleGetNodeCard(ctx context.Context, in *GetNodeCardRequest, opts ...grpc.CallOption) (*GetNodeCardResponse, error)
 	HandleGetListCard(ctx context.Context, in *GetListCardRequest, opts ...grpc.CallOption) (*GetListCardResponse, error)
+	HandleCreateLoginPassword(ctx context.Context, in *CreateLoginPasswordRequest, opts ...grpc.CallOption) (*CreateLoginPasswordResponse, error)
+	HandleGetNodeLoginPassword(ctx context.Context, in *GetNodeLoginPasswordRequest, opts ...grpc.CallOption) (*GetNodeLoginPasswordResponse, error)
+	HandleGetListLoginPassword(ctx context.Context, in *GetListLoginPasswordRequest, opts ...grpc.CallOption) (*GetListLoginPasswordResponse, error)
 }
 
 type gophkeeperClient struct {
@@ -145,6 +151,33 @@ func (c *gophkeeperClient) HandleGetListCard(ctx context.Context, in *GetListCar
 	return out, nil
 }
 
+func (c *gophkeeperClient) HandleCreateLoginPassword(ctx context.Context, in *CreateLoginPasswordRequest, opts ...grpc.CallOption) (*CreateLoginPasswordResponse, error) {
+	out := new(CreateLoginPasswordResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleCreateLoginPassword_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gophkeeperClient) HandleGetNodeLoginPassword(ctx context.Context, in *GetNodeLoginPasswordRequest, opts ...grpc.CallOption) (*GetNodeLoginPasswordResponse, error) {
+	out := new(GetNodeLoginPasswordResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetNodeLoginPassword_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gophkeeperClient) HandleGetListLoginPassword(ctx context.Context, in *GetListLoginPasswordRequest, opts ...grpc.CallOption) (*GetListLoginPasswordResponse, error) {
+	out := new(GetListLoginPasswordResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetListLoginPassword_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GophkeeperServer is the server API for Gophkeeper service.
 // All implementations must embed UnimplementedGophkeeperServer
 // for forward compatibility
@@ -159,6 +192,9 @@ type GophkeeperServer interface {
 	HandleCreateCard(context.Context, *CreateCardRequest) (*CreateCardResponse, error)
 	HandleGetNodeCard(context.Context, *GetNodeCardRequest) (*GetNodeCardResponse, error)
 	HandleGetListCard(context.Context, *GetListCardRequest) (*GetListCardResponse, error)
+	HandleCreateLoginPassword(context.Context, *CreateLoginPasswordRequest) (*CreateLoginPasswordResponse, error)
+	HandleGetNodeLoginPassword(context.Context, *GetNodeLoginPasswordRequest) (*GetNodeLoginPasswordResponse, error)
+	HandleGetListLoginPassword(context.Context, *GetListLoginPasswordRequest) (*GetListLoginPasswordResponse, error)
 	mustEmbedUnimplementedGophkeeperServer()
 }
 
@@ -195,6 +231,15 @@ func (UnimplementedGophkeeperServer) HandleGetNodeCard(context.Context, *GetNode
 }
 func (UnimplementedGophkeeperServer) HandleGetListCard(context.Context, *GetListCardRequest) (*GetListCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleGetListCard not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleCreateLoginPassword(context.Context, *CreateLoginPasswordRequest) (*CreateLoginPasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateLoginPassword not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleGetNodeLoginPassword(context.Context, *GetNodeLoginPasswordRequest) (*GetNodeLoginPasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleGetNodeLoginPassword not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleGetListLoginPassword(context.Context, *GetListLoginPasswordRequest) (*GetListLoginPasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleGetListLoginPassword not implemented")
 }
 func (UnimplementedGophkeeperServer) mustEmbedUnimplementedGophkeeperServer() {}
 
@@ -389,6 +434,60 @@ func _Gophkeeper_HandleGetListCard_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gophkeeper_HandleCreateLoginPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateLoginPasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleCreateLoginPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleCreateLoginPassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleCreateLoginPassword(ctx, req.(*CreateLoginPasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Gophkeeper_HandleGetNodeLoginPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNodeLoginPasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleGetNodeLoginPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleGetNodeLoginPassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleGetNodeLoginPassword(ctx, req.(*GetNodeLoginPasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Gophkeeper_HandleGetListLoginPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetListLoginPasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleGetListLoginPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleGetListLoginPassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleGetListLoginPassword(ctx, req.(*GetListLoginPasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Gophkeeper_ServiceDesc is the grpc.ServiceDesc for Gophkeeper service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -435,6 +534,18 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HandleGetListCard",
 			Handler:    _Gophkeeper_HandleGetListCard_Handler,
+		},
+		{
+			MethodName: "HandleCreateLoginPassword",
+			Handler:    _Gophkeeper_HandleCreateLoginPassword_Handler,
+		},
+		{
+			MethodName: "HandleGetNodeLoginPassword",
+			Handler:    _Gophkeeper_HandleGetNodeLoginPassword_Handler,
+		},
+		{
+			MethodName: "HandleGetListLoginPassword",
+			Handler:    _Gophkeeper_HandleGetListLoginPassword_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
