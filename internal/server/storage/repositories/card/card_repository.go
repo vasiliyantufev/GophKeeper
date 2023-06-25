@@ -68,7 +68,7 @@ func (c *Card) GetNodeCard(cardRequest *model.GetNodeCardRequest) (*model.Card, 
 }
 
 func (c *Card) GetListCard(userId int64) ([]model.Card, error) {
-	ListCard := []model.Card{}
+	listCard := []model.Card{}
 
 	rows, err := c.db.Pool.Query("SELECT metadata.entity_id, metadata.key, card.data, metadata.value, card.created_at, "+
 		"card.updated_at FROM metadata "+
@@ -91,7 +91,7 @@ func (c *Card) GetListCard(userId int64) ([]model.Card, error) {
 		if err != nil {
 			return nil, err
 		}
-		ListCard = append(ListCard, card)
+		listCard = append(listCard, card)
 	}
-	return ListCard, nil
+	return listCard, nil
 }

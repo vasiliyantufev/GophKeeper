@@ -67,8 +67,7 @@ func (lp *LoginPassword) GetNodeLoginPassword(loginPasswordRequest *model.GetNod
 }
 
 func (lp *LoginPassword) GetListLoginPassword(userId int64) ([]model.LoginPassword, error) {
-	ListLoginPassword := []model.LoginPassword{}
-
+	listLoginPassword := []model.LoginPassword{}
 	rows, err := lp.db.Pool.Query("SELECT metadata.entity_id, metadata.key, login_password.data, metadata.value, login_password.created_at, "+
 		"login_password.updated_at FROM metadata "+
 		"inner join login_password on metadata.entity_id = login_password.login_password_id "+
@@ -90,8 +89,7 @@ func (lp *LoginPassword) GetListLoginPassword(userId int64) ([]model.LoginPasswo
 		if err != nil {
 			return nil, err
 		}
-		ListLoginPassword = append(ListLoginPassword, loginPassword)
+		listLoginPassword = append(listLoginPassword, loginPassword)
 	}
-
-	return ListLoginPassword, nil
+	return listLoginPassword, nil
 }

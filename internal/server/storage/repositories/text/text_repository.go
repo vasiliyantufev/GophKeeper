@@ -54,7 +54,7 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 }
 
 func (t *Text) GetListText(userId int64) ([]model.Text, error) {
-	ListText := []model.Text{}
+	listText := []model.Text{}
 
 	rows, err := t.db.Pool.Query("SELECT metadata.entity_id, metadata.key, text.data, metadata.value, text.created_at, "+
 		"text.updated_at FROM metadata "+
@@ -77,9 +77,9 @@ func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 		if err != nil {
 			return nil, err
 		}
-		ListText = append(ListText, text)
+		listText = append(listText, text)
 	}
-	return ListText, nil
+	return listText, nil
 }
 
 func (t *Text) KeyExists(textRequest *model.CreateTextRequest) (bool, error) {
