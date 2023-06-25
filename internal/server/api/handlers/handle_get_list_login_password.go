@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 
+	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"google.golang.org/grpc/codes"
@@ -20,5 +21,16 @@ func (h *Handler) HandleGetListLoginPassword(ctx context.Context, req *grpc.GetL
 			codes.Unauthenticated, errors.ErrNotValidateToken.Error(),
 		)
 	}
-	return &grpc.GetListLoginPasswordResponse{}, nil
+
+	ListLoginPassword, err := h.loginPassword.GetListLoginPassword(req.AccessToken.UserId)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.GetListLoginPasswordResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+	list := model.GetListLoginPassword(ListLoginPassword)
+
+	h.logger.Debug(ListLoginPassword)
+	return &grpc.GetListLoginPasswordResponse{Node: list}, nil
 }

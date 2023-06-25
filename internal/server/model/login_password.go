@@ -46,3 +46,13 @@ func GetLoginPassword(data *LoginPassword) *grpc.LoginPassword {
 		DeletedAt: deleted,
 	}
 }
+
+func GetListLoginPassword(data []LoginPassword) []*grpc.LoginPassword {
+	items := make([]*grpc.LoginPassword, len(data))
+	for i := range data {
+		created, _ := service.ConvertTimeToTimestamp(data[i].CreatedAt)
+		updated, _ := service.ConvertTimeToTimestamp(data[i].UpdatedAt)
+		items[i] = &grpc.LoginPassword{Id: data[i].ID, Key: data[i].Key, Data: data[i].Data, Value: data[i].Value, CreatedAt: created, UpdatedAt: updated}
+	}
+	return items
+}
