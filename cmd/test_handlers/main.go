@@ -168,7 +168,7 @@ func main() {
 		log.Fatal(err)
 	}
 	createdLoginPassword, err := client.HandleCreateLoginPassword(context.Background(),
-		&gophkeeper.CreateLoginPasswordRequest{Name: randName, Data: []byte(encryptLoginPassword), AccessToken: authenticatedUser.AccessToken})
+		&gophkeeper.CreateLoginPasswordRequest{Name: randName, Description: randName, Data: []byte(encryptLoginPassword), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -76,7 +76,7 @@ func (h *Handler) HandleCreateLoginPassword(ctx context.Context, req *grpc.Creat
 	Metadata.EntityId = CreatedLoginPassword.ID
 	Metadata.Key = string(variables.Description)
 	Metadata.Value = LoginPasswordData.Description
-	Metadata.Type = string(variables.Card)
+	Metadata.Type = string(variables.LoginPassword)
 	CreatedMetadataDescription, err := h.metadata.CreateMetadata(Metadata)
 	if err != nil {
 		h.logger.Error(err)

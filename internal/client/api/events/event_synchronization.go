@@ -48,7 +48,7 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 	dataTblCardPointer := &dataTblCard
 
 	for _, node := range nodesText.Node {
-		plaintext, err = encryption.Decrypt(string(node.Text), secretKey)
+		plaintext, err = encryption.Decrypt(string(node.Data), secretKey)
 		if err != nil {
 			c.logger.Error(err)
 			return dataTblText, dataTblCard, err
