@@ -1,4 +1,4 @@
-package login_password
+package loginPassword
 
 import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
@@ -15,7 +15,7 @@ func New(db *database.DB) *LoginPassword {
 	}
 }
 
-func (lp *LoginPassword) CreateCard(cardRequest *model.CreateLoginPasswordRequest) (*model.LoginPassword, error) {
+func (lp *LoginPassword) CreateLoginPassword(cardRequest *model.CreateLoginPasswordRequest) (*model.LoginPassword, error) {
 	loginPassword := &model.LoginPassword{}
 	return loginPassword, nil
 }
@@ -25,12 +25,12 @@ func (lp *LoginPassword) KeyExists(cardRequest *model.CreateLoginPasswordRequest
 	return exists, nil
 }
 
-func (lp *LoginPassword) GetNodeCard(cardRequest *model.GetNodeLoginPasswordRequest) (*model.LoginPassword, error) {
+func (lp *LoginPassword) GetNodeLoginPassword(cardRequest *model.GetNodeLoginPasswordRequest) (*model.LoginPassword, error) {
 	loginPassword := &model.LoginPassword{}
 	return loginPassword, nil
 }
 
-func (lp *LoginPassword) GetListCard(userId int64) ([]model.LoginPassword, error) {
+func (lp *LoginPassword) GetListLoginPassword(userId int64) ([]model.LoginPassword, error) {
 	ListLoginPassword := []model.LoginPassword{}
 	return ListLoginPassword, nil
 }

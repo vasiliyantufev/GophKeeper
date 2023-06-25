@@ -1,13 +1,18 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
+)
 
 type LoginPassword struct {
 	ID        int64
 	UserID    int64
 	Key       string
 	Value     string
-	CardData  []byte
+	Data      []byte
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt time.Time
@@ -27,4 +32,17 @@ type GetNodeLoginPasswordRequest struct {
 	Key         string
 	Value       string
 	AccessToken string
+}
+
+func GetLoginPasswordData(data *LoginPassword) *grpc.LoginPassword {
+	created, _ := service.ConvertTimeToTimestamp(data.CreatedAt)
+	updated, _ := service.ConvertTimeToTimestamp(data.UpdatedAt)
+	deleted, _ := service.ConvertTimeToTimestamp(data.DeletedAt)
+	return &grpc.LoginPassword{
+		UserId:    data.UserID,
+		Data:      data.Data,
+		CreatedAt: created,
+		UpdatedAt: updated,
+		DeletedAt: deleted,
+	}
 }

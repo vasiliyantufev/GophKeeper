@@ -11,6 +11,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/card"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/login_password"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/metadata"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/text"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/token"
@@ -31,14 +32,15 @@ func main() {
 
 	userRepository := user.New(db)
 	textRepository := text.New(db)
-	metadataRepository := metadata.New(db)
 	cardRepository := card.New(db)
+	loginPasswordRepository := loginPassword.New(db)
+	metadataRepository := metadata.New(db)
 	tokenRepository := token.New(db)
 
 	ctx, cnl := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT)
 	defer cnl()
 
-	handlerGrpc := grpcHandler.NewHandler(db, userRepository, textRepository, cardRepository, metadataRepository, tokenRepository, logger)
+	handlerGrpc := grpcHandler.NewHandler(db, userRepository, textRepository, cardRepository, loginPasswordRepository, metadataRepository, tokenRepository, logger)
 	go api.StartService(handlerGrpc, config, logger)
 
 	<-ctx.Done()
