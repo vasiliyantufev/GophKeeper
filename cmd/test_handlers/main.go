@@ -102,7 +102,8 @@ func main() {
 	log.Info(getListText)
 	//----------------------------------------------------------------- card
 	randName = randomizer.RandStringRunes(10)
-	card := model.Card{Name: randName, PaymentSystem: randName, Number: randName, Holder: randName, EndData: time.Now(), CVC: 13579}
+	randDescription = randomizer.RandStringRunes(10)
+	card := model.Card{Name: randName, Description: randDescription, PaymentSystem: randName, Number: randName, Holder: randName, EndData: time.Now(), CVC: 13579}
 	jsonCard, err := json.Marshal(card)
 	if err != nil {
 		log.Fatal(err)
@@ -114,7 +115,7 @@ func main() {
 		log.Fatal(err)
 	}
 	createdCard, err := client.HandleCreateCard(context.Background(),
-		&gophkeeper.CreateCardRequest{Name: randName, Data: []byte(encryptCard), AccessToken: authenticatedUser.AccessToken})
+		&gophkeeper.CreateCardRequest{Name: randName, Description: randDescription, Data: []byte(encryptCard), AccessToken: authenticatedUser.AccessToken})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -131,7 +132,8 @@ func main() {
 	log.Info(plaintext)
 
 	randName = randomizer.RandStringRunes(10)
-	card = model.Card{Name: randName, PaymentSystem: randName, Number: randName, Holder: randName, EndData: time.Now(), CVC: 13579}
+	randDescription = randomizer.RandStringRunes(10)
+	card = model.Card{Name: randName, Description: randDescription, PaymentSystem: randName, Number: randName, Holder: randName, EndData: time.Now(), CVC: 13579}
 	jsonCard, err = json.Marshal(card)
 	if err != nil {
 		log.Fatal(err)
@@ -156,7 +158,8 @@ func main() {
 	log.Info(getListCard)
 	//----------------------------------------------------------------- login password
 	randName = randomizer.RandStringRunes(10)
-	loginPassword := model.LoginPassword{}
+	randDescription = randomizer.RandStringRunes(10)
+	loginPassword := model.LoginPassword{Name: randName, Description: randDescription, Login: "Login", Password: "Password"}
 	jsonLoginPassword, err := json.Marshal(loginPassword)
 	if err != nil {
 		log.Fatal(err)
