@@ -57,7 +57,7 @@ func (h *Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequ
 			codes.Internal, err.Error(),
 		)
 	}
-	card := model.GetCardData(CreatedCard)
+	card := model.GetCard(CreatedCard)
 
 	Metadata := &model.CreateMetadataRequest{}
 	Metadata.EntityId = CreatedCard.ID

@@ -57,7 +57,7 @@ func (h *Handler) HandleCreateLoginPassword(ctx context.Context, req *grpc.Creat
 			codes.Internal, err.Error(),
 		)
 	}
-	loginPassword := model.GetLoginPasswordData(CreatedLoginPassword)
+	loginPassword := model.GetLoginPassword(CreatedLoginPassword)
 
 	Metadata := &model.CreateMetadataRequest{}
 	Metadata.EntityId = CreatedLoginPassword.ID

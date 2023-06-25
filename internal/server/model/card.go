@@ -47,7 +47,7 @@ type GetNodeCardResponse struct {
 
 // ----------------------------------------
 
-func GetCardData(data *Card) *grpc.Card {
+func GetCard(data *Card) *grpc.Card {
 	created, _ := service.ConvertTimeToTimestamp(data.CreatedAt)
 	updated, _ := service.ConvertTimeToTimestamp(data.UpdatedAt)
 	deleted, _ := service.ConvertTimeToTimestamp(data.DeletedAt)

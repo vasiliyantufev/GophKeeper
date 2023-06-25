@@ -34,7 +34,7 @@ type GetNodeLoginPasswordRequest struct {
 	AccessToken string
 }
 
-func GetLoginPasswordData(data *LoginPassword) *grpc.LoginPassword {
+func GetLoginPassword(data *LoginPassword) *grpc.LoginPassword {
 	created, _ := service.ConvertTimeToTimestamp(data.CreatedAt)
 	updated, _ := service.ConvertTimeToTimestamp(data.UpdatedAt)
 	deleted, _ := service.ConvertTimeToTimestamp(data.DeletedAt)
