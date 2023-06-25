@@ -176,4 +176,14 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(createdLoginPassword.Data)
+
+	getNodeLoginPassword, err := client.HandleGetNodeLoginPassword(context.Background(), &gophkeeper.GetNodeLoginPasswordRequest{Name: randName, AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	plaintext, err = encryption.Decrypt(string(getNodeLoginPassword.Data.Data), secretKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(plaintext)
 }
