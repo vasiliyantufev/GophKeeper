@@ -122,5 +122,5 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 	logrus.Debug(dataTblCard)
 	logrus.Debug(dataTblLoginPassword)
 
-	return dataTblText, dataTblCard, dataTblLoginPassword, err
+	return dataTblText, dataTblCard, dataTblLoginPassword, nil
 }

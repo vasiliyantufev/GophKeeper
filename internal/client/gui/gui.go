@@ -233,6 +233,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				form.ClearLoginPassword(loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry, passwordEntry)
 				log.Info("Логин-пароль добавлен")
 
+				labelAlertLoginPassword.Hide()
 				formLoginPassword.Refresh()
 				window.SetContent(containerTabs)
 				window.Show()
@@ -257,6 +258,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				form.ClearText(textNameEntry, textDescriptionEntry, textEntry)
 				log.Info("Текст добавлен")
 
+				labelAlertText.Hide()
 				formText.Refresh()
 				window.SetContent(containerTabs)
 				window.Show()
@@ -283,6 +285,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				form.ClearCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 				log.Info("Карта добавлена")
 
+				labelAlertCard.Hide()
 				formCard.Refresh()
 				window.SetContent(containerTabs)
 				window.Show()

@@ -73,7 +73,6 @@ func ValidateLoginPassword(exists bool, loginPasswordNameEntry *widget.Entry, lo
 		log.Print(labelAlertLoginPassword.Text)
 		return false
 	}
-	labelAlertLoginPassword.Hide()
 	return true
 }
 
@@ -99,7 +98,6 @@ func ValidateText(exists bool, textNameEntry *widget.Entry, textEntry *widget.En
 		log.Print(labelAlertText.Text)
 		return false
 	}
-	labelAlertText.Hide()
 	return true
 }
 
@@ -172,6 +170,5 @@ func ValidateCard(exists bool, cardNameEntry *widget.Entry, cardDescriptionEntry
 			return false
 		}
 	}
-	labelAlertCard.Hide()
 	return true
 }
