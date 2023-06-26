@@ -221,7 +221,23 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		labelAlertLoginPassword.Show()
 		valid = form.ValidateLoginPassword(false, loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry,
 			passwordEntry, labelAlertLoginPassword)
+		if valid {
+			err = client.EventCreateLoginPassword(loginPasswordNameEntry.Text, loginPasswordDescriptionEntry.Text, password,
+				loginEntry.Text, passwordEntry.Text, accessToken)
+			if err != nil {
+				labelAlertLoginPassword.SetText(errors.ErrLoginPasswordAdd)
+			} else {
+				dataTblLoginPassword = append(dataTblLoginPassword, []string{loginPasswordNameEntry.Text, loginPasswordDescriptionEntry.Text,
+					loginEntry.Text, passwordEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
+				form.ClearLoginPassword(loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry, passwordEntry)
+				log.Info("Логин-пароль добавлен")
+
+				formLoginPassword.Refresh()
+				window.SetContent(containerTabs)
+				window.Show()
+			}
+		}
 		log.Debug(dataTblLoginPassword)
 	})
 	//---------------------------------------------------------------------- text event

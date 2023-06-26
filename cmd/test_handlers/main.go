@@ -186,4 +186,30 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(plaintext)
+
+	randName = randomizer.RandStringRunes(10)
+	randDescription = randomizer.RandStringRunes(10)
+	loginPassword = model.LoginPassword{Name: randName, Description: randDescription, Login: "Login", Password: "Password"}
+	jsonLoginPassword, err = json.Marshal(loginPassword)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	secretKey = encryption.AesKeySecureRandom([]byte(password))
+	encryptLoginPassword, err = encryption.Encrypt(string(jsonLoginPassword), secretKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	createdLoginPassword2, err := client.HandleCreateLoginPassword(context.Background(),
+		&gophkeeper.CreateLoginPasswordRequest{Name: randName, Description: randName, Data: []byte(encryptLoginPassword), AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(createdLoginPassword2.Data)
+
+	getListLoginPassword, err := client.HandleGetListLoginPassword(context.Background(), &gophkeeper.GetListLoginPasswordRequest{AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(getListLoginPassword)
 }

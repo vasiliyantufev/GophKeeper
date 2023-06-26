@@ -18,3 +18,11 @@ func ClearCard(cardNameEntry *widget.Entry, cardDescriptionEntry *widget.Entry, 
 	endDateEntry.SetText("")
 	cvcEntry.SetText("")
 }
+
+func ClearLoginPassword(loginPasswordNameEntry *widget.Entry, loginPasswordDescriptionEntry *widget.Entry,
+	loginEntry *widget.Entry, passwordEntry *widget.Entry) {
+	loginPasswordNameEntry.SetText("")
+	loginPasswordDescriptionEntry.SetText("")
+	loginEntry.SetText("")
+	passwordEntry.SetText("")
+}
