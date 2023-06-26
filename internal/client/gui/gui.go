@@ -106,7 +106,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	})
 	//---------------------------------------------------------------------- buttons event
 	buttonTop = widget.NewButton(labels.BtnUpdateData, func() {
-		dataTblText, dataTblCard, err = client.EventSynchronization(password, accessToken)
+		dataTblText, dataTblCard, dataTblLoginPassword, err = client.EventSynchronization(password, accessToken)
 		if err != nil {
 			labelAlertAuth.SetText(errors.ErrLogin)
 		} else {
@@ -182,7 +182,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 					labelAlertAuth.SetText(errors.ErrLogin)
 				} else {
 					password = passwordLoginEntry.Text
-					dataTblText, dataTblCard, err = client.EventSynchronization(password, accessToken)
+					dataTblText, dataTblCard, dataTblLoginPassword, err = client.EventSynchronization(password, accessToken)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrLogin)
 					} else {

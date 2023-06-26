@@ -11,7 +11,7 @@ import (
 )
 
 func (c Event) EventCreateLoginPassword(name, description, passwordSecure, login, password string, token model.Token) error {
-	c.logger.Info("Create text")
+	c.logger.Info("Create login password")
 
 	loginPassword := model.LoginPassword{Login: login, Password: password}
 	jsonLoginPassword, err := json.Marshal(loginPassword)

@@ -73,7 +73,7 @@ func (lp *LoginPassword) GetListLoginPassword(userId int64) ([]model.LoginPasswo
 		"inner join login_password on metadata.entity_id = login_password.login_password_id "+
 		"inner join users on login_password.user_id  = users.user_id "+
 		"where users.user_id = $1 and metadata.type = $2",
-		userId, string(variables.Card))
+		userId, string(variables.LoginPassword))
 
 	if err != nil {
 		if err == sql.ErrNoRows {
