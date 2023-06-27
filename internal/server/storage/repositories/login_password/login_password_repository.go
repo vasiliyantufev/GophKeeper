@@ -127,7 +127,7 @@ func (lp *LoginPassword) DeleteLoginPassword(entityId int64) error {
 func (lp *LoginPassword) UpdateLoginPassword(textID int64, data []byte) error {
 	var id int64
 	layout := "01/02/2006 15:04:05"
-	if err := lp.db.Pool.QueryRow("UPDATE login_password SET data = $1, update_at = $2 WHERE login_password_id = $3 RETURNING login_password_id",
+	if err := lp.db.Pool.QueryRow("UPDATE login_password SET data = $1, updated_at = $2 WHERE login_password_id = $3 RETURNING login_password_id",
 		data,
 		time.Now().Format(layout),
 		textID,

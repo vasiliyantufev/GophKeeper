@@ -128,7 +128,7 @@ func (t *Text) DeleteText(textID int64) error {
 func (t *Text) UpdateText(textID int64, data []byte) error {
 	var id int64
 	layout := "01/02/2006 15:04:05"
-	if err := t.db.Pool.QueryRow("UPDATE text SET data = $1, update_at = $2 WHERE text_id = $3 RETURNING text_id",
+	if err := t.db.Pool.QueryRow("UPDATE text SET data = $1, updated_at = $2 WHERE text_id = $3 RETURNING text_id",
 		data,
 		time.Now().Format(layout),
 		textID,
