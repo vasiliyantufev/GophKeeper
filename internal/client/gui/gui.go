@@ -170,6 +170,14 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	tabText = component.GetTabTexts(tblText, buttonTop, buttonText)
 	tabCard = component.GetTabCards(tblCard, buttonTop, buttonCard)
 	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard)
+	//----------------------------------------------------------------------
+	// Make rows selectable
+	tblLoginPassword.OnSelected = func(id widget.TableCellID) {
+		// Get selected row data
+		selectedRow := dataTblLoginPassword[id.Row]
+		logrus.Info(selectedRow[0])
+	}
+
 	//---------------------------------------------------------------------- auth event
 	buttonAuth = widget.NewButton("Submit", func() {
 		labelAlertAuth.Show()

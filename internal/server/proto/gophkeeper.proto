@@ -7,19 +7,26 @@ package api;
 option go_package = "./gophkeeper";
 
 service Gophkeeper {
-  rpc HandleAuthentication(AuthenticationRequest) returns (AuthenticationResponse) {}
-  rpc HandleRegistration(RegistrationRequest) returns (RegistrationResponse) {}
-  rpc HandleCreateText(CreateTextRequest) returns (CreateTextResponse) {}
-  rpc HandleGetListText(GetListTextRequest) returns (GetListTextResponse) {}
-  rpc HandleGetNodeText(GetNodeTextRequest) returns (GetNodeTextResponse) {}
   rpc HandlePing(PingRequest) returns (PingResponse) {}
   rpc HandleUserExist(UserExistRequest) returns (UserExistResponse) {}
+
+  rpc HandleAuthentication(AuthenticationRequest) returns (AuthenticationResponse) {}
+  rpc HandleRegistration(RegistrationRequest) returns (RegistrationResponse) {}
+
+  rpc HandleCreateText(CreateTextRequest) returns (CreateTextResponse) {}
+  rpc HandleGetNodeText(GetNodeTextRequest) returns (GetNodeTextResponse) {}
+  rpc HandleGetListText(GetListTextRequest) returns (GetListTextResponse) {}
+  rpc HandleDeleteText(DeleteTextRequest) returns (DeleteTextResponse) {}
+
   rpc HandleCreateCard(CreateCardRequest) returns (CreateCardResponse) {}
   rpc HandleGetNodeCard(GetNodeCardRequest) returns (GetNodeCardResponse) {}
   rpc HandleGetListCard(GetListCardRequest) returns (GetListCardResponse) {}
+  rpc HandleDeleteCard(DeleteCardRequest) returns (DeleteCardResponse) {}
+
   rpc HandleCreateLoginPassword(CreateLoginPasswordRequest) returns (CreateLoginPasswordResponse) {}
   rpc HandleGetNodeLoginPassword(GetNodeLoginPasswordRequest) returns (GetNodeLoginPasswordResponse) {}
   rpc HandleGetListLoginPassword(GetListLoginPasswordRequest) returns (GetListLoginPasswordResponse) {}
+  rpc HandleDeleteLoginPassword(DeleteLoginPasswordRequest) returns (DeleteLoginPasswordResponse) {}
 }
 //------------------------------------
 message PingRequest {}
@@ -94,6 +101,13 @@ message GetListTextRequest {
 message GetListTextResponse {
   repeated Text node = 1;
 }
+message DeleteTextRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message DeleteTextResponse {
+  string name = 1;
+}
 //------------------------------------
 message Metadata {
   int64  entityId = 1;
@@ -137,6 +151,13 @@ message GetListCardRequest {
 message GetListCardResponse {
   repeated Card node = 1;
 }
+message DeleteCardRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message DeleteCardResponse {
+  string name = 1;
+}
 //------------------------------------
 message LoginPassword {
   int64  id = 1;
@@ -169,5 +190,12 @@ message GetListLoginPasswordRequest {
 }
 message GetListLoginPasswordResponse {
   repeated LoginPassword node = 1;
+}
+message DeleteLoginPasswordRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message DeleteLoginPasswordResponse {
+  string name = 1;
 }
 //------------------------------------
