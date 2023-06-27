@@ -27,14 +27,17 @@ const (
 	Gophkeeper_HandleGetNodeText_FullMethodName          = "/api.Gophkeeper/HandleGetNodeText"
 	Gophkeeper_HandleGetListText_FullMethodName          = "/api.Gophkeeper/HandleGetListText"
 	Gophkeeper_HandleDeleteText_FullMethodName           = "/api.Gophkeeper/HandleDeleteText"
+	Gophkeeper_HandleUpdateText_FullMethodName           = "/api.Gophkeeper/HandleUpdateText"
 	Gophkeeper_HandleCreateCard_FullMethodName           = "/api.Gophkeeper/HandleCreateCard"
 	Gophkeeper_HandleGetNodeCard_FullMethodName          = "/api.Gophkeeper/HandleGetNodeCard"
 	Gophkeeper_HandleGetListCard_FullMethodName          = "/api.Gophkeeper/HandleGetListCard"
 	Gophkeeper_HandleDeleteCard_FullMethodName           = "/api.Gophkeeper/HandleDeleteCard"
+	Gophkeeper_HandleUpdateCard_FullMethodName           = "/api.Gophkeeper/HandleUpdateCard"
 	Gophkeeper_HandleCreateLoginPassword_FullMethodName  = "/api.Gophkeeper/HandleCreateLoginPassword"
 	Gophkeeper_HandleGetNodeLoginPassword_FullMethodName = "/api.Gophkeeper/HandleGetNodeLoginPassword"
 	Gophkeeper_HandleGetListLoginPassword_FullMethodName = "/api.Gophkeeper/HandleGetListLoginPassword"
 	Gophkeeper_HandleDeleteLoginPassword_FullMethodName  = "/api.Gophkeeper/HandleDeleteLoginPassword"
+	Gophkeeper_HandleUpdateLoginPassword_FullMethodName  = "/api.Gophkeeper/HandleUpdateLoginPassword"
 )
 
 // GophkeeperClient is the client API for Gophkeeper service.
@@ -49,14 +52,17 @@ type GophkeeperClient interface {
 	HandleGetNodeText(ctx context.Context, in *GetNodeTextRequest, opts ...grpc.CallOption) (*GetNodeTextResponse, error)
 	HandleGetListText(ctx context.Context, in *GetListTextRequest, opts ...grpc.CallOption) (*GetListTextResponse, error)
 	HandleDeleteText(ctx context.Context, in *DeleteTextRequest, opts ...grpc.CallOption) (*DeleteTextResponse, error)
+	HandleUpdateText(ctx context.Context, in *UpdateTextRequest, opts ...grpc.CallOption) (*UpdateTextResponse, error)
 	HandleCreateCard(ctx context.Context, in *CreateCardRequest, opts ...grpc.CallOption) (*CreateCardResponse, error)
 	HandleGetNodeCard(ctx context.Context, in *GetNodeCardRequest, opts ...grpc.CallOption) (*GetNodeCardResponse, error)
 	HandleGetListCard(ctx context.Context, in *GetListCardRequest, opts ...grpc.CallOption) (*GetListCardResponse, error)
 	HandleDeleteCard(ctx context.Context, in *DeleteCardRequest, opts ...grpc.CallOption) (*DeleteCardResponse, error)
+	HandleUpdateCard(ctx context.Context, in *UpdateCardRequest, opts ...grpc.CallOption) (*UpdateCardResponse, error)
 	HandleCreateLoginPassword(ctx context.Context, in *CreateLoginPasswordRequest, opts ...grpc.CallOption) (*CreateLoginPasswordResponse, error)
 	HandleGetNodeLoginPassword(ctx context.Context, in *GetNodeLoginPasswordRequest, opts ...grpc.CallOption) (*GetNodeLoginPasswordResponse, error)
 	HandleGetListLoginPassword(ctx context.Context, in *GetListLoginPasswordRequest, opts ...grpc.CallOption) (*GetListLoginPasswordResponse, error)
 	HandleDeleteLoginPassword(ctx context.Context, in *DeleteLoginPasswordRequest, opts ...grpc.CallOption) (*DeleteLoginPasswordResponse, error)
+	HandleUpdateLoginPassword(ctx context.Context, in *UpdateLoginPasswordRequest, opts ...grpc.CallOption) (*UpdateLoginPasswordResponse, error)
 }
 
 type gophkeeperClient struct {
@@ -139,6 +145,15 @@ func (c *gophkeeperClient) HandleDeleteText(ctx context.Context, in *DeleteTextR
 	return out, nil
 }
 
+func (c *gophkeeperClient) HandleUpdateText(ctx context.Context, in *UpdateTextRequest, opts ...grpc.CallOption) (*UpdateTextResponse, error) {
+	out := new(UpdateTextResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleUpdateText_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *gophkeeperClient) HandleCreateCard(ctx context.Context, in *CreateCardRequest, opts ...grpc.CallOption) (*CreateCardResponse, error) {
 	out := new(CreateCardResponse)
 	err := c.cc.Invoke(ctx, Gophkeeper_HandleCreateCard_FullMethodName, in, out, opts...)
@@ -169,6 +184,15 @@ func (c *gophkeeperClient) HandleGetListCard(ctx context.Context, in *GetListCar
 func (c *gophkeeperClient) HandleDeleteCard(ctx context.Context, in *DeleteCardRequest, opts ...grpc.CallOption) (*DeleteCardResponse, error) {
 	out := new(DeleteCardResponse)
 	err := c.cc.Invoke(ctx, Gophkeeper_HandleDeleteCard_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gophkeeperClient) HandleUpdateCard(ctx context.Context, in *UpdateCardRequest, opts ...grpc.CallOption) (*UpdateCardResponse, error) {
+	out := new(UpdateCardResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleUpdateCard_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -211,6 +235,15 @@ func (c *gophkeeperClient) HandleDeleteLoginPassword(ctx context.Context, in *De
 	return out, nil
 }
 
+func (c *gophkeeperClient) HandleUpdateLoginPassword(ctx context.Context, in *UpdateLoginPasswordRequest, opts ...grpc.CallOption) (*UpdateLoginPasswordResponse, error) {
+	out := new(UpdateLoginPasswordResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleUpdateLoginPassword_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GophkeeperServer is the server API for Gophkeeper service.
 // All implementations must embed UnimplementedGophkeeperServer
 // for forward compatibility
@@ -223,14 +256,17 @@ type GophkeeperServer interface {
 	HandleGetNodeText(context.Context, *GetNodeTextRequest) (*GetNodeTextResponse, error)
 	HandleGetListText(context.Context, *GetListTextRequest) (*GetListTextResponse, error)
 	HandleDeleteText(context.Context, *DeleteTextRequest) (*DeleteTextResponse, error)
+	HandleUpdateText(context.Context, *UpdateTextRequest) (*UpdateTextResponse, error)
 	HandleCreateCard(context.Context, *CreateCardRequest) (*CreateCardResponse, error)
 	HandleGetNodeCard(context.Context, *GetNodeCardRequest) (*GetNodeCardResponse, error)
 	HandleGetListCard(context.Context, *GetListCardRequest) (*GetListCardResponse, error)
 	HandleDeleteCard(context.Context, *DeleteCardRequest) (*DeleteCardResponse, error)
+	HandleUpdateCard(context.Context, *UpdateCardRequest) (*UpdateCardResponse, error)
 	HandleCreateLoginPassword(context.Context, *CreateLoginPasswordRequest) (*CreateLoginPasswordResponse, error)
 	HandleGetNodeLoginPassword(context.Context, *GetNodeLoginPasswordRequest) (*GetNodeLoginPasswordResponse, error)
 	HandleGetListLoginPassword(context.Context, *GetListLoginPasswordRequest) (*GetListLoginPasswordResponse, error)
 	HandleDeleteLoginPassword(context.Context, *DeleteLoginPasswordRequest) (*DeleteLoginPasswordResponse, error)
+	HandleUpdateLoginPassword(context.Context, *UpdateLoginPasswordRequest) (*UpdateLoginPasswordResponse, error)
 	mustEmbedUnimplementedGophkeeperServer()
 }
 
@@ -262,6 +298,9 @@ func (UnimplementedGophkeeperServer) HandleGetListText(context.Context, *GetList
 func (UnimplementedGophkeeperServer) HandleDeleteText(context.Context, *DeleteTextRequest) (*DeleteTextResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleDeleteText not implemented")
 }
+func (UnimplementedGophkeeperServer) HandleUpdateText(context.Context, *UpdateTextRequest) (*UpdateTextResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleUpdateText not implemented")
+}
 func (UnimplementedGophkeeperServer) HandleCreateCard(context.Context, *CreateCardRequest) (*CreateCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateCard not implemented")
 }
@@ -274,6 +313,9 @@ func (UnimplementedGophkeeperServer) HandleGetListCard(context.Context, *GetList
 func (UnimplementedGophkeeperServer) HandleDeleteCard(context.Context, *DeleteCardRequest) (*DeleteCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleDeleteCard not implemented")
 }
+func (UnimplementedGophkeeperServer) HandleUpdateCard(context.Context, *UpdateCardRequest) (*UpdateCardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleUpdateCard not implemented")
+}
 func (UnimplementedGophkeeperServer) HandleCreateLoginPassword(context.Context, *CreateLoginPasswordRequest) (*CreateLoginPasswordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateLoginPassword not implemented")
 }
@@ -285,6 +327,9 @@ func (UnimplementedGophkeeperServer) HandleGetListLoginPassword(context.Context,
 }
 func (UnimplementedGophkeeperServer) HandleDeleteLoginPassword(context.Context, *DeleteLoginPasswordRequest) (*DeleteLoginPasswordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleDeleteLoginPassword not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleUpdateLoginPassword(context.Context, *UpdateLoginPasswordRequest) (*UpdateLoginPasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleUpdateLoginPassword not implemented")
 }
 func (UnimplementedGophkeeperServer) mustEmbedUnimplementedGophkeeperServer() {}
 
@@ -443,6 +488,24 @@ func _Gophkeeper_HandleDeleteText_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gophkeeper_HandleUpdateText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTextRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleUpdateText(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleUpdateText_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleUpdateText(ctx, req.(*UpdateTextRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Gophkeeper_HandleCreateCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateCardRequest)
 	if err := dec(in); err != nil {
@@ -511,6 +574,24 @@ func _Gophkeeper_HandleDeleteCard_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(GophkeeperServer).HandleDeleteCard(ctx, req.(*DeleteCardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Gophkeeper_HandleUpdateCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleUpdateCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleUpdateCard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleUpdateCard(ctx, req.(*UpdateCardRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -587,6 +668,24 @@ func _Gophkeeper_HandleDeleteLoginPassword_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gophkeeper_HandleUpdateLoginPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateLoginPasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleUpdateLoginPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleUpdateLoginPassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleUpdateLoginPassword(ctx, req.(*UpdateLoginPasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Gophkeeper_ServiceDesc is the grpc.ServiceDesc for Gophkeeper service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -627,6 +726,10 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Gophkeeper_HandleDeleteText_Handler,
 		},
 		{
+			MethodName: "HandleUpdateText",
+			Handler:    _Gophkeeper_HandleUpdateText_Handler,
+		},
+		{
 			MethodName: "HandleCreateCard",
 			Handler:    _Gophkeeper_HandleCreateCard_Handler,
 		},
@@ -643,6 +746,10 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Gophkeeper_HandleDeleteCard_Handler,
 		},
 		{
+			MethodName: "HandleUpdateCard",
+			Handler:    _Gophkeeper_HandleUpdateCard_Handler,
+		},
+		{
 			MethodName: "HandleCreateLoginPassword",
 			Handler:    _Gophkeeper_HandleCreateLoginPassword_Handler,
 		},
@@ -657,6 +764,10 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HandleDeleteLoginPassword",
 			Handler:    _Gophkeeper_HandleDeleteLoginPassword_Handler,
+		},
+		{
+			MethodName: "HandleUpdateLoginPassword",
+			Handler:    _Gophkeeper_HandleUpdateLoginPassword_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

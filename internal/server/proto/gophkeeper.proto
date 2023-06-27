@@ -17,16 +17,19 @@ service Gophkeeper {
   rpc HandleGetNodeText(GetNodeTextRequest) returns (GetNodeTextResponse) {}
   rpc HandleGetListText(GetListTextRequest) returns (GetListTextResponse) {}
   rpc HandleDeleteText(DeleteTextRequest) returns (DeleteTextResponse) {}
+  rpc HandleUpdateText(UpdateTextRequest) returns (UpdateTextResponse) {}
 
   rpc HandleCreateCard(CreateCardRequest) returns (CreateCardResponse) {}
   rpc HandleGetNodeCard(GetNodeCardRequest) returns (GetNodeCardResponse) {}
   rpc HandleGetListCard(GetListCardRequest) returns (GetListCardResponse) {}
   rpc HandleDeleteCard(DeleteCardRequest) returns (DeleteCardResponse) {}
+  rpc HandleUpdateCard(UpdateCardRequest) returns (UpdateCardResponse) {}
 
   rpc HandleCreateLoginPassword(CreateLoginPasswordRequest) returns (CreateLoginPasswordResponse) {}
   rpc HandleGetNodeLoginPassword(GetNodeLoginPasswordRequest) returns (GetNodeLoginPasswordResponse) {}
   rpc HandleGetListLoginPassword(GetListLoginPasswordRequest) returns (GetListLoginPasswordResponse) {}
   rpc HandleDeleteLoginPassword(DeleteLoginPasswordRequest) returns (DeleteLoginPasswordResponse) {}
+  rpc HandleUpdateLoginPassword(UpdateLoginPasswordRequest) returns (UpdateLoginPasswordResponse) {}
 }
 //------------------------------------
 message PingRequest {}
@@ -108,15 +111,12 @@ message DeleteTextRequest {
 message DeleteTextResponse {
   int64  id = 1;
 }
-//------------------------------------
-message Metadata {
-  int64  entityId = 1;
-  string key = 2;
-  string value = 3;
-  string type = 4;
-  google.protobuf.Timestamp createdAt = 5;
-  google.protobuf.Timestamp updatedAt = 6;
-  google.protobuf.Timestamp deletedAt = 7;
+message UpdateTextRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message UpdateTextResponse {
+  int64  id = 1;
 }
 //------------------------------------
 message Card {
@@ -158,6 +158,13 @@ message DeleteCardRequest {
 message DeleteCardResponse {
   int64  id = 1;
 }
+message UpdateCardRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message UpdateCardResponse {
+  int64  id = 1;
+}
 //------------------------------------
 message LoginPassword {
   int64  id = 1;
@@ -197,5 +204,22 @@ message DeleteLoginPasswordRequest {
 }
 message DeleteLoginPasswordResponse {
   int64  id = 1;
+}
+message UpdateLoginPasswordRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message UpdateLoginPasswordResponse {
+  int64  id = 1;
+}
+//------------------------------------
+message Metadata {
+  int64  entityId = 1;
+  string key = 2;
+  string value = 3;
+  string type = 4;
+  google.protobuf.Timestamp createdAt = 5;
+  google.protobuf.Timestamp updatedAt = 6;
+  google.protobuf.Timestamp deletedAt = 7;
 }
 //------------------------------------
