@@ -125,3 +125,16 @@ func (c *Card) DeleteCard(entityId int64) error {
 	}
 	return nil
 }
+
+func (lp *Card) UpdateCard(textID int64, data []byte) error {
+	var id int64
+	layout := "01/02/2006 15:04:05"
+	if err := lp.db.Pool.QueryRow("UPDATE card SET data = $1, update_at = $2 WHERE card_id = $3 RETURNING card_id",
+		data,
+		time.Now().Format(layout),
+		textID,
+	).Scan(&id); err != nil {
+		return err
+	}
+	return nil
+}

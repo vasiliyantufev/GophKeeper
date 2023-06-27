@@ -29,13 +29,13 @@ func (h *Handler) HandleUpdateLoginPassword(ctx context.Context, req *grpc.Updat
 		)
 	}
 
-	//err = h.loginPassword.UpdateLoginPassword(loginPasswordID)
-	//if err != nil {
-	//	h.logger.Error(err)
-	//	return &grpc.UpdateLoginPasswordResponse{}, status.Errorf(
-	//		codes.Internal, err.Error(),
-	//	)
-	//}
+	err = h.loginPassword.UpdateLoginPassword(loginPasswordID, req.Data)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.UpdateLoginPasswordResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
 
 	return &grpc.UpdateLoginPasswordResponse{Id: loginPasswordID}, nil
 }

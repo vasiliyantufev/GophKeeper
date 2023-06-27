@@ -29,13 +29,13 @@ func (h *Handler) HandleUpdateCard(ctx context.Context, req *grpc.UpdateCardRequ
 		)
 	}
 
-	//err = h.card.UpdateCard(cardID)
-	//if err != nil {
-	//	h.logger.Error(err)
-	//	return &grpc.UpdateCardResponse{}, status.Errorf(
-	//		codes.Internal, err.Error(),
-	//	)
-	//}
+	err = h.card.UpdateCard(cardID, req.Data)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.UpdateCardResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
 
 	return &grpc.UpdateCardResponse{Id: cardID}, nil
 }
