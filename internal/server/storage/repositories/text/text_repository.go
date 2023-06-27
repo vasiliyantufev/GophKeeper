@@ -113,12 +113,25 @@ func (t *Text) KeyExists(textRequest *model.CreateTextRequest) (bool, error) {
 	return exists, nil
 }
 
-func (t *Text) DeleteText(entityId int64) error {
+func (t *Text) DeleteText(textID int64) error {
 	var id int64
 	layout := "01/02/2006 15:04:05"
 	if err := t.db.Pool.QueryRow("UPDATE text SET deleted_at = $1 WHERE text_id = $2 RETURNING text_id",
 		time.Now().Format(layout),
-		entityId,
+		textID,
+	).Scan(&id); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *Text) UpdateText(textID int64, data []byte) error {
+	var id int64
+	layout := "01/02/2006 15:04:05"
+	if err := t.db.Pool.QueryRow("UPDATE text SET data = $1, update_at = $2 WHERE text_id = $3 RETURNING text_id",
+		data,
+		time.Now().Format(layout),
+		textID,
 	).Scan(&id); err != nil {
 		return err
 	}

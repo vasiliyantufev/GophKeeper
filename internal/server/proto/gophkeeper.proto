@@ -113,7 +113,8 @@ message DeleteTextResponse {
 }
 message UpdateTextRequest {
   string name = 1;
-  Token accessToken = 2;
+  bytes  data = 2;
+  Token accessToken = 3;
 }
 message UpdateTextResponse {
   int64  id = 1;
@@ -160,7 +161,8 @@ message DeleteCardResponse {
 }
 message UpdateCardRequest {
   string name = 1;
-  Token accessToken = 2;
+  bytes  data = 2;
+  Token accessToken = 3;
 }
 message UpdateCardResponse {
   int64  id = 1;
@@ -207,7 +209,8 @@ message DeleteLoginPasswordResponse {
 }
 message UpdateLoginPasswordRequest {
   string name = 1;
-  Token accessToken = 2;
+  bytes  data = 2;
+  Token accessToken = 3;
 }
 message UpdateLoginPasswordResponse {
   int64  id = 1;
