@@ -93,3 +93,33 @@ func (lp *LoginPassword) GetListLoginPassword(userId int64) ([]model.LoginPasswo
 	}
 	return listLoginPassword, nil
 }
+
+func (lp *LoginPassword) GetIdLoginPassword(value string, userID int64) (int64, error) {
+	var loginPasswordID int64
+	err := lp.db.Pool.QueryRow("SELECT login_password.login_password_id FROM metadata "+
+		"inner join login_password on metadata.entity_id = login_password.login_password_id "+
+		"inner join users on login_password.user_id  = users.user_id "+
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		string(variables.Name), value, userID, string(variables.LoginPassword)).
+		Scan(&loginPasswordID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return loginPasswordID, errors.ErrRecordNotFound
+		} else {
+			return loginPasswordID, err
+		}
+	}
+	return loginPasswordID, nil
+}
+
+func (lp *LoginPassword) DeleteLoginPassword(entityId int64) error {
+	var id int64
+	layout := "01/02/2006 15:04:05"
+	if err := lp.db.Pool.QueryRow("UPDATE login_password SET deleted_at = $1 WHERE login_password_id = $2 RETURNING login_password_id",
+		time.Now().Format(layout),
+		entityId,
+	).Scan(&id); err != nil {
+		return err
+	}
+	return nil
+}

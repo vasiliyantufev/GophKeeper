@@ -224,4 +224,10 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(getListLoginPassword)
+
+	deleteLoginPassword, err := client.HandleDeleteLoginPassword(context.Background(), &gophkeeper.DeleteLoginPasswordRequest{Name: randName, AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(deleteLoginPassword)
 }
