@@ -35,6 +35,24 @@ func (c *Card) CreateCard(cardRequest *model.CreateCardRequest) (*model.Card, er
 	return card, nil
 }
 
+func (c *Card) GetIdCard(value string, userID int64) (int64, error) {
+	var cardID int64
+	err := c.db.Pool.QueryRow("SELECT card.card_id FROM metadata "+
+		"inner join card on metadata.entity_id = card.card_id "+
+		"inner join users on card.user_id  = users.user_id "+
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		string(variables.Name), value, userID, string(variables.Card)).
+		Scan(&cardID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return cardID, errors.ErrRecordNotFound
+		} else {
+			return cardID, err
+		}
+	}
+	return cardID, nil
+}
+
 func (c *Card) KeyExists(cardRequest *model.CreateCardRequest) (bool, error) {
 	var exists bool
 	row := c.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM metadata "+
@@ -94,4 +112,16 @@ func (c *Card) GetListCard(userId int64) ([]model.Card, error) {
 		listCard = append(listCard, card)
 	}
 	return listCard, nil
+}
+
+func (c *Card) DeleteCard(entityId int64) error {
+	var id int64
+	layout := "01/02/2006 15:04:05"
+	if err := c.db.Pool.QueryRow("UPDATE card SET deleted_at = $1 WHERE card_id = $2 RETURNING card_id",
+		time.Now().Format(layout),
+		entityId,
+	).Scan(&id); err != nil {
+		return err
+	}
+	return nil
 }

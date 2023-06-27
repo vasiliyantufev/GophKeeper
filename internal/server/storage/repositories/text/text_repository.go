@@ -114,12 +114,12 @@ func (t *Text) KeyExists(textRequest *model.CreateTextRequest) (bool, error) {
 }
 
 func (t *Text) DeleteText(entityId int64) error {
-	metadata := &model.Metadata{}
+	var id int64
 	layout := "01/02/2006 15:04:05"
 	if err := t.db.Pool.QueryRow("UPDATE text SET deleted_at = $1 WHERE text_id = $2 RETURNING text_id",
 		time.Now().Format(layout),
 		entityId,
-	).Scan(&metadata.EntityId); err != nil {
+	).Scan(&id); err != nil {
 		return err
 	}
 	return nil

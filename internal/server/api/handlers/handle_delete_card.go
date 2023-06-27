@@ -3,8 +3,10 @@ package handlers
 import (
 	"context"
 
+	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -20,5 +22,31 @@ func (h *Handler) HandleDeleteCard(ctx context.Context, req *grpc.DeleteCardRequ
 			codes.Unauthenticated, errors.ErrNotValidateToken.Error(),
 		)
 	}
-	return &grpc.DeleteCardResponse{}, nil
+
+	cardID, err := h.card.GetIdCard(req.Name, req.AccessToken.UserId)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.DeleteCardResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
+	metadataRequest := model.DeleteMetadataRequest{cardID, string(variables.Name), req.Name, string(variables.Card)}
+	err = h.metadata.DeleteMetadata(metadataRequest)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.DeleteCardResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
+	err = h.card.DeleteCard(cardID)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.DeleteCardResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
+	return &grpc.DeleteCardResponse{Id: cardID}, nil
 }
