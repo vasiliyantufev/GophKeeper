@@ -100,6 +100,12 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(getListText)
+
+	deleteText, err := client.HandleDeleteText(context.Background(), &gophkeeper.DeleteTextRequest{Name: randName, AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(deleteText)
 	//----------------------------------------------------------------- card
 	randName = randomizer.RandStringRunes(10)
 	randDescription = randomizer.RandStringRunes(10)

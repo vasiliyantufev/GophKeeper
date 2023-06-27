@@ -82,6 +82,24 @@ func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 	return listText, nil
 }
 
+func (t *Text) GetIdText(value string, userID int64) (int64, error) {
+	var textID int64
+	err := t.db.Pool.QueryRow("SELECT text.text_id FROM metadata "+
+		"inner join text on metadata.entity_id = text.text_id "+
+		"inner join users on text.user_id  = users.user_id "+
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		string(variables.Name), value, userID, string(variables.Text)).
+		Scan(&textID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return textID, errors.ErrRecordNotFound
+		} else {
+			return textID, err
+		}
+	}
+	return textID, nil
+}
+
 func (t *Text) KeyExists(textRequest *model.CreateTextRequest) (bool, error) {
 	var exists bool
 	row := t.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM metadata "+
@@ -93,4 +111,16 @@ func (t *Text) KeyExists(textRequest *model.CreateTextRequest) (bool, error) {
 		return exists, err
 	}
 	return exists, nil
+}
+
+func (t *Text) DeleteText(entityId int64) error {
+	metadata := &model.Metadata{}
+	layout := "01/02/2006 15:04:05"
+	if err := t.db.Pool.QueryRow("UPDATE text SET deleted_at = $1 WHERE text_id = $2 RETURNING text_id",
+		time.Now().Format(layout),
+		entityId,
+	).Scan(&metadata.EntityId); err != nil {
+		return err
+	}
+	return nil
 }

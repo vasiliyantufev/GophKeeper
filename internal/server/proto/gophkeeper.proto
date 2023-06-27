@@ -106,7 +106,7 @@ message DeleteTextRequest {
   Token accessToken = 2;
 }
 message DeleteTextResponse {
-  string name = 1;
+  int64  id = 1;
 }
 //------------------------------------
 message Metadata {
@@ -156,7 +156,7 @@ message DeleteCardRequest {
   Token accessToken = 2;
 }
 message DeleteCardResponse {
-  string name = 1;
+  int64  id = 1;
 }
 //------------------------------------
 message LoginPassword {
@@ -196,6 +196,6 @@ message DeleteLoginPasswordRequest {
   Token accessToken = 2;
 }
 message DeleteLoginPasswordResponse {
-  string name = 1;
+  int64  id = 1;
 }
 //------------------------------------
