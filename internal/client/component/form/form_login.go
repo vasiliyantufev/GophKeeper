@@ -1,4 +1,4 @@
-package component
+package auth
 
 import "fyne.io/fyne/v2/widget"
 
