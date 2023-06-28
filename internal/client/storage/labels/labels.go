@@ -6,6 +6,7 @@ var (
 	BtnAddCard             = "Добавить банковскую карту"
 	BtnUpdateData          = "Обновить данные"
 	BtnAdd                 = "Добавить"
+	BtnUpdate              = "Изменить"
 	TblLabel               = "Содержимое"
 	BtnDeleteLoginPassword = "Удалить логин пароль"
 	BtnDeleteText          = "Удалить текстовые данные"
