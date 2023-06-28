@@ -44,8 +44,14 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var buttonText *widget.Button
 	var buttonCard *widget.Button
 	var buttonLoginPasswordAdd *widget.Button
+	var buttonLoginPasswordDelete *widget.Button
+	var buttonLoginPasswordUpdate *widget.Button
 	var buttonTextAdd *widget.Button
+	var buttonTextDelete *widget.Button
+	var buttonTextUpdate *widget.Button
 	var buttonCardAdd *widget.Button
+	var buttonCardDelete *widget.Button
+	var buttonCardUpdate *widget.Button
 	//---------------------------------------------------------------------- tabs
 	var containerTabs *container.AppTabs
 	var tblLoginPassword *widget.Table
@@ -129,6 +135,24 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		window.SetContent(containerFormCard)
 		window.Show()
 	})
+	buttonLoginPasswordDelete = widget.NewButton(labels.BtnDeleteLoginPassword, func() {
+		logrus.Info(labels.BtnDeleteLoginPassword)
+	})
+	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
+		logrus.Info(labels.BtnUpdateLoginPassword)
+	})
+	buttonTextDelete = widget.NewButton(labels.BtnDeleteText, func() {
+		logrus.Info(labels.BtnDeleteText)
+	})
+	buttonTextUpdate = widget.NewButton(labels.BtnUpdateText, func() {
+		logrus.Info(labels.BtnUpdateText)
+	})
+	buttonCardDelete = widget.NewButton(labels.BtnDeleteCard, func() {
+		logrus.Info(labels.BtnDeleteCard)
+	})
+	buttonCardUpdate = widget.NewButton(labels.BtnUpdateCard, func() {
+		logrus.Info(labels.BtnUpdateCard)
+	})
 	//---------------------------------------------------------------------- table login password init
 	tblLoginPassword = widget.NewTable(
 		func() (int, int) {
@@ -166,15 +190,16 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		})
 	form.SetDefaultColumnsWidthCard(tblCard)
 	//---------------------------------------------------------------------- containerTabs
-	tabLoginPassword = component.GetTabLoginPassword(tblLoginPassword, buttonTop, buttonLoginPassword)
-	tabText = component.GetTabTexts(tblText, buttonTop, buttonText)
-	tabCard = component.GetTabCards(tblCard, buttonTop, buttonCard)
+	tabLoginPassword = component.GetTabLoginPassword(tblLoginPassword, buttonTop, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate)
+	tabText = component.GetTabTexts(tblText, buttonTop, buttonText, buttonTextDelete, buttonTextUpdate)
+	tabCard = component.GetTabCards(tblCard, buttonTop, buttonCard, buttonCardDelete, buttonCardUpdate)
 	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard)
 	//----------------------------------------------------------------------
 	// Make rows selectable
 	tblLoginPassword.OnSelected = func(id widget.TableCellID) {
 		// Get selected row data
 		selectedRow := dataTblLoginPassword[id.Row]
+		logrus.Info(id.Row)
 		logrus.Info(selectedRow[0])
 	}
 

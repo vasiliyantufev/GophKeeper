@@ -7,8 +7,9 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func GetTabCards(tblCard *widget.Table, top *widget.Button, card *widget.Button) *container.TabItem {
-	containerTblCard := layout.NewBorderLayout(top, card, nil, nil)
-	boxCard := fyne.NewContainerWithLayout(containerTblCard, top, tblCard, card)
+func GetTabCards(tblCard *widget.Table, buttonSynchronization *widget.Button, cardAdd *widget.Button, cardDelete *widget.Button, cardUpdate *widget.Button) *container.TabItem {
+	bottomContainer := container.New(layout.NewHBoxLayout(), cardAdd, cardDelete, cardUpdate)
+	containerTblCard := layout.NewBorderLayout(buttonSynchronization, bottomContainer, nil, nil)
+	boxCard := fyne.NewContainerWithLayout(containerTblCard, buttonSynchronization, tblCard, bottomContainer)
 	return container.NewTabItem("Банковские карты", boxCard)
 }
