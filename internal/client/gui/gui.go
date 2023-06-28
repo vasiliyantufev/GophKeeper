@@ -43,10 +43,12 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 
 	var containerFormLoginPasswordUpdate *fyne.Container
 	var containerFormTextUpdate *fyne.Container
+	var containerFormCardUpdate *fyne.Container
 	//---------------------------------------------------------------------- buttons
 	var buttonAuth *widget.Button
 
-	var buttonTop *widget.Button
+	var buttonTopBack *widget.Button
+	var buttonTopSynchronization *widget.Button
 
 	var buttonLoginPassword *widget.Button
 	var buttonText *widget.Button
@@ -65,6 +67,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var buttonCardCreate *widget.Button
 	var buttonCardDelete *widget.Button
 	var buttonCardUpdate *widget.Button
+	var buttonCardFormUpdate *widget.Button
 	//---------------------------------------------------------------------- tabs
 	var containerTabs *container.AppTabs
 	var tblLoginPassword *widget.Table
@@ -86,7 +89,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	textEntryCreate := widget.NewEntry()
 
 	textNameEntryUpdate := widget.NewEntry()
+	textNameEntryUpdate.Disable()
 	textDescriptionEntryUpdate := widget.NewEntry()
+	textDescriptionEntryUpdate.Disable()
 	textEntryUpdate := widget.NewEntry()
 
 	loginPasswordNameEntryCreate := widget.NewEntry()
@@ -95,32 +100,46 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	passwordEntryCreate := widget.NewEntry()
 
 	loginPasswordNameEntryUpdate := widget.NewEntry()
+	loginPasswordNameEntryUpdate.Disable()
 	loginPasswordDescriptionEntryUpdate := widget.NewEntry()
+	loginPasswordDescriptionEntryUpdate.Disable()
 	loginEntryUpdate := widget.NewEntry()
 	passwordEntryUpdate := widget.NewEntry()
 
-	cardNameEntry := widget.NewEntry()
-	cardDescriptionEntry := widget.NewEntry()
-	paymentSystemEntry := widget.NewEntry()
-	numberEntry := widget.NewEntry()
-	holderEntry := widget.NewEntry()
-	endDateEntry := widget.NewEntry()
-	cvcEntry := widget.NewEntry()
+	cardNameEntryCreate := widget.NewEntry()
+	cardDescriptionEntryCreate := widget.NewEntry()
+	paymentSystemEntryCreate := widget.NewEntry()
+	numberEntryCreate := widget.NewEntry()
+	holderEntryCreate := widget.NewEntry()
+	endDateEntryCreate := widget.NewEntry()
+	cvcEntryCreate := widget.NewEntry()
+
+	cardNameEntryUpdate := widget.NewEntry()
+	cardNameEntryUpdate.Disable()
+	cardDescriptionEntryUpdate := widget.NewEntry()
+	cardDescriptionEntryUpdate.Disable()
+	paymentSystemEntryUpdate := widget.NewEntry()
+	numberEntryUpdate := widget.NewEntry()
+	holderEntryUpdate := widget.NewEntry()
+	endDateEntryUpdate := widget.NewEntry()
+	cvcEntryUpdate := widget.NewEntry()
+
 	//---------------------------------------------------------------------- labels init
 	labelAlertAuth := widget.NewLabel("")
-
 	labelAlertLoginPasswordCreate := widget.NewLabel("")
 	labelAlertLoginPasswordUpdate := widget.NewLabel("")
 	labelAlertTextCreate := widget.NewLabel("")
 	labelAlertTextUpdate := widget.NewLabel("")
-	labelAlertCard := widget.NewLabel("")
+	labelAlertCardCreate := widget.NewLabel("")
+	labelAlertCardUpdate := widget.NewLabel("")
 
 	labelAlertAuth.Hide()
 	labelAlertLoginPasswordCreate.Hide()
 	labelAlertLoginPasswordUpdate.Hide()
 	labelAlertTextCreate.Hide()
 	labelAlertTextUpdate.Hide()
-	labelAlertCard.Hide()
+	labelAlertCardCreate.Hide()
+	labelAlertCardUpdate.Hide()
 	//---------------------------------------------------------------------- forms init
 	formLogin := form.GetFormLogin(usernameLoginEntry, passwordLoginEntry)
 	formRegistration := form.GetFormRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
@@ -131,7 +150,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	formTextCreate := form.GetFormText(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
 	formTextUpdate := form.GetFormText(textNameEntryUpdate, textDescriptionEntryUpdate, textEntryUpdate)
 
-	formCard := form.GetFormCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+	formCardCreate := form.GetFormCard(cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate, numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate)
+	formCardUpdate := form.GetFormCard(cardNameEntryUpdate, cardDescriptionEntryUpdate, paymentSystemEntryUpdate, numberEntryUpdate, holderEntryUpdate, endDateEntryUpdate, cvcEntryUpdate)
 	//---------------------------------------------------------------------- radio event
 	radioAuth := widget.NewRadioGroup(radioOptions, func(value string) {
 		log.Println("Radio set to ", value)
@@ -147,11 +167,13 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		}
 	})
 	//---------------------------------------------------------------------- buttons event
-	buttonTop = widget.NewButton(labels.BtnUpdateData, func() {
+	buttonTopSynchronization = widget.NewButton(labels.BtnUpdateData, func() {
 		dataTblText, dataTblCard, dataTblLoginPassword, err = client.EventSynchronization(password, accessToken)
 		if err != nil {
 			labelAlertAuth.SetText(errors.ErrLogin)
 		} else {
+			tblLoginPassword.Resize(fyne.NewSize(float32(len(dataTblLoginPassword)), float32(len(dataTblLoginPassword[0]))))
+			tblLoginPassword.Refresh()
 			tblText.Resize(fyne.NewSize(float32(len(dataTblText)), float32(len(dataTblText[0]))))
 			tblText.Refresh()
 			tblCard.Resize(fyne.NewSize(float32(len(dataTblCard)), float32(len(dataTblCard[0]))))
@@ -189,7 +211,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		window.Show()
 	})
 	buttonCardUpdate = widget.NewButton(labels.BtnUpdateCard, func() {
-		logrus.Info(labels.BtnUpdateCard)
+		window.SetContent(containerFormCardUpdate)
+		window.Show()
 	})
 	buttonLoginPasswordFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
 		logrus.Info(labels.BtnUpdate)
@@ -197,6 +220,15 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonTextFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
 		logrus.Info(labels.BtnUpdate)
 	})
+	buttonCardFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
+		logrus.Info(labels.BtnUpdate)
+	})
+	buttonTopBack = widget.NewButton(labels.BtnBack, func() {
+		window.SetContent(containerTabs)
+		window.Resize(fyne.NewSize(1250, 300))
+		window.Show()
+	})
+
 	//---------------------------------------------------------------------- table login password init
 	tblLoginPassword = widget.NewTable(
 		func() (int, int) {
@@ -234,9 +266,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		})
 	function.SetDefaultColumnsWidthCard(tblCard)
 	//---------------------------------------------------------------------- containerTabs
-	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTop, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate)
-	tabText = tab.GetTabTexts(tblText, buttonTop, buttonText, buttonTextDelete, buttonTextUpdate)
-	tabCard = tab.GetTabCards(tblCard, buttonTop, buttonCard, buttonCardDelete, buttonCardUpdate)
+	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTopSynchronization, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate)
+	tabText = tab.GetTabTexts(tblText, buttonTopSynchronization, buttonText, buttonTextDelete, buttonTextUpdate)
+	tabCard = tab.GetTabCards(tblCard, buttonTopSynchronization, buttonCard, buttonCardDelete, buttonCardUpdate)
 	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard)
 	//----------------------------------------------------------------------
 	// Make rows selectable
@@ -345,25 +377,25 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	})
 	//---------------------------------------------------------------------- card event
 	buttonCardCreate = widget.NewButton(labels.BtnAdd, func() {
-		labelAlertCard.Show()
+		labelAlertCardCreate.Show()
 		valid = false
-		exist = table.SearchByColumn(dataTblCard, 0, cardNameEntry.Text) // search in map
-		valid = function.ValidateCard(exist, cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCard)
+		exist = table.SearchByColumn(dataTblCard, 0, cardNameEntryCreate.Text) // search in map
+		valid = function.ValidateCard(exist, cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate, numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate, labelAlertCardCreate)
 		if valid {
-			err = client.EventCreateCard(cardNameEntry.Text, cardDescriptionEntry.Text, password, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
-				endDateEntry.Text, cvcEntry.Text, accessToken)
+			err = client.EventCreateCard(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
+				endDateEntryCreate.Text, cvcEntryCreate.Text, accessToken)
 			if err != nil {
-				labelAlertCard.SetText(errors.ErrTextAdd)
+				labelAlertCardCreate.SetText(errors.ErrTextAdd)
 			} else {
 				layout := "01/02/2006 15:04:05"
-				dataTblCard = append(dataTblCard, []string{cardNameEntry.Text, cardDescriptionEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
-					cvcEntry.Text, endDateEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
+				dataTblCard = append(dataTblCard, []string{cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
+					cvcEntryCreate.Text, endDateEntryCreate.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
-				function.ClearCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+				function.ClearCard(cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate, numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate)
 				log.Info("Карта добавлена")
 
-				labelAlertCard.Hide()
-				formCard.Refresh()
+				labelAlertCardCreate.Hide()
+				formCardCreate.Refresh()
 				window.SetContent(containerTabs)
 				window.Show()
 			}
@@ -376,13 +408,14 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	containerFormLogin = container.NewVBox(formLogin, buttonAuth, labelAlertAuth, separator, radioAuth)
 	containerFormRegistration = container.NewVBox(formRegistration, buttonAuth, labelAlertAuth, separator, radioAuth)
 
-	containerFormLoginPasswordCreate = container.NewVBox(formLoginPasswordCreate, buttonLoginPasswordCreate, labelAlertLoginPasswordCreate)
-	containerFormLoginPasswordUpdate = container.NewVBox(formLoginPasswordUpdate, buttonLoginPasswordFormUpdate, labelAlertLoginPasswordUpdate)
+	containerFormLoginPasswordCreate = container.NewVBox(buttonTopBack, formLoginPasswordCreate, buttonLoginPasswordCreate, labelAlertLoginPasswordCreate)
+	containerFormLoginPasswordUpdate = container.NewVBox(buttonTopBack, formLoginPasswordUpdate, buttonLoginPasswordFormUpdate, labelAlertLoginPasswordUpdate)
 
-	containerFormTextCreate = container.NewVBox(formTextCreate, buttonTextCreate, labelAlertTextCreate)
-	containerFormTextUpdate = container.NewVBox(formTextUpdate, buttonTextFormUpdate, labelAlertTextUpdate)
+	containerFormTextCreate = container.NewVBox(buttonTopBack, formTextCreate, buttonTextCreate, labelAlertTextCreate)
+	containerFormTextUpdate = container.NewVBox(buttonTopBack, formTextUpdate, buttonTextFormUpdate, labelAlertTextUpdate)
 
-	containerFormCardCreate = container.NewVBox(formCard, buttonCardCreate, labelAlertCard)
+	containerFormCardCreate = container.NewVBox(buttonTopBack, formCardCreate, buttonCardCreate, labelAlertCardCreate)
+	containerFormCardUpdate = container.NewVBox(buttonTopBack, formCardUpdate, buttonCardFormUpdate, labelAlertCardUpdate)
 
 	//----------------------------------------------------------------------
 	window.SetContent(containerRadio)

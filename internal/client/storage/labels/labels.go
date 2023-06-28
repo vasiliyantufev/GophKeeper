@@ -7,6 +7,7 @@ var (
 	BtnUpdateData          = "Обновить данные"
 	BtnAdd                 = "Добавить"
 	BtnUpdate              = "Изменить"
+	BtnBack                = "Вернуться назад"
 	TblLabel               = "Содержимое"
 	BtnDeleteLoginPassword = "Удалить логин пароль"
 	BtnDeleteText          = "Удалить текстовые данные"
