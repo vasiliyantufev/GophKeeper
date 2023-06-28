@@ -8,8 +8,9 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/api/events"
-	"github.com/vasiliyantufev/gophkeeper/internal/client/component"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/component/form"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/component/function"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/component/tab"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
@@ -91,11 +92,11 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	labelAlertText.Hide()
 	labelAlertCard.Hide()
 	//---------------------------------------------------------------------- forms init
-	formLogin := component.GetFormLogin(usernameLoginEntry, passwordLoginEntry)
-	formRegistration := component.GetFormRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
-	formLoginPassword := component.GetFormLoginPassword(loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry, passwordEntry)
-	formText := component.GetFormText(textNameEntry, textDescriptionEntry, textEntry)
-	formCard := component.GetFormCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+	formLogin := form.GetFormLogin(usernameLoginEntry, passwordLoginEntry)
+	formRegistration := form.GetFormRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
+	formLoginPassword := form.GetFormLoginPassword(loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry, passwordEntry)
+	formText := form.GetFormText(textNameEntry, textDescriptionEntry, textEntry)
+	formCard := form.GetFormCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 	//---------------------------------------------------------------------- radio event
 	radioAuth := widget.NewRadioGroup(radioOptions, func(value string) {
 		log.Println("Radio set to ", value)
@@ -138,17 +139,17 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonLoginPasswordDelete = widget.NewButton(labels.BtnDeleteLoginPassword, func() {
 		logrus.Info(labels.BtnDeleteLoginPassword)
 	})
-	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
-		logrus.Info(labels.BtnUpdateLoginPassword)
-	})
 	buttonTextDelete = widget.NewButton(labels.BtnDeleteText, func() {
 		logrus.Info(labels.BtnDeleteText)
 	})
-	buttonTextUpdate = widget.NewButton(labels.BtnUpdateText, func() {
-		logrus.Info(labels.BtnUpdateText)
-	})
 	buttonCardDelete = widget.NewButton(labels.BtnDeleteCard, func() {
 		logrus.Info(labels.BtnDeleteCard)
+	})
+	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
+		logrus.Info(labels.BtnUpdateLoginPassword)
+	})
+	buttonTextUpdate = widget.NewButton(labels.BtnUpdateText, func() {
+		logrus.Info(labels.BtnUpdateText)
 	})
 	buttonCardUpdate = widget.NewButton(labels.BtnUpdateCard, func() {
 		logrus.Info(labels.BtnUpdateCard)
@@ -164,7 +165,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblLoginPassword[i.Row][i.Col])
 		})
-	form.SetDefaultColumnsWidthLoginPassword(tblLoginPassword)
+	function.SetDefaultColumnsWidthLoginPassword(tblLoginPassword)
 	//---------------------------------------------------------------------- table text init
 	tblText = widget.NewTable(
 		func() (int, int) {
@@ -176,7 +177,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblText[i.Row][i.Col])
 		})
-	form.SetDefaultColumnsWidthText(tblText)
+	function.SetDefaultColumnsWidthText(tblText)
 	//---------------------------------------------------------------------- table card init
 	tblCard = widget.NewTable(
 		func() (int, int) {
@@ -188,11 +189,11 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblCard[i.Row][i.Col])
 		})
-	form.SetDefaultColumnsWidthCard(tblCard)
+	function.SetDefaultColumnsWidthCard(tblCard)
 	//---------------------------------------------------------------------- containerTabs
-	tabLoginPassword = component.GetTabLoginPassword(tblLoginPassword, buttonTop, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate)
-	tabText = component.GetTabTexts(tblText, buttonTop, buttonText, buttonTextDelete, buttonTextUpdate)
-	tabCard = component.GetTabCards(tblCard, buttonTop, buttonCard, buttonCardDelete, buttonCardUpdate)
+	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTop, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate)
+	tabText = tab.GetTabTexts(tblText, buttonTop, buttonText, buttonTextDelete, buttonTextUpdate)
+	tabCard = tab.GetTabCards(tblCard, buttonTop, buttonCard, buttonCardDelete, buttonCardUpdate)
 	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard)
 	//----------------------------------------------------------------------
 	// Make rows selectable
@@ -208,7 +209,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		labelAlertAuth.Show()
 		valid = false
 		if radioAuth.Selected == "Login" {
-			valid = form.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
+			valid = function.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
 			if valid {
 				accessToken, err = client.EventAuthentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
 				if err != nil {
@@ -227,7 +228,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			}
 		}
 		if radioAuth.Selected == "Registration" {
-			valid = form.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
+			valid = function.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
 			if valid {
 				exist, err = client.EventUserExist(usernameRegistrationEntry.Text)
 				if err != nil {
@@ -252,7 +253,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- login password event
 	buttonLoginPasswordAdd = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertLoginPassword.Show()
-		valid = form.ValidateLoginPassword(false, loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry,
+		valid = function.ValidateLoginPassword(false, loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry,
 			passwordEntry, labelAlertLoginPassword)
 		if valid {
 			err = client.EventCreateLoginPassword(loginPasswordNameEntry.Text, loginPasswordDescriptionEntry.Text, password,
@@ -263,7 +264,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				dataTblLoginPassword = append(dataTblLoginPassword, []string{loginPasswordNameEntry.Text, loginPasswordDescriptionEntry.Text,
 					loginEntry.Text, passwordEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
-				form.ClearLoginPassword(loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry, passwordEntry)
+				function.ClearLoginPassword(loginPasswordNameEntry, loginPasswordDescriptionEntry, loginEntry, passwordEntry)
 				log.Info("Логин-пароль добавлен")
 
 				labelAlertLoginPassword.Hide()
@@ -279,7 +280,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		labelAlertText.Show()
 		valid = false
 		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) // search in map
-		valid = form.ValidateText(exist, textNameEntry, textDescriptionEntry, textEntry, labelAlertText)
+		valid = function.ValidateText(exist, textNameEntry, textDescriptionEntry, textEntry, labelAlertText)
 		if valid {
 			err = client.EventCreateText(textNameEntry.Text, textDescriptionEntry.Text, password, textEntry.Text, accessToken)
 			if err != nil {
@@ -288,7 +289,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				dataTblText = append(dataTblText, []string{textNameEntry.Text, textDescriptionEntry.Text, textEntry.Text,
 					time.Now().Format(layout), time.Now().Format(layout)})
 
-				form.ClearText(textNameEntry, textDescriptionEntry, textEntry)
+				function.ClearText(textNameEntry, textDescriptionEntry, textEntry)
 				log.Info("Текст добавлен")
 
 				labelAlertText.Hide()
@@ -304,7 +305,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		labelAlertCard.Show()
 		valid = false
 		exist = table.SearchByColumn(dataTblCard, 0, cardNameEntry.Text) // search in map
-		valid = form.ValidateCard(exist, cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCard)
+		valid = function.ValidateCard(exist, cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry, labelAlertCard)
 		if valid {
 			err = client.EventCreateCard(cardNameEntry.Text, cardDescriptionEntry.Text, password, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
 				endDateEntry.Text, cvcEntry.Text, accessToken)
@@ -315,7 +316,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				dataTblCard = append(dataTblCard, []string{cardNameEntry.Text, cardDescriptionEntry.Text, paymentSystemEntry.Text, numberEntry.Text, holderEntry.Text,
 					cvcEntry.Text, endDateEntry.Text, time.Now().Format(layout), time.Now().Format(layout)})
 
-				form.ClearCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
+				function.ClearCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 				log.Info("Карта добавлена")
 
 				labelAlertCard.Hide()
@@ -323,7 +324,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				window.SetContent(containerTabs)
 				window.Show()
 			}
-
 		}
 		log.Debug(dataTblCard)
 	})

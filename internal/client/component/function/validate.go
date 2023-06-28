@@ -1,4 +1,4 @@
-package form
+package function
 
 import (
 	"log"

@@ -1,4 +1,4 @@
-package component
+package tab
 
 import (
 	"fyne.io/fyne/v2"

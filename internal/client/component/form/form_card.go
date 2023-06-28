@@ -1,4 +1,4 @@
-package create
+package form
 
 import "fyne.io/fyne/v2/widget"
 
