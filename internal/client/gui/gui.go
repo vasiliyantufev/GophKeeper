@@ -42,6 +42,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var containerFormCardCreate *fyne.Container
 
 	var containerFormLoginPasswordUpdate *fyne.Container
+	var containerFormTextUpdate *fyne.Container
 	//---------------------------------------------------------------------- buttons
 	var buttonAuth *widget.Button
 
@@ -59,6 +60,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var buttonTextCreate *widget.Button
 	var buttonTextDelete *widget.Button
 	var buttonTextUpdate *widget.Button
+	var buttonTextFormUpdate *widget.Button
 
 	var buttonCardCreate *widget.Button
 	var buttonCardDelete *widget.Button
@@ -79,9 +81,13 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	passwordRegistrationEntry := widget.NewPasswordEntry()
 	passwordConfirmationRegistrationEntry := widget.NewPasswordEntry()
 
-	textNameEntry := widget.NewEntry()
-	textDescriptionEntry := widget.NewEntry()
-	textEntry := widget.NewEntry()
+	textNameEntryCreate := widget.NewEntry()
+	textDescriptionEntryCreate := widget.NewEntry()
+	textEntryCreate := widget.NewEntry()
+
+	textNameEntryUpdate := widget.NewEntry()
+	textDescriptionEntryUpdate := widget.NewEntry()
+	textEntryUpdate := widget.NewEntry()
 
 	loginPasswordNameEntryCreate := widget.NewEntry()
 	loginPasswordDescriptionEntryCreate := widget.NewEntry()
@@ -105,12 +111,15 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 
 	labelAlertLoginPasswordCreate := widget.NewLabel("")
 	labelAlertLoginPasswordUpdate := widget.NewLabel("")
-	labelAlertText := widget.NewLabel("")
+	labelAlertTextCreate := widget.NewLabel("")
+	labelAlertTextUpdate := widget.NewLabel("")
 	labelAlertCard := widget.NewLabel("")
+
 	labelAlertAuth.Hide()
 	labelAlertLoginPasswordCreate.Hide()
 	labelAlertLoginPasswordUpdate.Hide()
-	labelAlertText.Hide()
+	labelAlertTextCreate.Hide()
+	labelAlertTextUpdate.Hide()
 	labelAlertCard.Hide()
 	//---------------------------------------------------------------------- forms init
 	formLogin := form.GetFormLogin(usernameLoginEntry, passwordLoginEntry)
@@ -119,7 +128,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	formLoginPasswordCreate := form.GetFormLoginPassword(loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate, passwordEntryCreate)
 	formLoginPasswordUpdate := form.GetFormLoginPassword(loginPasswordNameEntryUpdate, loginPasswordDescriptionEntryUpdate, loginEntryUpdate, passwordEntryUpdate)
 
-	formText := form.GetFormText(textNameEntry, textDescriptionEntry, textEntry)
+	formTextCreate := form.GetFormText(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
+	formTextUpdate := form.GetFormText(textNameEntryUpdate, textDescriptionEntryUpdate, textEntryUpdate)
+
 	formCard := form.GetFormCard(cardNameEntry, cardDescriptionEntry, paymentSystemEntry, numberEntry, holderEntry, endDateEntry, cvcEntry)
 	//---------------------------------------------------------------------- radio event
 	radioAuth := widget.NewRadioGroup(radioOptions, func(value string) {
@@ -174,12 +185,16 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		window.Show()
 	})
 	buttonTextUpdate = widget.NewButton(labels.BtnUpdateText, func() {
-		logrus.Info(labels.BtnUpdateText)
+		window.SetContent(containerFormTextUpdate)
+		window.Show()
 	})
 	buttonCardUpdate = widget.NewButton(labels.BtnUpdateCard, func() {
 		logrus.Info(labels.BtnUpdateCard)
 	})
 	buttonLoginPasswordFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
+		logrus.Info(labels.BtnUpdate)
+	})
+	buttonTextFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
 		logrus.Info(labels.BtnUpdate)
 	})
 	//---------------------------------------------------------------------- table login password init
@@ -305,23 +320,23 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	})
 	//---------------------------------------------------------------------- text event
 	buttonTextCreate = widget.NewButton(labels.BtnAdd, func() {
-		labelAlertText.Show()
+		labelAlertTextCreate.Show()
 		valid = false
-		exist = table.SearchByColumn(dataTblText, 0, textNameEntry.Text) // search in map
-		valid = function.ValidateText(exist, textNameEntry, textDescriptionEntry, textEntry, labelAlertText)
+		exist = table.SearchByColumn(dataTblText, 0, textNameEntryCreate.Text) // search in map
+		valid = function.ValidateText(exist, textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate, labelAlertTextCreate)
 		if valid {
-			err = client.EventCreateText(textNameEntry.Text, textDescriptionEntry.Text, password, textEntry.Text, accessToken)
+			err = client.EventCreateText(textNameEntryCreate.Text, textDescriptionEntryCreate.Text, password, textEntryCreate.Text, accessToken)
 			if err != nil {
-				labelAlertText.SetText(errors.ErrTextAdd)
+				labelAlertTextCreate.SetText(errors.ErrTextAdd)
 			} else {
-				dataTblText = append(dataTblText, []string{textNameEntry.Text, textDescriptionEntry.Text, textEntry.Text,
+				dataTblText = append(dataTblText, []string{textNameEntryCreate.Text, textDescriptionEntryCreate.Text, textEntryCreate.Text,
 					time.Now().Format(layout), time.Now().Format(layout)})
 
-				function.ClearText(textNameEntry, textDescriptionEntry, textEntry)
+				function.ClearText(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
 				log.Info("Текст добавлен")
 
-				labelAlertText.Hide()
-				formText.Refresh()
+				labelAlertTextCreate.Hide()
+				formTextCreate.Refresh()
 				window.SetContent(containerTabs)
 				window.Show()
 			}
@@ -364,7 +379,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	containerFormLoginPasswordCreate = container.NewVBox(formLoginPasswordCreate, buttonLoginPasswordCreate, labelAlertLoginPasswordCreate)
 	containerFormLoginPasswordUpdate = container.NewVBox(formLoginPasswordUpdate, buttonLoginPasswordFormUpdate, labelAlertLoginPasswordUpdate)
 
-	containerFormTextCreate = container.NewVBox(formText, buttonTextCreate, labelAlertText)
+	containerFormTextCreate = container.NewVBox(formTextCreate, buttonTextCreate, labelAlertTextCreate)
+	containerFormTextUpdate = container.NewVBox(formTextUpdate, buttonTextFormUpdate, labelAlertTextUpdate)
+
 	containerFormCardCreate = container.NewVBox(formCard, buttonCardCreate, labelAlertCard)
 
 	//----------------------------------------------------------------------
