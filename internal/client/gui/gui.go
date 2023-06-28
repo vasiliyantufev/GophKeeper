@@ -23,6 +23,10 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var dataTblLoginPassword = [][]string{{"NAME", "DESCRIPTION", "LOGIN", "PASSWORD", "CREATED AT", "UPDATED AT"}}
 	var dataTblText = [][]string{{"NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}}
 	var dataTblCard = [][]string{{"NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}}
+
+	var indexTblLoginPassword = 0
+	var selectedRowTblLoginPassword []string
+
 	var radioOptions = []string{"Login", "Registration"}
 	var accessToken = model.Token{}
 	var password string
@@ -126,6 +130,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 
 	//---------------------------------------------------------------------- labels init
 	labelAlertAuth := widget.NewLabel("")
+	labelAlertLoginPassword := widget.NewLabel("")
 	labelAlertLoginPasswordCreate := widget.NewLabel("")
 	labelAlertLoginPasswordUpdate := widget.NewLabel("")
 	labelAlertTextCreate := widget.NewLabel("")
@@ -134,6 +139,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	labelAlertCardUpdate := widget.NewLabel("")
 
 	labelAlertAuth.Hide()
+	labelAlertLoginPassword.Hide()
 	labelAlertLoginPasswordCreate.Hide()
 	labelAlertLoginPasswordUpdate.Hide()
 	labelAlertTextCreate.Hide()
@@ -194,7 +200,17 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		window.Show()
 	})
 	buttonLoginPasswordDelete = widget.NewButton(labels.BtnDeleteLoginPassword, func() {
-		logrus.Info(labels.BtnDeleteLoginPassword)
+		if indexTblLoginPassword > 0 {
+			client.EventDeleteLoginPassword(selectedRowTblLoginPassword, accessToken)
+			// Удаляем строку с индексом indexTblLoginPassword
+			labelAlertLoginPassword.Hide()
+			dataTblLoginPassword = table.RemoveRow(dataTblLoginPassword, indexTblLoginPassword)
+			indexTblLoginPassword = 0
+		} else {
+			logrus.Error(errors.ErrLoginPasswordTblIndex)
+			labelAlertLoginPassword.Show()
+			labelAlertLoginPassword.SetText(errors.ErrLoginPasswordTblIndex)
+		}
 	})
 	buttonTextDelete = widget.NewButton(labels.BtnDeleteText, func() {
 		logrus.Info(labels.BtnDeleteText)
@@ -277,19 +293,21 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		})
 	function.SetDefaultColumnsWidthCard(tblCard)
 	//---------------------------------------------------------------------- containerTabs
-	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTopSynchronization, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate)
+	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTopSynchronization, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate, labelAlertLoginPassword)
 	tabText = tab.GetTabTexts(tblText, buttonTopSynchronization, buttonText, buttonTextDelete, buttonTextUpdate)
 	tabCard = tab.GetTabCards(tblCard, buttonTopSynchronization, buttonCard, buttonCardDelete, buttonCardUpdate)
 	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard)
 	//----------------------------------------------------------------------
-	// Make rows selectable
 	tblLoginPassword.OnSelected = func(id widget.TableCellID) {
 		// Get selected row data
-		selectedRow := dataTblLoginPassword[id.Row]
-		logrus.Info(id.Row)
-		logrus.Info(selectedRow[0])
+		indexTblLoginPassword = id.Row
+		selectedRowTblLoginPassword = dataTblLoginPassword[id.Row]
 	}
-
+	tblText.OnSelected = func(id widget.TableCellID) {
+		// Get selected row data
+		indexTblLoginPassword = id.Row
+		selectedRowTblLoginPassword = dataTblLoginPassword[id.Row]
+	}
 	//---------------------------------------------------------------------- auth event
 	buttonAuth = widget.NewButton("Submit", func() {
 		labelAlertAuth.Show()

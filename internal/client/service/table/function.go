@@ -34,6 +34,10 @@ func GetIndex(slice [][]string, targetColumn int, targetValue string) (index int
 	return 0
 }
 
+func RemoveRow(slice [][]string, index int) [][]string {
+	return append(slice[:index], slice[index+1:]...)
+}
+
 func AppendText(node *grpc.Text, dataTblText *[][]string, plaintext string) {
 	layout := "01/02/2006 15:04:05"
 	created, _ := service.ConvertTimestampToTime(node.CreatedAt)

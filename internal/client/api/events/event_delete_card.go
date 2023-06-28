@@ -5,7 +5,7 @@ import (
 )
 
 func (c Event) EventDeleteCard(token model.Token) error {
-	c.logger.Info("Delete text")
+	c.logger.Info("Delete card")
 
 	return nil
 }
