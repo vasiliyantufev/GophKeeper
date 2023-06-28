@@ -224,11 +224,22 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		logrus.Info(labels.BtnUpdate)
 	})
 	buttonTopBack = widget.NewButton(labels.BtnBack, func() {
+		function.ClearLoginPassword(loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate, passwordEntryCreate)
+		function.ClearText(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
+		function.ClearCard(cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate, numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate)
+		function.ClearLoginPassword(loginPasswordNameEntryUpdate, loginPasswordDescriptionEntryUpdate, loginEntryUpdate, passwordEntryUpdate)
+		function.ClearText(textNameEntryUpdate, textDescriptionEntryUpdate, textEntryUpdate)
+		function.ClearCard(cardNameEntryUpdate, cardDescriptionEntryUpdate, paymentSystemEntryUpdate, numberEntryUpdate, holderEntryUpdate, endDateEntryUpdate, cvcEntryUpdate)
+		labelAlertLoginPasswordCreate.Hide()
+		labelAlertLoginPasswordUpdate.Hide()
+		labelAlertTextCreate.Hide()
+		labelAlertTextUpdate.Hide()
+		labelAlertCardCreate.Hide()
+		labelAlertCardUpdate.Hide()
 		window.SetContent(containerTabs)
 		window.Resize(fyne.NewSize(1250, 300))
 		window.Show()
 	})
-
 	//---------------------------------------------------------------------- table login password init
 	tblLoginPassword = widget.NewTable(
 		func() (int, int) {
