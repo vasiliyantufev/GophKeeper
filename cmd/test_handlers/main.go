@@ -112,6 +112,13 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(updateText)
+
+	getListText, err = client.HandleGetListText(context.Background(), &gophkeeper.GetListTextRequest{AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(getListText)
+
 	//----------------------------------------------------------------- card
 	randName3 := randomizer.RandStringRunes(10)
 	randDescription3 := randomizer.RandStringRunes(10)
@@ -180,6 +187,12 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(updateCard)
+
+	getListCard, err = client.HandleGetListCard(context.Background(), &gophkeeper.GetListCardRequest{AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(getListCard)
 	//----------------------------------------------------------------- login password
 	randName5 := randomizer.RandStringRunes(10)
 	randDescription5 := randomizer.RandStringRunes(10)
@@ -248,4 +261,10 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info(updateLoginPassword)
+
+	getListLoginPassword, err = client.HandleGetListLoginPassword(context.Background(), &gophkeeper.GetListLoginPasswordRequest{AccessToken: authenticatedUser.AccessToken})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(getListLoginPassword)
 }

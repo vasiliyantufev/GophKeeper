@@ -92,7 +92,7 @@ func (c *Card) GetListCard(userId int64) ([]model.Card, error) {
 		"card.updated_at FROM metadata "+
 		"inner join card on metadata.entity_id = card.card_id "+
 		"inner join users on card.user_id  = users.user_id "+
-		"where users.user_id = $1 and metadata.type = $2",
+		"where users.user_id = $1 and metadata.type = $2 and card.deleted_at IS NULL",
 		userId, string(variables.Card))
 
 	if err != nil {

@@ -60,7 +60,7 @@ func (t *Text) GetListText(userId int64) ([]model.Text, error) {
 		"text.updated_at FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
-		"where users.user_id = $1 and metadata.type = $2",
+		"where users.user_id = $1 and metadata.type = $2 and text.deleted_at IS NULL",
 		userId, string(variables.Text))
 
 	if err != nil {

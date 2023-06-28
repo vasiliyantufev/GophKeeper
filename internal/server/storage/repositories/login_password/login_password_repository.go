@@ -72,7 +72,7 @@ func (lp *LoginPassword) GetListLoginPassword(userId int64) ([]model.LoginPasswo
 		"login_password.updated_at FROM metadata "+
 		"inner join login_password on metadata.entity_id = login_password.login_password_id "+
 		"inner join users on login_password.user_id  = users.user_id "+
-		"where users.user_id = $1 and metadata.type = $2",
+		"where users.user_id = $1 and metadata.type = $2 and login_password.deleted_at IS NULL",
 		userId, string(variables.LoginPassword))
 
 	if err != nil {
