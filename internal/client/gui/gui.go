@@ -219,10 +219,10 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonTextDelete = widget.NewButton(labels.BtnDeleteText, func() {
 		if indexTblText > 0 {
 			client.EventDeleteText(selectedRowTblText, accessToken)
-			// Удаляем строку с индексом indexTblLoginPassword
+			// Удаляем строку с индексом indexTblText
 			labelAlertText.Hide()
-			dataTblLoginPassword = table.RemoveRow(dataTblText, indexTblText)
-			indexTblLoginPassword = 0
+			dataTblText = table.RemoveRow(dataTblText, indexTblText)
+			indexTblText = 0
 		} else {
 			logrus.Error(errors.ErrTextTblIndex)
 			labelAlertText.Show()
