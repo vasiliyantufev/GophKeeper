@@ -208,11 +208,11 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		window.Show()
 	})
 	buttonLoginPasswordDelete = widget.NewButton(labels.BtnDeleteLoginPassword, func() {
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		if indexTblLoginPassword > 0 {
 			client.EventDeleteLoginPassword(selectedRowTblLoginPassword, accessToken)
 			// Удаляем строку с индексом indexTblLoginPassword
 			dataTblLoginPassword = table.RemoveRow(dataTblLoginPassword, indexTblLoginPassword)
-			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 			indexTblLoginPassword = 0
 		} else {
 			logrus.Error(errors.ErrLoginPasswordTblIndex)
@@ -221,11 +221,11 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		}
 	})
 	buttonTextDelete = widget.NewButton(labels.BtnDeleteText, func() {
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		if indexTblText > 0 {
 			client.EventDeleteText(selectedRowTblText, accessToken)
 			// Удаляем строку с индексом indexTblText
 			dataTblText = table.RemoveRow(dataTblText, indexTblText)
-			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 			indexTblText = 0
 		} else {
 			logrus.Error(errors.ErrTextTblIndex)
@@ -234,11 +234,11 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		}
 	})
 	buttonCardDelete = widget.NewButton(labels.BtnDeleteCard, func() {
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		if indexTblCard > 0 {
 			client.EventDeleteCard(selectedRowTblCard, accessToken)
 			// Удаляем строку с индексом indexTblCard
 			dataTblCard = table.RemoveRow(dataTblCard, indexTblCard)
-			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 			indexTblCard = 0
 		} else {
 			logrus.Error(errors.ErrCardTblIndex)
