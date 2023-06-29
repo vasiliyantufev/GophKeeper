@@ -28,6 +28,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var selectedRowTblLoginPassword []string
 	var indexTblText = 0
 	var selectedRowTblText []string
+	var indexTblCard = 0
+	var selectedRowTblCard []string
 
 	var radioOptions = []string{"Login", "Registration"}
 	var accessToken = model.Token{}
@@ -138,6 +140,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	labelAlertText := widget.NewLabel("")
 	labelAlertTextCreate := widget.NewLabel("")
 	labelAlertTextUpdate := widget.NewLabel("")
+	labelAlertCard := widget.NewLabel("")
 	labelAlertCardCreate := widget.NewLabel("")
 	labelAlertCardUpdate := widget.NewLabel("")
 
@@ -148,6 +151,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	labelAlertText.Hide()
 	labelAlertTextCreate.Hide()
 	labelAlertTextUpdate.Hide()
+	labelAlertCard.Hide()
 	labelAlertCardCreate.Hide()
 	labelAlertCardUpdate.Hide()
 	//---------------------------------------------------------------------- forms init
@@ -230,7 +234,17 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		}
 	})
 	buttonCardDelete = widget.NewButton(labels.BtnDeleteCard, func() {
-		logrus.Info(labels.BtnDeleteCard)
+		if indexTblCard > 0 {
+			client.EventDeleteCard(selectedRowTblCard, accessToken)
+			// Удаляем строку с индексом indexTblCard
+			labelAlertCard.Hide()
+			dataTblCard = table.RemoveRow(dataTblCard, indexTblCard)
+			indexTblCard = 0
+		} else {
+			logrus.Error(errors.ErrCardTblIndex)
+			labelAlertCard.Show()
+			labelAlertCard.SetText(errors.ErrCardTblIndex)
+		}
 	})
 	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
 		window.SetContent(containerFormLoginPasswordUpdate)
@@ -309,7 +323,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- containerTabs
 	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTopSynchronization, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate, labelAlertLoginPassword)
 	tabText = tab.GetTabTexts(tblText, buttonTopSynchronization, buttonText, buttonTextDelete, buttonTextUpdate, labelAlertText)
-	tabCard = tab.GetTabCards(tblCard, buttonTopSynchronization, buttonCard, buttonCardDelete, buttonCardUpdate)
+	tabCard = tab.GetTabCards(tblCard, buttonTopSynchronization, buttonCard, buttonCardDelete, buttonCardUpdate, labelAlertCard)
 	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard)
 	//----------------------------------------------------------------------
 	// Get selected row data
@@ -320,6 +334,10 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	tblText.OnSelected = func(id widget.TableCellID) {
 		indexTblText = id.Row
 		selectedRowTblText = dataTblText[id.Row]
+	}
+	tblCard.OnSelected = func(id widget.TableCellID) {
+		indexTblCard = id.Row
+		selectedRowTblCard = dataTblCard[id.Row]
 	}
 	//---------------------------------------------------------------------- auth event
 	buttonAuth = widget.NewButton("Submit", func() {
