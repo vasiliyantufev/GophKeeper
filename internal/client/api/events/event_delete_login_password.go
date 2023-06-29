@@ -3,7 +3,6 @@ package events
 import (
 	"context"
 
-	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
@@ -20,7 +19,7 @@ func (c Event) EventDeleteLoginPassword(loginPassword []string, token model.Toke
 		c.logger.Error(err)
 		return err
 	}
-	logrus.Info(loginPassword)
+	c.logger.Debug(loginPassword)
 	c.logger.Debug(deletedText)
 	return nil
 }

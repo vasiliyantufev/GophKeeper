@@ -26,6 +26,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 
 	var indexTblLoginPassword = 0
 	var selectedRowTblLoginPassword []string
+	var indexTblText = 0
+	var selectedRowTblText []string
 
 	var radioOptions = []string{"Login", "Registration"}
 	var accessToken = model.Token{}
@@ -133,6 +135,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	labelAlertLoginPassword := widget.NewLabel("")
 	labelAlertLoginPasswordCreate := widget.NewLabel("")
 	labelAlertLoginPasswordUpdate := widget.NewLabel("")
+	labelAlertText := widget.NewLabel("")
 	labelAlertTextCreate := widget.NewLabel("")
 	labelAlertTextUpdate := widget.NewLabel("")
 	labelAlertCardCreate := widget.NewLabel("")
@@ -142,6 +145,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	labelAlertLoginPassword.Hide()
 	labelAlertLoginPasswordCreate.Hide()
 	labelAlertLoginPasswordUpdate.Hide()
+	labelAlertText.Hide()
 	labelAlertTextCreate.Hide()
 	labelAlertTextUpdate.Hide()
 	labelAlertCardCreate.Hide()
@@ -213,7 +217,17 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		}
 	})
 	buttonTextDelete = widget.NewButton(labels.BtnDeleteText, func() {
-		logrus.Info(labels.BtnDeleteText)
+		if indexTblText > 0 {
+			client.EventDeleteText(selectedRowTblText, accessToken)
+			// Удаляем строку с индексом indexTblLoginPassword
+			labelAlertText.Hide()
+			dataTblLoginPassword = table.RemoveRow(dataTblText, indexTblText)
+			indexTblLoginPassword = 0
+		} else {
+			logrus.Error(errors.ErrTextTblIndex)
+			labelAlertText.Show()
+			labelAlertText.SetText(errors.ErrTextTblIndex)
+		}
 	})
 	buttonCardDelete = widget.NewButton(labels.BtnDeleteCard, func() {
 		logrus.Info(labels.BtnDeleteCard)
@@ -294,19 +308,18 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	function.SetDefaultColumnsWidthCard(tblCard)
 	//---------------------------------------------------------------------- containerTabs
 	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTopSynchronization, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate, labelAlertLoginPassword)
-	tabText = tab.GetTabTexts(tblText, buttonTopSynchronization, buttonText, buttonTextDelete, buttonTextUpdate)
+	tabText = tab.GetTabTexts(tblText, buttonTopSynchronization, buttonText, buttonTextDelete, buttonTextUpdate, labelAlertText)
 	tabCard = tab.GetTabCards(tblCard, buttonTopSynchronization, buttonCard, buttonCardDelete, buttonCardUpdate)
 	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard)
 	//----------------------------------------------------------------------
+	// Get selected row data
 	tblLoginPassword.OnSelected = func(id widget.TableCellID) {
-		// Get selected row data
 		indexTblLoginPassword = id.Row
 		selectedRowTblLoginPassword = dataTblLoginPassword[id.Row]
 	}
 	tblText.OnSelected = func(id widget.TableCellID) {
-		// Get selected row data
-		indexTblLoginPassword = id.Row
-		selectedRowTblLoginPassword = dataTblLoginPassword[id.Row]
+		indexTblText = id.Row
+		selectedRowTblText = dataTblText[id.Row]
 	}
 	//---------------------------------------------------------------------- auth event
 	buttonAuth = widget.NewButton("Submit", func() {
