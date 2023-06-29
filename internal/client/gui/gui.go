@@ -211,8 +211,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		if indexTblLoginPassword > 0 {
 			client.EventDeleteLoginPassword(selectedRowTblLoginPassword, accessToken)
 			// Удаляем строку с индексом indexTblLoginPassword
-			labelAlertLoginPassword.Hide()
 			dataTblLoginPassword = table.RemoveRow(dataTblLoginPassword, indexTblLoginPassword)
+			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 			indexTblLoginPassword = 0
 		} else {
 			logrus.Error(errors.ErrLoginPasswordTblIndex)
@@ -224,8 +224,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		if indexTblText > 0 {
 			client.EventDeleteText(selectedRowTblText, accessToken)
 			// Удаляем строку с индексом indexTblText
-			labelAlertText.Hide()
 			dataTblText = table.RemoveRow(dataTblText, indexTblText)
+			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 			indexTblText = 0
 		} else {
 			logrus.Error(errors.ErrTextTblIndex)
@@ -237,8 +237,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		if indexTblCard > 0 {
 			client.EventDeleteCard(selectedRowTblCard, accessToken)
 			// Удаляем строку с индексом indexTblCard
-			labelAlertCard.Hide()
 			dataTblCard = table.RemoveRow(dataTblCard, indexTblCard)
+			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 			indexTblCard = 0
 		} else {
 			logrus.Error(errors.ErrCardTblIndex)
@@ -247,14 +247,17 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		}
 	})
 	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		window.SetContent(containerFormLoginPasswordUpdate)
 		window.Show()
 	})
 	buttonTextUpdate = widget.NewButton(labels.BtnUpdateText, func() {
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		window.SetContent(containerFormTextUpdate)
 		window.Show()
 	})
 	buttonCardUpdate = widget.NewButton(labels.BtnUpdateCard, func() {
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		window.SetContent(containerFormCardUpdate)
 		window.Show()
 	})
@@ -388,6 +391,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- login password event
 	buttonLoginPasswordCreate = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertLoginPasswordCreate.Show()
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+		exist = table.SearchByColumn(dataTblLoginPassword, 0, loginPasswordNameEntryCreate.Text) // search in map
+		valid = false
 		valid = function.ValidateLoginPassword(false, loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate,
 			passwordEntryCreate, labelAlertLoginPasswordCreate)
 		if valid {
@@ -413,8 +419,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- text event
 	buttonTextCreate = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertTextCreate.Show()
-		valid = false
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		exist = table.SearchByColumn(dataTblText, 0, textNameEntryCreate.Text) // search in map
+		valid = false
 		valid = function.ValidateText(exist, textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate, labelAlertTextCreate)
 		if valid {
 			err = client.EventCreateText(textNameEntryCreate.Text, textDescriptionEntryCreate.Text, password, textEntryCreate.Text, accessToken)
@@ -438,8 +445,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- card event
 	buttonCardCreate = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertCardCreate.Show()
-		valid = false
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		exist = table.SearchByColumn(dataTblCard, 0, cardNameEntryCreate.Text) // search in map
+		valid = false
 		valid = function.ValidateCard(exist, cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate, numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate, labelAlertCardCreate)
 		if valid {
 			err = client.EventCreateCard(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
