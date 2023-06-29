@@ -40,7 +40,7 @@ func (lp *LoginPassword) KeyExists(loginPasswordRequest *model.CreateLoginPasswo
 	row := lp.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM metadata "+
 		"inner join login_password on metadata.entity_id = login_password.login_password_id "+
 		"inner join users on login_password.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4)",
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4 and login_password.deleted_at IS NULL)",
 		string(variables.Name), loginPasswordRequest.Name, loginPasswordRequest.UserID, string(variables.LoginPassword))
 	if err := row.Scan(&exists); err != nil {
 		return exists, err
@@ -53,7 +53,7 @@ func (lp *LoginPassword) GetNodeLoginPassword(loginPasswordRequest *model.GetNod
 	err := lp.db.Pool.QueryRow("SELECT login_password.data FROM metadata "+
 		"inner join login_password on metadata.entity_id = login_password.login_password_id "+
 		"inner join users on login_password.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4 and login_password.deleted_at IS NULL",
 		string(variables.Name), loginPasswordRequest.Value, loginPasswordRequest.UserID, string(variables.LoginPassword)).
 		Scan(&loginPassword.Data)
 	if err != nil {
@@ -99,7 +99,7 @@ func (lp *LoginPassword) GetIdLoginPassword(value string, userID int64) (int64, 
 	err := lp.db.Pool.QueryRow("SELECT login_password.login_password_id FROM metadata "+
 		"inner join login_password on metadata.entity_id = login_password.login_password_id "+
 		"inner join users on login_password.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4 and login_password.deleted_at IS NULL",
 		string(variables.Name), value, userID, string(variables.LoginPassword)).
 		Scan(&loginPasswordID)
 	if err != nil {

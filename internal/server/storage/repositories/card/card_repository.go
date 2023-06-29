@@ -40,7 +40,7 @@ func (c *Card) GetIdCard(value string, userID int64) (int64, error) {
 	err := c.db.Pool.QueryRow("SELECT card.card_id FROM metadata "+
 		"inner join card on metadata.entity_id = card.card_id "+
 		"inner join users on card.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4 and card.deleted_at IS NULL",
 		string(variables.Name), value, userID, string(variables.Card)).
 		Scan(&cardID)
 	if err != nil {
@@ -58,7 +58,7 @@ func (c *Card) KeyExists(cardRequest *model.CreateCardRequest) (bool, error) {
 	row := c.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM metadata "+
 		"inner join card on metadata.entity_id = card.card_id "+
 		"inner join users on card.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4)",
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4 and card.deleted_at IS NULL)",
 		string(variables.Name), cardRequest.Name, cardRequest.UserID, string(variables.Card))
 	if err := row.Scan(&exists); err != nil {
 		return exists, err
@@ -71,7 +71,7 @@ func (c *Card) GetNodeCard(cardRequest *model.GetNodeCardRequest) (*model.Card, 
 	err := c.db.Pool.QueryRow("SELECT card.data FROM metadata "+
 		"inner join card on metadata.entity_id = card.card_id "+
 		"inner join users on card.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4 and card.deleted_at IS NULL",
 		string(variables.Name), cardRequest.Value, cardRequest.UserID, string(variables.Card)).Scan(
 		&card.Data,
 	)

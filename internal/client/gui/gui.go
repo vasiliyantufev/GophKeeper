@@ -453,7 +453,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			err = client.EventCreateCard(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
 				endDateEntryCreate.Text, cvcEntryCreate.Text, accessToken)
 			if err != nil {
-				labelAlertCardCreate.SetText(errors.ErrTextAdd)
+				labelAlertCardCreate.SetText(errors.ErrCardAdd)
 			} else {
 				layout := "01/02/2006 15:04:05"
 				dataTblCard = append(dataTblCard, []string{cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,

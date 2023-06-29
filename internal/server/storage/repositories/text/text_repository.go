@@ -40,7 +40,7 @@ func (t *Text) GetNodeText(textRequest *model.GetNodeTextRequest) (*model.Text, 
 	err := t.db.Pool.QueryRow("SELECT text.data FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4 and text.deleted_at IS NULL",
 		string(variables.Name), textRequest.Value, textRequest.UserID, string(variables.Text)).
 		Scan(&text.Data)
 	if err != nil {
@@ -87,7 +87,7 @@ func (t *Text) GetIdText(value string, userID int64) (int64, error) {
 	err := t.db.Pool.QueryRow("SELECT text.text_id FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4",
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4 and text.deleted_at IS NULL",
 		string(variables.Name), value, userID, string(variables.Text)).
 		Scan(&textID)
 	if err != nil {
@@ -105,7 +105,7 @@ func (t *Text) KeyExists(textRequest *model.CreateTextRequest) (bool, error) {
 	row := t.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM metadata "+
 		"inner join text on metadata.entity_id = text.text_id "+
 		"inner join users on text.user_id  = users.user_id "+
-		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4)",
+		"where metadata.key = $1 and metadata.value = $2 and users.user_id = $3 and metadata.type = $4 and text.deleted_at IS NULL)",
 		string(variables.Name), textRequest.Name, textRequest.UserID, string(variables.Text))
 	if err := row.Scan(&exists); err != nil {
 		return exists, err
