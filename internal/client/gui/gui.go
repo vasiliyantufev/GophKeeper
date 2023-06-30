@@ -249,6 +249,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
 		if indexTblLoginPassword > 0 {
 			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+			function.SetLoginPasswordData(selectedRowTblLoginPassword, loginPasswordNameEntryUpdate, loginPasswordDescriptionEntryUpdate, loginEntryUpdate, passwordEntryUpdate)
 			window.SetContent(containerFormLoginPasswordUpdate)
 			window.Show()
 		} else {
