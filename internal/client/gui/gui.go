@@ -215,9 +215,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			dataTblLoginPassword = table.RemoveRow(dataTblLoginPassword, indexTblLoginPassword)
 			indexTblLoginPassword = 0
 		} else {
-			logrus.Error(errors.ErrLoginPasswordTblIndex)
+			logrus.Error(errors.ErrLoginPasswordTblIndexDelete)
 			labelAlertLoginPassword.Show()
-			labelAlertLoginPassword.SetText(errors.ErrLoginPasswordTblIndex)
+			labelAlertLoginPassword.SetText(errors.ErrLoginPasswordTblIndexDelete)
 		}
 	})
 	buttonTextDelete = widget.NewButton(labels.BtnDeleteText, func() {
@@ -228,9 +228,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			dataTblText = table.RemoveRow(dataTblText, indexTblText)
 			indexTblText = 0
 		} else {
-			logrus.Error(errors.ErrTextTblIndex)
+			logrus.Error(errors.ErrTextTblIndexDelete)
 			labelAlertText.Show()
-			labelAlertText.SetText(errors.ErrTextTblIndex)
+			labelAlertText.SetText(errors.ErrTextTblIndexDelete)
 		}
 	})
 	buttonCardDelete = widget.NewButton(labels.BtnDeleteCard, func() {
@@ -241,26 +241,45 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			dataTblCard = table.RemoveRow(dataTblCard, indexTblCard)
 			indexTblCard = 0
 		} else {
-			logrus.Error(errors.ErrCardTblIndex)
+			logrus.Error(errors.ErrCardTblIndexDelete)
 			labelAlertCard.Show()
-			labelAlertCard.SetText(errors.ErrCardTblIndex)
+			labelAlertCard.SetText(errors.ErrCardTblIndexDelete)
 		}
 	})
 	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
-		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
-		window.SetContent(containerFormLoginPasswordUpdate)
-		window.Show()
+		if indexTblLoginPassword > 0 {
+			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+			window.SetContent(containerFormLoginPasswordUpdate)
+			window.Show()
+		} else {
+			logrus.Error(errors.ErrLoginPasswordTblIndexUpdate)
+			labelAlertLoginPassword.Show()
+			labelAlertLoginPassword.SetText(errors.ErrLoginPasswordTblIndexUpdate)
+		}
 	})
 	buttonTextUpdate = widget.NewButton(labels.BtnUpdateText, func() {
-		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
-		window.SetContent(containerFormTextUpdate)
-		window.Show()
+		if indexTblText > 0 {
+			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+			window.SetContent(containerFormTextUpdate)
+			window.Show()
+		} else {
+			logrus.Error(errors.ErrTextTblIndexUpdate)
+			labelAlertText.Show()
+			labelAlertText.SetText(errors.ErrTextTblIndexUpdate)
+		}
 	})
 	buttonCardUpdate = widget.NewButton(labels.BtnUpdateCard, func() {
-		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
-		window.SetContent(containerFormCardUpdate)
-		window.Show()
+		if indexTblCard > 0 {
+			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+			window.SetContent(containerFormCardUpdate)
+			window.Show()
+		} else {
+			logrus.Error(errors.ErrCardTblIndexUpdate)
+			labelAlertCard.Show()
+			labelAlertCard.SetText(errors.ErrCardTblIndexUpdate)
+		}
 	})
+
 	buttonLoginPasswordFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
 		logrus.Info(labels.BtnUpdate)
 	})
@@ -270,6 +289,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonCardFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
 		logrus.Info(labels.BtnUpdate)
 	})
+
 	buttonTopBack = widget.NewButton(labels.BtnBack, func() {
 		function.ClearLoginPassword(loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate, passwordEntryCreate)
 		function.ClearText(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
