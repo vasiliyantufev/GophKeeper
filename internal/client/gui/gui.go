@@ -207,6 +207,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		window.SetContent(containerFormCardCreate)
 		window.Show()
 	})
+
+	//---------------------------------------------------------------------- login password event delete
 	buttonLoginPasswordDelete = widget.NewButton(labels.BtnDeleteLoginPassword, func() {
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		if indexTblLoginPassword > 0 {
@@ -220,6 +222,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertLoginPassword.SetText(errors.ErrLoginPasswordTblIndexDelete)
 		}
 	})
+	//---------------------------------------------------------------------- text event delete
 	buttonTextDelete = widget.NewButton(labels.BtnDeleteText, func() {
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		if indexTblText > 0 {
@@ -233,6 +236,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertText.SetText(errors.ErrTextTblIndexDelete)
 		}
 	})
+	//---------------------------------------------------------------------- card event delete
 	buttonCardDelete = widget.NewButton(labels.BtnDeleteCard, func() {
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		if indexTblCard > 0 {
@@ -246,6 +250,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertCard.SetText(errors.ErrCardTblIndexDelete)
 		}
 	})
+
+	//---------------------------------------------------------------------- switch form update
 	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
 		if indexTblLoginPassword > 0 {
 			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
@@ -282,15 +288,44 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertCard.SetText(errors.ErrCardTblIndexUpdate)
 		}
 	})
-
+	//---------------------------------------------------------------------- login password event update
 	buttonLoginPasswordFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
-		logrus.Info(labels.BtnUpdate)
+		labelAlertLoginPasswordUpdate.Show()
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+
+		errMsg, valid := function.ValidateLoginPasswordForm(loginPasswordNameEntryUpdate, loginPasswordDescriptionEntryUpdate,
+			loginEntryUpdate, passwordEntryUpdate)
+		if valid {
+			err = client.EventUpdateLoginPassword(loginPasswordNameEntryUpdate.Text, password,
+				loginEntryUpdate.Text, passwordEntryUpdate.Text, accessToken)
+			if err != nil {
+				labelAlertLoginPasswordUpdate.SetText(errors.ErrLoginPasswordUpdate)
+				log.Error(err)
+			} else {
+
+				dataTblLoginPassword = table.UpdateRowLoginPassword(loginEntryUpdate.Text, passwordEntryUpdate.Text, dataTblLoginPassword, indexTblLoginPassword)
+				log.Info("Логин-пароль изменен")
+
+				labelAlertLoginPasswordUpdate.Hide()
+				formLoginPasswordUpdate.Refresh()
+				window.SetContent(containerTabs)
+				window.Show()
+			}
+		} else {
+			labelAlertLoginPasswordUpdate.SetText(errMsg)
+			log.Error(errMsg)
+		}
+		log.Debug(dataTblLoginPassword)
 	})
+
+	//---------------------------------------------------------------------- text event update
 	buttonTextFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
-		logrus.Info(labels.BtnUpdate)
+		log.Info("Текст изменен")
 	})
+
+	//---------------------------------------------------------------------- card event update
 	buttonCardFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
-		logrus.Info(labels.BtnUpdate)
+		log.Info("Карта изменена")
 	})
 
 	buttonTopBack = widget.NewButton(labels.BtnBack, func() {
@@ -436,7 +471,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			err = client.EventCreateLoginPassword(loginPasswordNameEntryCreate.Text, loginPasswordDescriptionEntryCreate.Text, password,
 				loginEntryCreate.Text, passwordEntryCreate.Text, accessToken)
 			if err != nil {
-				labelAlertLoginPasswordCreate.SetText(errors.ErrLoginPasswordAdd)
+				labelAlertLoginPasswordCreate.SetText(errors.ErrLoginPasswordCreate)
 				log.Error(err)
 			} else {
 				dataTblLoginPassword = append(dataTblLoginPassword, []string{loginPasswordNameEntryCreate.Text, loginPasswordDescriptionEntryCreate.Text,
@@ -469,7 +504,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		if valid {
 			err = client.EventCreateText(textNameEntryCreate.Text, textDescriptionEntryCreate.Text, password, textEntryCreate.Text, accessToken)
 			if err != nil {
-				labelAlertTextCreate.SetText(errors.ErrTextAdd)
+				labelAlertTextCreate.SetText(errors.ErrTextCreate)
 				log.Error(err)
 			} else {
 				dataTblText = append(dataTblText, []string{textNameEntryCreate.Text, textDescriptionEntryCreate.Text, textEntryCreate.Text,
@@ -504,7 +539,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			err = client.EventCreateCard(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
 				endDateEntryCreate.Text, cvcEntryCreate.Text, accessToken)
 			if err != nil {
-				labelAlertCardCreate.SetText(errors.ErrCardAdd)
+				labelAlertCardCreate.SetText(errors.ErrCardCreate)
 				log.Error(err)
 			} else {
 				layout := "01/02/2006 15:04:05"

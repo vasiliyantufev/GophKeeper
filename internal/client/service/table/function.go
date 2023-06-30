@@ -2,6 +2,7 @@ package table
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
@@ -34,8 +35,19 @@ func GetIndex(slice [][]string, targetColumn int, targetValue string) (index int
 	return 0
 }
 
-func RemoveRow(slice [][]string, index int) [][]string {
-	return append(slice[:index], slice[index+1:]...)
+func RemoveRow(slice [][]string, indexRow int) [][]string {
+	return append(slice[:indexRow], slice[indexRow+1:]...)
+}
+
+func UpdateRowLoginPassword(login, password string, slice [][]string, indexRow int) [][]string {
+	layout := "01/02/2006 15:04:05"
+	indexColLogin := 2
+	indexColPassword := 3
+	indexColUpdateAt := 5
+	slice[indexRow][indexColLogin] = login
+	slice[indexRow][indexColPassword] = password
+	slice[indexRow][indexColUpdateAt] = time.Now().Format(layout)
+	return slice
 }
 
 func AppendText(node *grpc.Text, dataTblText *[][]string, plaintext string) {

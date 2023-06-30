@@ -29,7 +29,7 @@ func (c Event) EventUpdateLoginPassword(name, passwordSecure, login, password st
 
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
-	updateLoginPassword, err := c.HandleUpdateLoginPassword(context.Background(), &grpc.UpdateLoginPasswordRequest{Name: name, Data: []byte(encryptLoginPassword),
+	updateLoginPassword, err := c.grpc.HandleUpdateLoginPassword(context.Background(), &grpc.UpdateLoginPasswordRequest{Name: name, Data: []byte(encryptLoginPassword),
 		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
 	if err != nil {
 		c.logger.Error(err)
