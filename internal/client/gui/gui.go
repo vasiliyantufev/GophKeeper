@@ -411,19 +411,23 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			}
 		}
 	})
-	//---------------------------------------------------------------------- login password event
+	//---------------------------------------------------------------------- login password event create
 	buttonLoginPasswordCreate = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertLoginPasswordCreate.Show()
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		exist = table.SearchByColumn(dataTblLoginPassword, 0, loginPasswordNameEntryCreate.Text) // search in map
-		valid = false
-		valid = function.ValidateLoginPassword(false, loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate,
-			passwordEntryCreate, labelAlertLoginPasswordCreate)
+		if exist {
+			labelAlertLoginPassword.SetText(errors.ErrLoginPasswordExist)
+			log.Error(labelAlertLoginPassword.Text)
+		}
+		errMsg, valid := function.ValidateLoginPasswordForm(loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate,
+			passwordEntryCreate)
 		if valid {
 			err = client.EventCreateLoginPassword(loginPasswordNameEntryCreate.Text, loginPasswordDescriptionEntryCreate.Text, password,
 				loginEntryCreate.Text, passwordEntryCreate.Text, accessToken)
 			if err != nil {
 				labelAlertLoginPasswordCreate.SetText(errors.ErrLoginPasswordAdd)
+				log.Error(err)
 			} else {
 				dataTblLoginPassword = append(dataTblLoginPassword, []string{loginPasswordNameEntryCreate.Text, loginPasswordDescriptionEntryCreate.Text,
 					loginEntryCreate.Text, passwordEntryCreate.Text, time.Now().Format(layout), time.Now().Format(layout)})
@@ -436,10 +440,13 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				window.SetContent(containerTabs)
 				window.Show()
 			}
+		} else {
+			labelAlertLoginPasswordCreate.SetText(errMsg)
+			log.Error(errMsg)
 		}
 		log.Debug(dataTblLoginPassword)
 	})
-	//---------------------------------------------------------------------- text event
+	//---------------------------------------------------------------------- text event create
 	buttonTextCreate = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertTextCreate.Show()
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
@@ -465,7 +472,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		}
 		log.Debug(dataTblText)
 	})
-	//---------------------------------------------------------------------- card event
+	//---------------------------------------------------------------------- card event create
 	buttonCardCreate = widget.NewButton(labels.BtnAdd, func() {
 		labelAlertCardCreate.Show()
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)

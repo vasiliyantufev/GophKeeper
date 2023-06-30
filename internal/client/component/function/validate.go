@@ -46,34 +46,21 @@ func ValidateRegistration(usernameRegistrationEntry *widget.Entry, passwordRegis
 	return true
 }
 
-func ValidateLoginPassword(exists bool, loginPasswordNameEntry *widget.Entry, loginPasswordDescriptionEntry *widget.Entry,
-	loginEntry *widget.Entry, passwordEntry *widget.Entry, labelAlertLoginPassword *widget.Label) bool {
-	if exists {
-		labelAlertLoginPassword.SetText(errors.ErrLoginPasswordExist)
-		log.Print(labelAlertLoginPassword.Text)
-		return false
-	}
+func ValidateLoginPasswordForm(loginPasswordNameEntry *widget.Entry, loginPasswordDescriptionEntry *widget.Entry,
+	loginEntry *widget.Entry, passwordEntry *widget.Entry) (string, bool) {
 	if loginPasswordNameEntry.Text == "" {
-		labelAlertLoginPassword.SetText(errors.ErrNameEmpty)
-		log.Print(labelAlertLoginPassword.Text)
-		return false
+		return errors.ErrNameEmpty, false
 	}
 	if loginPasswordDescriptionEntry.Text == "" {
-		labelAlertLoginPassword.SetText(errors.ErrDescriptionEmpty)
-		log.Print(labelAlertLoginPassword.Text)
-		return false
+		return errors.ErrDescriptionEmpty, false
 	}
 	if loginEntry.Text == "" {
-		labelAlertLoginPassword.SetText(errors.ErrLoginEmpty)
-		log.Print(labelAlertLoginPassword.Text)
-		return false
+		return errors.ErrLoginEmpty, false
 	}
 	if passwordEntry.Text == "" {
-		labelAlertLoginPassword.SetText(errors.ErrPasswordEmpty)
-		log.Print(labelAlertLoginPassword.Text)
-		return false
+		return errors.ErrPasswordEmpty, false
 	}
-	return true
+	return "", true
 }
 
 func ValidateText(exists bool, textNameEntry *widget.Entry, textEntry *widget.Entry, textDescriptionEntry *widget.Entry,
