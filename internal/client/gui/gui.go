@@ -261,6 +261,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonTextUpdate = widget.NewButton(labels.BtnUpdateText, func() {
 		if indexTblText > 0 {
 			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+			function.SetTextData(selectedRowTblText, textNameEntryUpdate, textDescriptionEntryUpdate, textEntryUpdate)
 			window.SetContent(containerFormTextUpdate)
 			window.Show()
 		} else {

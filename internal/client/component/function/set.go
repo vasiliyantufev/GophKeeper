@@ -8,3 +8,9 @@ func SetLoginPasswordData(loginPasswordData []string, loginPasswordNameEntry *wi
 	loginEntry.SetText(loginPasswordData[2])
 	passwordEntry.SetText(loginPasswordData[3])
 }
+
+func SetTextData(textData []string, textNameEntry *widget.Entry, textDescriptionEntry *widget.Entry, textEntry *widget.Entry) {
+	textNameEntry.SetText(textData[0])
+	textDescriptionEntry.SetText(textData[1])
+	textEntry.SetText(textData[2])
+}
