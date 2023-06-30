@@ -27,6 +27,6 @@ func (c Event) EventUpdateText(name, passwordSecure, text string, token model.To
 		c.logger.Error(err)
 		return err
 	}
-	c.logger.Debug(updateText.Id)
+	c.logger.Debug(updateText)
 	return nil
 }

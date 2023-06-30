@@ -66,7 +66,7 @@ func ValidateTextForm(textNameEntry *widget.Entry, textEntry *widget.Entry, text
 }
 
 func ValidateCardForm(cardNameEntry *widget.Entry, cardDescriptionEntry *widget.Entry, paymentSystemEntry *widget.Entry,
-	numberEntry *widget.Entry, holderEntry *widget.Entry, endDateEntry *widget.Entry, cvcEntry *widget.Entry) (string, bool) {
+	numberEntry *widget.Entry, holderEntry *widget.Entry, cvcEntry *widget.Entry, endDateEntry *widget.Entry) (string, bool) {
 	var err error
 	if cardNameEntry.Text == "" {
 		return errors.ErrNameEmpty, false

@@ -8,6 +8,6 @@ type Card struct {
 	PaymentSystem string    `json:"PaymentSystem"`
 	Number        string    `json:"Number"`
 	Holder        string    `json:"Holder"`
-	EndData       time.Time `json:"EndData"`
 	CVC           int       `json:"CVC"`
+	EndData       time.Time `json:"EndData"`
 }

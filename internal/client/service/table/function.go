@@ -59,6 +59,23 @@ func UpdateRowText(text string, slice [][]string, indexRow int) [][]string {
 	return slice
 }
 
+func UpdateRowCard(paymentSystem, number, holder, cvc, endDate string, slice [][]string, indexRow int) [][]string {
+	layout := "01/02/2006 15:04:05"
+	indexColPaymentSystem := 2
+	indexColNumber := 3
+	indexColHolder := 4
+	indexColCvc := 5
+	indexColEndDate := 6
+	indexColUpdateAt := 8
+	slice[indexRow][indexColPaymentSystem] = paymentSystem
+	slice[indexRow][indexColNumber] = number
+	slice[indexRow][indexColHolder] = holder
+	slice[indexRow][indexColEndDate] = endDate
+	slice[indexRow][indexColCvc] = cvc
+	slice[indexRow][indexColUpdateAt] = time.Now().Format(layout)
+	return slice
+}
+
 func AppendText(node *grpc.Text, dataTblText *[][]string, plaintext string) {
 	layout := "01/02/2006 15:04:05"
 	created, _ := service.ConvertTimestampToTime(node.CreatedAt)

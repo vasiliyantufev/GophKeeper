@@ -35,6 +35,6 @@ func (c Event) EventUpdateLoginPassword(name, passwordSecure, login, password st
 		c.logger.Error(err)
 		return err
 	}
-	c.logger.Debug(updateLoginPassword.Id)
+	c.logger.Debug(updateLoginPassword)
 	return nil
 }

@@ -279,7 +279,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonCardUpdate = widget.NewButton(labels.BtnUpdateCard, func() {
 		if indexTblCard > 0 {
 			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
-			function.SetCardData(selectedRowTblCard, cardNameEntryUpdate, cardDescriptionEntryUpdate, paymentSystemEntryUpdate, numberEntryUpdate, holderEntryUpdate, endDateEntryUpdate, cvcEntryUpdate)
+			function.SetCardData(selectedRowTblCard, cardNameEntryUpdate, cardDescriptionEntryUpdate, paymentSystemEntryUpdate, numberEntryUpdate, holderEntryUpdate, cvcEntryUpdate, endDateEntryUpdate)
 			window.SetContent(containerFormCardUpdate)
 			window.Show()
 		} else {
@@ -348,8 +348,35 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 
 	//---------------------------------------------------------------------- card event update
 	buttonCardFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
-		log.Info("Карта изменена")
+		labelAlertCardUpdate.Show()
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+
+		errMsg, valid := function.ValidateCardForm(cardNameEntryUpdate, cardDescriptionEntryUpdate, paymentSystemEntryUpdate,
+			numberEntryUpdate, holderEntryUpdate, cvcEntryUpdate, endDateEntryUpdate)
+		if valid {
+			err = client.EventUpdateCard(cardNameEntryUpdate.Text, password, paymentSystemEntryUpdate.Text, numberEntryUpdate.Text,
+				holderEntryUpdate.Text, cvcEntryUpdate.Text, endDateEntryUpdate.Text, accessToken)
+			if err != nil {
+				labelAlertCardUpdate.SetText(errors.ErrCardUpdate)
+				log.Error(err)
+			} else {
+
+				dataTblCard = table.UpdateRowCard(paymentSystemEntryUpdate.Text, numberEntryUpdate.Text, holderEntryUpdate.Text,
+					cvcEntryUpdate.Text, endDateEntryUpdate.Text, dataTblCard, indexTblCard)
+				log.Info("Карта изменена")
+
+				labelAlertCardUpdate.Hide()
+				formCardUpdate.Refresh()
+				window.SetContent(containerTabs)
+				window.Show()
+			}
+		} else {
+			labelAlertCardUpdate.SetText(errMsg)
+			log.Error(errMsg)
+		}
+		log.Debug(dataTblCard)
 	})
+	//----------------------------------------------------------------------
 
 	buttonTopBack = widget.NewButton(labels.BtnBack, func() {
 		function.ClearLoginPassword(loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate, passwordEntryCreate)
@@ -560,7 +587,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate)
 		if valid {
 			err = client.EventCreateCard(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
-				endDateEntryCreate.Text, cvcEntryCreate.Text, accessToken)
+				cvcEntryCreate.Text, endDateEntryCreate.Text, accessToken)
 			if err != nil {
 				labelAlertCardCreate.SetText(errors.ErrCardCreate)
 				log.Error(err)
