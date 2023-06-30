@@ -50,6 +50,15 @@ func UpdateRowLoginPassword(login, password string, slice [][]string, indexRow i
 	return slice
 }
 
+func UpdateRowText(text string, slice [][]string, indexRow int) [][]string {
+	layout := "01/02/2006 15:04:05"
+	indexColText := 2
+	indexColUpdateAt := 4
+	slice[indexRow][indexColText] = text
+	slice[indexRow][indexColUpdateAt] = time.Now().Format(layout)
+	return slice
+}
+
 func AppendText(node *grpc.Text, dataTblText *[][]string, plaintext string) {
 	layout := "01/02/2006 15:04:05"
 	created, _ := service.ConvertTimestampToTime(node.CreatedAt)

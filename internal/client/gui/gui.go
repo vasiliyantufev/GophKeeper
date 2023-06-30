@@ -320,7 +320,30 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 
 	//---------------------------------------------------------------------- text event update
 	buttonTextFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
-		log.Info("Текст изменен")
+		labelAlertTextUpdate.Show()
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+
+		errMsg, valid := function.ValidateTextForm(textNameEntryUpdate, textDescriptionEntryUpdate, textEntryUpdate)
+		if valid {
+			err = client.EventUpdateText(textNameEntryUpdate.Text, password, textEntryUpdate.Text, accessToken)
+			if err != nil {
+				labelAlertTextUpdate.SetText(errors.ErrTextUpdate)
+				log.Error(err)
+			} else {
+
+				dataTblText = table.UpdateRowText(textEntryUpdate.Text, dataTblText, indexTblText)
+				log.Info("Текст изменен")
+
+				labelAlertTextUpdate.Hide()
+				formLoginPasswordUpdate.Refresh()
+				window.SetContent(containerTabs)
+				window.Show()
+			}
+		} else {
+			labelAlertTextUpdate.SetText(errMsg)
+			log.Error(errMsg)
+		}
+		log.Debug(dataTblText)
 	})
 
 	//---------------------------------------------------------------------- card event update
