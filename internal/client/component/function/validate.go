@@ -63,29 +63,17 @@ func ValidateLoginPasswordForm(loginPasswordNameEntry *widget.Entry, loginPasswo
 	return "", true
 }
 
-func ValidateText(exists bool, textNameEntry *widget.Entry, textEntry *widget.Entry, textDescriptionEntry *widget.Entry,
-	labelAlertText *widget.Label) bool {
-	if exists {
-		labelAlertText.SetText(errors.ErrTextExist)
-		log.Print(labelAlertText)
-		return false
-	}
+func ValidateTextForm(textNameEntry *widget.Entry, textEntry *widget.Entry, textDescriptionEntry *widget.Entry) (string, bool) {
 	if textNameEntry.Text == "" {
-		labelAlertText.SetText(errors.ErrNameEmpty)
-		log.Print(labelAlertText.Text)
-		return false
+		return errors.ErrNameEmpty, false
 	}
 	if textDescriptionEntry.Text == "" {
-		labelAlertText.SetText(errors.ErrDescriptionEmpty)
-		log.Print(labelAlertText.Text)
-		return false
+		return errors.ErrDescriptionEmpty, false
 	}
 	if textEntry.Text == "" {
-		labelAlertText.SetText(errors.ErrTextEmpty)
-		log.Print(labelAlertText.Text)
-		return false
+		return errors.ErrTextEmpty, false
 	}
-	return true
+	return "", true
 }
 
 func ValidateCard(exists bool, cardNameEntry *widget.Entry, cardDescriptionEntry *widget.Entry, paymentSystemEntry *widget.Entry,

@@ -451,12 +451,16 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		labelAlertTextCreate.Show()
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		exist = table.SearchByColumn(dataTblText, 0, textNameEntryCreate.Text) // search in map
-		valid = false
-		valid = function.ValidateText(exist, textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate, labelAlertTextCreate)
+		if exist {
+			labelAlertText.SetText(errors.ErrTextExist)
+			log.Error(labelAlertText)
+		}
+		errMsg, valid := function.ValidateTextForm(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
 		if valid {
 			err = client.EventCreateText(textNameEntryCreate.Text, textDescriptionEntryCreate.Text, password, textEntryCreate.Text, accessToken)
 			if err != nil {
 				labelAlertTextCreate.SetText(errors.ErrTextAdd)
+				log.Error(errors.ErrTextAdd)
 			} else {
 				dataTblText = append(dataTblText, []string{textNameEntryCreate.Text, textDescriptionEntryCreate.Text, textEntryCreate.Text,
 					time.Now().Format(layout), time.Now().Format(layout)})
@@ -469,6 +473,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				window.SetContent(containerTabs)
 				window.Show()
 			}
+		} else {
+			labelAlertTextCreate.SetText(errMsg)
+			log.Error(errMsg)
 		}
 		log.Debug(dataTblText)
 	})
