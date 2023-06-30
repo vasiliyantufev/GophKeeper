@@ -35,7 +35,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var accessToken = model.Token{}
 	var password string
 	var exist bool
-	var valid bool
+	//var valid bool
 	var layout string
 	var err error
 	layout = "01/02/2006 15:04:05"
@@ -369,7 +369,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonAuth = widget.NewButton("Submit", func() {
 		labelAlertAuth.Show()
 		if radioAuth.Selected == "Login" {
-			errMsg, valid := function.ValidateLoginForm(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
+			errMsg, valid := function.ValidateLoginForm(usernameLoginEntry, passwordLoginEntry)
 			if valid {
 				accessToken, err = client.EventAuthentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
 				if err != nil {
@@ -393,18 +393,21 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			}
 		}
 		if radioAuth.Selected == "Registration" {
-			valid = function.ValidateRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry, labelAlertAuth)
+			errMsg, valid := function.ValidateRegistrationForm(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
 			if valid {
 				exist, err = client.EventUserExist(usernameRegistrationEntry.Text)
 				if err != nil {
 					labelAlertAuth.SetText(errors.ErrRegistration)
+					log.Error(err)
 				}
 				if exist {
 					labelAlertAuth.SetText(errors.ErrUserExist)
+					log.Error(errors.ErrUserExist)
 				} else {
 					accessToken, err = client.EventRegistration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrRegistration)
+						log.Error(err)
 					} else {
 						password = passwordRegistrationEntry.Text
 						window.SetContent(containerTabs)
@@ -412,6 +415,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 						window.Show()
 					}
 				}
+			} else {
+				labelAlertAuth.SetText(errMsg)
+				log.Error(errMsg)
 			}
 		}
 	})

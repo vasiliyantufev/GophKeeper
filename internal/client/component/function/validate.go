@@ -1,7 +1,6 @@
 package function
 
 import (
-	"log"
 	"strconv"
 	"time"
 	"unicode/utf8"
@@ -12,7 +11,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
 )
 
-func ValidateLoginForm(usernameLoginEntry *widget.Entry, passwordLoginEntry *widget.Entry, labelAlertAuth *widget.Label) (string, bool) {
+func ValidateLoginForm(usernameLoginEntry *widget.Entry, passwordLoginEntry *widget.Entry) (string, bool) {
 	if utf8.RuneCountInString(usernameLoginEntry.Text) < 6 {
 		return errors.ErrUsernameIncorrect, false
 	}
@@ -22,24 +21,18 @@ func ValidateLoginForm(usernameLoginEntry *widget.Entry, passwordLoginEntry *wid
 	return "", true
 }
 
-func ValidateRegistration(usernameRegistrationEntry *widget.Entry, passwordRegistrationEntry *widget.Entry,
-	passwordConfirmationRegistrationEntry *widget.Entry, labelAlertAuth *widget.Label) bool {
+func ValidateRegistrationForm(usernameRegistrationEntry *widget.Entry, passwordRegistrationEntry *widget.Entry,
+	passwordConfirmationRegistrationEntry *widget.Entry) (string, bool) {
 	if utf8.RuneCountInString(usernameRegistrationEntry.Text) < 6 {
-		labelAlertAuth.SetText(errors.ErrUsernameIncorrect)
-		log.Print(labelAlertAuth.Text)
-		return false
+		return errors.ErrUsernameIncorrect, false
 	}
 	if !encryption.VerifyPassword(passwordRegistrationEntry.Text) {
-		labelAlertAuth.SetText(errors.ErrPasswordIncorrect)
-		log.Print(labelAlertAuth.Text)
-		return false
+		return errors.ErrPasswordIncorrect, false
 	}
 	if passwordRegistrationEntry.Text != passwordConfirmationRegistrationEntry.Text {
-		labelAlertAuth.SetText(errors.ErrPasswordDifferent)
-		log.Print(labelAlertAuth.Text)
-		return false
+		return errors.ErrPasswordDifferent, false
 	}
-	return true
+	return "", true
 }
 
 func ValidateLoginPasswordForm(loginPasswordNameEntry *widget.Entry, loginPasswordDescriptionEntry *widget.Entry,
