@@ -14,3 +14,13 @@ func SetTextData(textData []string, textNameEntry *widget.Entry, textDescription
 	textDescriptionEntry.SetText(textData[1])
 	textEntry.SetText(textData[2])
 }
+
+func SetCardData(card []string, cardNameEntry *widget.Entry, cardDescriptionEntry *widget.Entry, paymentSystemEntry *widget.Entry, numberEntry *widget.Entry, holderEntry *widget.Entry, endDateEntry *widget.Entry, cvcEntry *widget.Entry) {
+	cardNameEntry.SetText(card[0])
+	cardDescriptionEntry.SetText(card[1])
+	paymentSystemEntry.SetText(card[2])
+	numberEntry.SetText(card[3])
+	holderEntry.SetText(card[4])
+	endDateEntry.SetText(card[5])
+	cvcEntry.SetText(card[6])
+}

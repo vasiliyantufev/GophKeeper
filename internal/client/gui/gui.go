@@ -273,6 +273,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonCardUpdate = widget.NewButton(labels.BtnUpdateCard, func() {
 		if indexTblCard > 0 {
 			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+			function.SetCardData(selectedRowTblCard, cardNameEntryUpdate, cardDescriptionEntryUpdate, paymentSystemEntryUpdate, numberEntryUpdate, holderEntryUpdate, endDateEntryUpdate, cvcEntryUpdate)
 			window.SetContent(containerFormCardUpdate)
 			window.Show()
 		} else {
