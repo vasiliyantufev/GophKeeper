@@ -76,74 +76,47 @@ func ValidateTextForm(textNameEntry *widget.Entry, textEntry *widget.Entry, text
 	return "", true
 }
 
-func ValidateCard(exists bool, cardNameEntry *widget.Entry, cardDescriptionEntry *widget.Entry, paymentSystemEntry *widget.Entry,
-	numberEntry *widget.Entry, holderEntry *widget.Entry, endDateEntry *widget.Entry, cvcEntry *widget.Entry, labelAlertCard *widget.Label) bool {
+func ValidateCardForm(cardNameEntry *widget.Entry, cardDescriptionEntry *widget.Entry, paymentSystemEntry *widget.Entry,
+	numberEntry *widget.Entry, holderEntry *widget.Entry, endDateEntry *widget.Entry, cvcEntry *widget.Entry) (string, bool) {
 	var err error
-	if exists {
-		labelAlertCard.SetText(errors.ErrCardExist)
-		log.Print(labelAlertCard)
-		return false
-	}
 	if cardNameEntry.Text == "" {
-		labelAlertCard.SetText(errors.ErrNameEmpty)
-		log.Print(labelAlertCard.Text)
-		return false
+		return errors.ErrNameEmpty, false
 	}
 	if cardDescriptionEntry.Text == "" {
-		labelAlertCard.SetText(errors.ErrDescriptionEmpty)
-		log.Print(labelAlertCard.Text)
-		return false
+		return errors.ErrDescriptionEmpty, false
 	}
 	if paymentSystemEntry.Text == "" {
-		labelAlertCard.SetText(errors.ErrPaymentSystemEmpty)
-		log.Print(labelAlertCard.Text)
-		return false
+		return errors.ErrPaymentSystemEmpty, false
 	}
 	if numberEntry.Text == "" {
-		labelAlertCard.SetText(errors.ErrNumberEmpty)
-		log.Print(labelAlertCard.Text)
-		return false
+		return errors.ErrNumberEmpty, false
 	}
 	intNumber, err := strconv.Atoi(numberEntry.Text)
 	if err != nil {
-		labelAlertCard.SetText(errors.ErrNumberIncorrect)
-		log.Print(labelAlertCard.Text)
-		return false
+		return errors.ErrNumberIncorrect, false
 	}
 	if !algorithm.ValidLuhn(intNumber) {
-		labelAlertCard.SetText(errors.ErrNumberIncorrect)
-		log.Print(labelAlertCard.Text)
-		return false
+		return errors.ErrNumberIncorrect, false
 	}
 	if holderEntry.Text == "" {
-		labelAlertCard.SetText(errors.ErrHolderEmpty)
-		log.Print(labelAlertCard.Text)
-		return false
+		return errors.ErrHolderEmpty, false
 	}
 	if endDateEntry.Text == "" {
-		labelAlertCard.SetText(errors.ErrEndDateEmpty)
-		log.Print(labelAlertCard.Text)
-		return false
+		return errors.ErrEndDateEmpty, false
 	} else {
 		layout := "01/02/2006"
 		_, err = time.Parse(layout, endDateEntry.Text)
 		if err != nil {
-			labelAlertCard.SetText(errors.ErrEndDataIncorrect)
-			log.Print(labelAlertCard.Text)
-			return false
+			return errors.ErrEndDataIncorrect, false
 		}
 	}
 	if cvcEntry.Text == "" {
-		labelAlertCard.SetText(errors.ErrCvcEmpty)
-		log.Print(labelAlertCard.Text)
-		return false
+		return errors.ErrCvcEmpty, false
 	} else {
 		_, err = strconv.Atoi(cvcEntry.Text)
 		if err != nil {
-			labelAlertCard.SetText(errors.ErrCvcIncorrect)
-			log.Print(labelAlertCard.Text)
-			return false
+			return errors.ErrCvcIncorrect, false
 		}
 	}
-	return true
+	return "", true
 }

@@ -484,13 +484,18 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		labelAlertCardCreate.Show()
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
 		exist = table.SearchByColumn(dataTblCard, 0, cardNameEntryCreate.Text) // search in map
-		valid = false
-		valid = function.ValidateCard(exist, cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate, numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate, labelAlertCardCreate)
+		if exist {
+			labelAlertCard.SetText(errors.ErrCardExist)
+			log.Print(labelAlertCard)
+		}
+		errMsg, valid := function.ValidateCardForm(cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate,
+			numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate)
 		if valid {
 			err = client.EventCreateCard(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
 				endDateEntryCreate.Text, cvcEntryCreate.Text, accessToken)
 			if err != nil {
 				labelAlertCardCreate.SetText(errors.ErrCardAdd)
+				log.Error(errors.ErrCardAdd)
 			} else {
 				layout := "01/02/2006 15:04:05"
 				dataTblCard = append(dataTblCard, []string{cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
@@ -504,6 +509,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				window.SetContent(containerTabs)
 				window.Show()
 			}
+		} else {
+			labelAlertCardCreate.SetText(errMsg)
+			log.Error(errMsg)
 		}
 		log.Debug(dataTblCard)
 	})
