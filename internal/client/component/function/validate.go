@@ -12,18 +12,14 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
 )
 
-func ValidateLogin(usernameLoginEntry *widget.Entry, passwordLoginEntry *widget.Entry, labelAlertAuth *widget.Label) bool {
+func ValidateLoginForm(usernameLoginEntry *widget.Entry, passwordLoginEntry *widget.Entry, labelAlertAuth *widget.Label) (string, bool) {
 	if utf8.RuneCountInString(usernameLoginEntry.Text) < 6 {
-		labelAlertAuth.SetText(errors.ErrUsernameIncorrect)
-		log.Print(labelAlertAuth.Text)
-		return false
+		return errors.ErrUsernameIncorrect, false
 	}
-	if utf8.RuneCountInString(passwordLoginEntry.Text) < 6 {
-		labelAlertAuth.SetText(errors.ErrPasswordIncorrect)
-		log.Print(labelAlertAuth.Text)
-		return false
+	if !encryption.VerifyPassword(passwordLoginEntry.Text) {
+		return errors.ErrPasswordIncorrect, false
 	}
-	return true
+	return "", true
 }
 
 func ValidateRegistration(usernameRegistrationEntry *widget.Entry, passwordRegistrationEntry *widget.Entry,

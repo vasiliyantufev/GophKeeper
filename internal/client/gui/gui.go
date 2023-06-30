@@ -368,24 +368,28 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- auth event
 	buttonAuth = widget.NewButton("Submit", func() {
 		labelAlertAuth.Show()
-		valid = false
 		if radioAuth.Selected == "Login" {
-			valid = function.ValidateLogin(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
+			errMsg, valid := function.ValidateLoginForm(usernameLoginEntry, passwordLoginEntry, labelAlertAuth)
 			if valid {
 				accessToken, err = client.EventAuthentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
 				if err != nil {
 					labelAlertAuth.SetText(errors.ErrLogin)
+					log.Error(err)
 				} else {
 					password = passwordLoginEntry.Text
 					dataTblText, dataTblCard, dataTblLoginPassword, err = client.EventSynchronization(password, accessToken)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrLogin)
+						log.Error(err)
 					} else {
 						window.SetContent(containerTabs)
 						window.Resize(fyne.NewSize(1250, 300))
 						window.Show()
 					}
 				}
+			} else {
+				labelAlertAuth.SetText(errMsg)
+				log.Error(errMsg)
 			}
 		}
 		if radioAuth.Selected == "Registration" {
@@ -460,7 +464,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			err = client.EventCreateText(textNameEntryCreate.Text, textDescriptionEntryCreate.Text, password, textEntryCreate.Text, accessToken)
 			if err != nil {
 				labelAlertTextCreate.SetText(errors.ErrTextAdd)
-				log.Error(errors.ErrTextAdd)
+				log.Error(err)
 			} else {
 				dataTblText = append(dataTblText, []string{textNameEntryCreate.Text, textDescriptionEntryCreate.Text, textEntryCreate.Text,
 					time.Now().Format(layout), time.Now().Format(layout)})
@@ -495,7 +499,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				endDateEntryCreate.Text, cvcEntryCreate.Text, accessToken)
 			if err != nil {
 				labelAlertCardCreate.SetText(errors.ErrCardAdd)
-				log.Error(errors.ErrCardAdd)
+				log.Error(err)
 			} else {
 				layout := "01/02/2006 15:04:05"
 				dataTblCard = append(dataTblCard, []string{cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
