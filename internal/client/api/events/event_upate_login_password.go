@@ -27,14 +27,15 @@ func (c Event) EventUpdateLoginPassword(name, passwordSecure, login, password st
 		return err
 	}
 
-	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
+	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	updateLoginPassword, err := c.grpc.HandleUpdateLoginPassword(context.Background(), &grpc.UpdateLoginPasswordRequest{Name: name, Data: []byte(encryptLoginPassword),
-		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
+		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
 		c.logger.Error(err)
 		return err
 	}
+
 	c.logger.Debug(updateLoginPassword)
 	return nil
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/algorithm"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/variables"
 )
 
 func ValidateLoginForm(usernameLoginEntry *widget.Entry, passwordLoginEntry *widget.Entry) (string, bool) {
@@ -93,10 +94,9 @@ func ValidateCardForm(cardNameEntry *widget.Entry, cardDescriptionEntry *widget.
 	if endDateEntry.Text == "" {
 		return errors.ErrEndDateEmpty, false
 	} else {
-		layout := "01/02/2006"
-		_, err = time.Parse(layout, endDateEntry.Text)
+		_, err = time.Parse(string(variables.LayoutDateAndTime), endDateEntry.Text)
 		if err != nil {
-			return errors.ErrEndDataIncorrect, false
+			return errors.ErrEndDateIncorrect, false
 		}
 	}
 	if cvcEntry.Text == "" {

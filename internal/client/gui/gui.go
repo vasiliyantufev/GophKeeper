@@ -15,6 +15,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/labels"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/variables"
 )
 
 func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
@@ -35,10 +36,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var accessToken = model.Token{}
 	var password string
 	var exist bool
-	//var valid bool
-	var layout string
 	var err error
-	layout = "01/02/2006 15:04:05"
 	//---------------------------------------------------------------------- containers
 	var containerRadio *fyne.Container
 
@@ -525,7 +523,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				log.Error(err)
 			} else {
 				dataTblLoginPassword = append(dataTblLoginPassword, []string{loginPasswordNameEntryCreate.Text, loginPasswordDescriptionEntryCreate.Text,
-					loginEntryCreate.Text, passwordEntryCreate.Text, time.Now().Format(layout), time.Now().Format(layout)})
+					loginEntryCreate.Text, passwordEntryCreate.Text, time.Now().Format(string(variables.LayoutDateAndTime)), time.Now().Format(string(variables.LayoutDateAndTime))})
 
 				function.ClearLoginPassword(loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate, passwordEntryCreate)
 				log.Info("Логин-пароль добавлен")
@@ -558,7 +556,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				log.Error(err)
 			} else {
 				dataTblText = append(dataTblText, []string{textNameEntryCreate.Text, textDescriptionEntryCreate.Text, textEntryCreate.Text,
-					time.Now().Format(layout), time.Now().Format(layout)})
+					time.Now().Format(string(variables.LayoutDateAndTime)), time.Now().Format(string(variables.LayoutDateAndTime))})
 
 				function.ClearText(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
 				log.Info("Текст добавлен")
@@ -592,9 +590,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				labelAlertCardCreate.SetText(errors.ErrCardCreate)
 				log.Error(err)
 			} else {
-				layout := "01/02/2006 15:04:05"
 				dataTblCard = append(dataTblCard, []string{cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
-					cvcEntryCreate.Text, endDateEntryCreate.Text, time.Now().Format(layout), time.Now().Format(layout)})
+					cvcEntryCreate.Text, endDateEntryCreate.Text, time.Now().Format(string(variables.LayoutDateAndTime)), time.Now().Format(string(variables.LayoutDateAndTime))})
 
 				function.ClearCard(cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate, numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate)
 				log.Info("Карта добавлена")

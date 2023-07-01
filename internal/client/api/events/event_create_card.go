@@ -8,11 +8,12 @@ import (
 
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/variables"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
 
-func (c Event) EventCreateCard(name, description, password, paymentSystem, number, holder, cvc, endData string, token model.Token) error {
+func (c Event) EventCreateCard(name, description, password, paymentSystem, number, holder, cvc, endDate string, token model.Token) error {
 	c.logger.Info("Create card")
 
 	intCvc, err := strconv.Atoi(cvc)
@@ -20,13 +21,12 @@ func (c Event) EventCreateCard(name, description, password, paymentSystem, numbe
 		c.logger.Error(err)
 		return err
 	}
-	layout := "01/02/2006"
-	timeEndData, err := time.Parse(layout, endData)
+	timeEndDate, err := time.Parse(string(variables.LayoutDateAndTime), endDate)
 	if err != nil {
 		c.logger.Error(err)
 		return err
 	}
-	card := model.Card{Name: name, Description: description, PaymentSystem: paymentSystem, Number: number, Holder: holder, EndData: timeEndData, CVC: intCvc}
+	card := model.Card{Name: name, Description: description, PaymentSystem: paymentSystem, Number: number, Holder: holder, EndDate: timeEndDate, CVC: intCvc}
 	jsonCard, err := json.Marshal(card)
 	if err != nil {
 		c.logger.Error(err)
@@ -40,11 +40,11 @@ func (c Event) EventCreateCard(name, description, password, paymentSystem, numbe
 		return err
 	}
 
-	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
+	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	createdCard, err := c.grpc.HandleCreateCard(context.Background(),
 		&grpc.CreateCardRequest{Name: name, Description: description, Data: []byte(encryptCard),
-			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
+			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
 		c.logger.Error(err)
 		return err

@@ -27,11 +27,11 @@ func (c Event) EventCreateLoginPassword(name, description, passwordSecure, login
 		return err
 	}
 
-	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
+	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	createdLoginPassword, err := c.grpc.HandleCreateLoginPassword(context.Background(),
 		&grpc.CreateLoginPasswordRequest{Name: name, Description: description, Data: []byte(encryptLoginPassword),
-			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
+			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
 		c.logger.Error(err)
 		return err

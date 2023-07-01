@@ -8,6 +8,7 @@ import (
 
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/variables"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
@@ -20,13 +21,12 @@ func (c Event) EventUpdateCard(name, passwordSecure, paymentSystem, number, hold
 		c.logger.Error(err)
 		return err
 	}
-	layout := "01/02/2006"
-	timeEndData, err := time.Parse(layout, endDateCard)
+	timeEndDate, err := time.Parse(string(variables.LayoutDate), endDateCard)
 	if err != nil {
 		c.logger.Error(err)
 		return err
 	}
-	card := model.Card{PaymentSystem: paymentSystem, Number: number, Holder: holder, CVC: intCvc, EndData: timeEndData}
+	card := model.Card{PaymentSystem: paymentSystem, Number: number, Holder: holder, CVC: intCvc, EndDate: timeEndDate}
 	jsonCard, err := json.Marshal(card)
 	if err != nil {
 		c.logger.Error(err)
@@ -40,14 +40,15 @@ func (c Event) EventUpdateCard(name, passwordSecure, paymentSystem, number, hold
 		return err
 	}
 
-	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
+	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	updateCard, err := c.grpc.HandleUpdateCard(context.Background(), &grpc.UpdateCardRequest{Name: name, Data: []byte(encryptCard),
-		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
+		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
 		c.logger.Error(err)
 		return err
 	}
+
 	c.logger.Debug(updateCard)
 	return nil
 }

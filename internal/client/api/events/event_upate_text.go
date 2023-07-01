@@ -19,14 +19,15 @@ func (c Event) EventUpdateText(name, passwordSecure, text string, token model.To
 		return err
 	}
 
-	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
+	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	updateText, err := c.grpc.HandleUpdateText(context.Background(), &grpc.UpdateTextRequest{Name: name, Data: []byte(encryptText),
-		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
+		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
 		c.logger.Error(err)
 		return err
 	}
+
 	c.logger.Debug(updateText)
 	return nil
 }

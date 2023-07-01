@@ -122,7 +122,7 @@ func main() {
 	//----------------------------------------------------------------- card
 	randName3 := randomizer.RandStringRunes(10)
 	randDescription3 := randomizer.RandStringRunes(10)
-	card := model.Card{Name: randName3, Description: randDescription3, PaymentSystem: randName3, Number: randName3, Holder: randName3, EndData: time.Now(), CVC: 13579}
+	card := model.Card{Name: randName3, Description: randDescription3, PaymentSystem: randName3, Number: randName3, Holder: randName3, EndDate: time.Now(), CVC: 13579}
 	jsonCard, err := json.Marshal(card)
 	if err != nil {
 		log.Fatal(err)
@@ -152,7 +152,7 @@ func main() {
 
 	randName4 := randomizer.RandStringRunes(10)
 	randDescription4 := randomizer.RandStringRunes(10)
-	card = model.Card{Name: randName4, Description: randDescription4, PaymentSystem: randName4, Number: randName4, Holder: randName4, EndData: time.Now(), CVC: 13579}
+	card = model.Card{Name: randName4, Description: randDescription4, PaymentSystem: randName4, Number: randName4, Holder: randName4, EndDate: time.Now(), CVC: 13579}
 	jsonCard, err = json.Marshal(card)
 	if err != nil {
 		log.Fatal(err)

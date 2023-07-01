@@ -9,5 +9,5 @@ type Card struct {
 	Number        string    `json:"Number"`
 	Holder        string    `json:"Holder"`
 	CVC           int       `json:"CVC"`
-	EndData       time.Time `json:"EndData"`
+	EndDate       time.Time `json:"EndDate"`
 }
