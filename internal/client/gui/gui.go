@@ -25,6 +25,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var dataTblLoginPassword = [][]string{{"NAME", "DESCRIPTION", "LOGIN", "PASSWORD", "CREATED AT", "UPDATED AT"}}
 	var dataTblText = [][]string{{"NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}}
 	var dataTblCard = [][]string{{"NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}}
+	var dataTblBinary = [][]string{{"NAME", "DESCRIPTION", "SIZE", "CREATED AT"}}
 
 	var indexTblLoginPassword = 0
 	var selectedRowTblLoginPassword []string
@@ -75,14 +76,20 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var buttonCardDelete *widget.Button
 	var buttonCardUpdate *widget.Button
 	var buttonCardFormUpdate *widget.Button
+
+	var buttonBinaryUpload *widget.Button
+	var buttonBinaryDelete *widget.Button
+	var buttonBinaryDownload *widget.Button
 	//---------------------------------------------------------------------- tabs
 	var containerTabs *container.AppTabs
 	var tblLoginPassword *widget.Table
 	var tblText *widget.Table
 	var tblCard *widget.Table
+	var tblBinary *widget.Table
 	var tabLoginPassword *container.TabItem
 	var tabText *container.TabItem
 	var tabCard *container.TabItem
+	var tabBinary *container.TabItem
 	//---------------------------------------------------------------------- entries init
 	separator := widget.NewSeparator()
 	usernameLoginEntry := widget.NewEntry()
@@ -142,6 +149,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	labelAlertCard := widget.NewLabel("")
 	labelAlertCardCreate := widget.NewLabel("")
 	labelAlertCardUpdate := widget.NewLabel("")
+	labelAlertBinary := widget.NewLabel("")
 
 	labelAlertAuth.Hide()
 	labelAlertLoginPassword.Hide()
@@ -153,6 +161,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	labelAlertCard.Hide()
 	labelAlertCardCreate.Hide()
 	labelAlertCardUpdate.Hide()
+	labelAlertBinary.Hide()
 	//---------------------------------------------------------------------- forms init
 	formLogin := form.GetFormLogin(usernameLoginEntry, passwordLoginEntry)
 	formRegistration := form.GetFormRegistration(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
@@ -314,9 +323,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertLoginPasswordUpdate.SetText(errMsg)
 			log.Error(errMsg)
 		}
-		log.Debug(dataTblLoginPassword)
 	})
-
 	//---------------------------------------------------------------------- text event update
 	buttonTextFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
 		labelAlertTextUpdate.Show()
@@ -342,7 +349,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertTextUpdate.SetText(errMsg)
 			log.Error(errMsg)
 		}
-		log.Debug(dataTblText)
 	})
 
 	//---------------------------------------------------------------------- card event update
@@ -373,7 +379,16 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertCardUpdate.SetText(errMsg)
 			log.Error(errMsg)
 		}
-		log.Debug(dataTblCard)
+	})
+	//---------------------------------------------------------------------- binary events
+	buttonBinaryUpload = widget.NewButton(labels.BtnUploadBinary, func() {
+		logrus.Info(labels.BtnUploadBinary)
+	})
+	buttonBinaryDelete = widget.NewButton(labels.BtnDeleteBinary, func() {
+		logrus.Info(labels.BtnDeleteBinary)
+	})
+	buttonBinaryDownload = widget.NewButton(labels.BtnDownloadBinary, func() {
+		logrus.Info(labels.BtnDownloadBinary)
 	})
 	//----------------------------------------------------------------------
 	buttonTopBack = widget.NewButton(labels.BtnBack, func() {
@@ -429,11 +444,25 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			o.(*widget.Label).SetText(dataTblCard[i.Row][i.Col])
 		})
 	function.SetDefaultColumnsWidthCard(tblCard)
+	//---------------------------------------------------------------------- table binary init
+	tblBinary = widget.NewTable(
+		func() (int, int) {
+			return len(dataTblBinary), len(dataTblBinary[0])
+		},
+		func() fyne.CanvasObject {
+			return widget.NewLabel(labels.TblLabel)
+		},
+		func(i widget.TableCellID, o fyne.CanvasObject) {
+			o.(*widget.Label).SetText(dataTblBinary[i.Row][i.Col])
+		})
+	function.SetDefaultColumnsWidthCard(tblBinary)
 	//---------------------------------------------------------------------- containerTabs
+
 	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTopSynchronization, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate, labelAlertLoginPassword)
 	tabText = tab.GetTabTexts(tblText, buttonTopSynchronization, buttonText, buttonTextDelete, buttonTextUpdate, labelAlertText)
 	tabCard = tab.GetTabCards(tblCard, buttonTopSynchronization, buttonCard, buttonCardDelete, buttonCardUpdate, labelAlertCard)
-	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard)
+	tabBinary = tab.GetTabBinaries(tblBinary, buttonTopSynchronization, buttonBinaryUpload, buttonBinaryDelete, buttonBinaryDownload, labelAlertBinary)
+	containerTabs = container.NewAppTabs(tabLoginPassword, tabText, tabCard, tabBinary)
 	//----------------------------------------------------------------------
 	// Get selected row data
 	tblLoginPassword.OnSelected = func(id widget.TableCellID) {
@@ -537,7 +566,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertLoginPasswordCreate.SetText(errMsg)
 			log.Error(errMsg)
 		}
-		log.Debug(dataTblLoginPassword)
 	})
 	//---------------------------------------------------------------------- text event create
 	buttonTextCreate = widget.NewButton(labels.BtnAdd, func() {
@@ -570,7 +598,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertTextCreate.SetText(errMsg)
 			log.Error(errMsg)
 		}
-		log.Debug(dataTblText)
 	})
 	//---------------------------------------------------------------------- card event create
 	buttonCardCreate = widget.NewButton(labels.BtnAdd, func() {
@@ -608,7 +635,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertCardCreate.SetText(errMsg)
 			log.Error(errMsg)
 		}
-		log.Debug(dataTblCard)
 	})
 	//---------------------------------------------------------------------- containers init
 	containerRadio = container.NewVBox(radioAuth)
