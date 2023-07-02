@@ -8,7 +8,7 @@ import (
 
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
-	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/variables"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/layouts"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
@@ -21,7 +21,7 @@ func (c Event) EventCreateCard(name, description, password, paymentSystem, numbe
 		c.logger.Error(err)
 		return err
 	}
-	timeEndDate, err := time.Parse(string(variables.LayoutDateAndTime), endDate)
+	timeEndDate, err := time.Parse(layouts.LayoutDate.ToString(), endDate)
 	if err != nil {
 		c.logger.Error(err)
 		return err

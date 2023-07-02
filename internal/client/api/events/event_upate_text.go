@@ -13,7 +13,7 @@ func (c Event) EventUpdateText(name, passwordSecure, text string, token model.To
 	c.logger.Info("Update text")
 
 	secretKey := encryption.AesKeySecureRandom([]byte(passwordSecure))
-	encryptText, err := encryption.Encrypt(string(text), secretKey)
+	encryptText, err := encryption.Encrypt(text, secretKey)
 	if err != nil {
 		c.logger.Error(err)
 		return err

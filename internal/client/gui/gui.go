@@ -15,7 +15,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/labels"
-	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/variables"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/layouts"
 )
 
 func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
@@ -375,7 +375,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		log.Debug(dataTblCard)
 	})
 	//----------------------------------------------------------------------
-
 	buttonTopBack = widget.NewButton(labels.BtnBack, func() {
 		function.ClearLoginPassword(loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate, passwordEntryCreate)
 		function.ClearText(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
@@ -523,7 +522,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				log.Error(err)
 			} else {
 				dataTblLoginPassword = append(dataTblLoginPassword, []string{loginPasswordNameEntryCreate.Text, loginPasswordDescriptionEntryCreate.Text,
-					loginEntryCreate.Text, passwordEntryCreate.Text, time.Now().Format(string(variables.LayoutDateAndTime)), time.Now().Format(string(variables.LayoutDateAndTime))})
+					loginEntryCreate.Text, passwordEntryCreate.Text, time.Now().Format(layouts.LayoutDateAndTime.ToString()), time.Now().Format(layouts.LayoutDateAndTime.ToString())})
 
 				function.ClearLoginPassword(loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate, passwordEntryCreate)
 				log.Info("Логин-пароль добавлен")
@@ -556,7 +555,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				log.Error(err)
 			} else {
 				dataTblText = append(dataTblText, []string{textNameEntryCreate.Text, textDescriptionEntryCreate.Text, textEntryCreate.Text,
-					time.Now().Format(string(variables.LayoutDateAndTime)), time.Now().Format(string(variables.LayoutDateAndTime))})
+					time.Now().Format(layouts.LayoutDateAndTime.ToString()), time.Now().Format(layouts.LayoutDateAndTime.ToString())})
 
 				function.ClearText(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
 				log.Info("Текст добавлен")
@@ -582,16 +581,19 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			log.Print(labelAlertCard)
 		}
 		errMsg, valid := function.ValidateCardForm(cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate,
-			numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate)
+			numberEntryCreate, holderEntryCreate, cvcEntryCreate, endDateEntryCreate)
 		if valid {
-			err = client.EventCreateCard(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
+			err = client.EventCreateCard(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password,
+				paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
 				cvcEntryCreate.Text, endDateEntryCreate.Text, accessToken)
 			if err != nil {
 				labelAlertCardCreate.SetText(errors.ErrCardCreate)
 				log.Error(err)
 			} else {
-				dataTblCard = append(dataTblCard, []string{cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
-					cvcEntryCreate.Text, endDateEntryCreate.Text, time.Now().Format(string(variables.LayoutDateAndTime)), time.Now().Format(string(variables.LayoutDateAndTime))})
+				dataTblCard = append(dataTblCard, []string{cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text,
+					paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
+					cvcEntryCreate.Text, endDateEntryCreate.Text, time.Now().Format(layouts.LayoutDateAndTime.ToString()),
+					time.Now().Format(layouts.LayoutDateAndTime.ToString())})
 
 				function.ClearCard(cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate, numberEntryCreate, holderEntryCreate, endDateEntryCreate, cvcEntryCreate)
 				log.Info("Карта добавлена")

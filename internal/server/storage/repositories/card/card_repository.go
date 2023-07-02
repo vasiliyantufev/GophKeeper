@@ -116,9 +116,8 @@ func (c *Card) GetListCard(userId int64) ([]model.Card, error) {
 
 func (c *Card) DeleteCard(entityId int64) error {
 	var id int64
-	layout := "01/02/2006 15:04:05"
 	if err := c.db.Pool.QueryRow("UPDATE card SET deleted_at = $1 WHERE card_id = $2 RETURNING card_id",
-		time.Now().Format(layout),
+		time.Now(),
 		entityId,
 	).Scan(&id); err != nil {
 		return err
@@ -128,10 +127,9 @@ func (c *Card) DeleteCard(entityId int64) error {
 
 func (lp *Card) UpdateCard(textID int64, data []byte) error {
 	var id int64
-	layout := "01/02/2006 15:04:05"
 	if err := lp.db.Pool.QueryRow("UPDATE card SET data = $1, updated_at = $2 WHERE card_id = $3 RETURNING card_id",
 		data,
-		time.Now().Format(layout),
+		time.Now(),
 		textID,
 	).Scan(&id); err != nil {
 		return err
