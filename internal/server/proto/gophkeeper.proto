@@ -30,6 +30,12 @@ service Gophkeeper {
   rpc HandleGetListLoginPassword(GetListLoginPasswordRequest) returns (GetListLoginPasswordResponse) {}
   rpc HandleDeleteLoginPassword(DeleteLoginPasswordRequest) returns (DeleteLoginPasswordResponse) {}
   rpc HandleUpdateLoginPassword(UpdateLoginPasswordRequest) returns (UpdateLoginPasswordResponse) {}
+
+  rpc HandleUploadBinary(UploadBinaryRequest) returns (UploadBinaryResponse) {}
+  rpc HandleGetNodeBinary(GetNodeBinaryRequest) returns (GetNodeBinaryResponse) {}
+  rpc HandleGetListBinary(GetListBinaryRequest) returns (GetListBinaryResponse) {}
+  rpc HandleDeleteBinary(DeleteBinaryRequest) returns (DeleteBinaryResponse) {}
+  rpc HandleDownloadBinary(DownloadBinaryRequest) returns (DownloadBinaryResponse) {}
 }
 //------------------------------------
 message PingRequest {}
@@ -213,6 +219,54 @@ message UpdateLoginPasswordRequest {
   Token accessToken = 3;
 }
 message UpdateLoginPasswordResponse {
+  int64  id = 1;
+}
+//------------------------------------
+message Binary {
+  int64  id = 1;
+  int64  userId = 2;
+  string key = 3;
+  string value = 4;
+  bytes  data = 5;
+  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp updatedAt = 7;
+  google.protobuf.Timestamp deletedAt = 8;
+}
+message UploadBinaryRequest {
+  string name = 1;
+  string description = 2;
+  bytes  data = 3;
+  Token  accessToken = 4;
+}
+message UploadBinaryResponse {
+  Binary data = 1;
+}
+message GetNodeBinaryRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message GetNodeBinaryResponse {
+  Binary data = 1;
+}
+message GetListBinaryRequest {
+  Token accessToken = 1;
+}
+message GetListBinaryResponse {
+  repeated Binary node = 1;
+}
+message DeleteBinaryRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message DeleteBinaryResponse {
+  int64  id = 1;
+}
+message DownloadBinaryRequest {
+  string name = 1;
+  bytes  data = 2;
+  Token accessToken = 3;
+}
+message DownloadBinaryResponse {
   int64  id = 1;
 }
 //------------------------------------

@@ -38,6 +38,11 @@ const (
 	Gophkeeper_HandleGetListLoginPassword_FullMethodName = "/api.Gophkeeper/HandleGetListLoginPassword"
 	Gophkeeper_HandleDeleteLoginPassword_FullMethodName  = "/api.Gophkeeper/HandleDeleteLoginPassword"
 	Gophkeeper_HandleUpdateLoginPassword_FullMethodName  = "/api.Gophkeeper/HandleUpdateLoginPassword"
+	Gophkeeper_HandleUploadBinary_FullMethodName         = "/api.Gophkeeper/HandleUploadBinary"
+	Gophkeeper_HandleGetNodeBinary_FullMethodName        = "/api.Gophkeeper/HandleGetNodeBinary"
+	Gophkeeper_HandleGetListBinary_FullMethodName        = "/api.Gophkeeper/HandleGetListBinary"
+	Gophkeeper_HandleDeleteBinary_FullMethodName         = "/api.Gophkeeper/HandleDeleteBinary"
+	Gophkeeper_HandleDownloadBinary_FullMethodName       = "/api.Gophkeeper/HandleDownloadBinary"
 )
 
 // GophkeeperClient is the client API for Gophkeeper service.
@@ -63,6 +68,11 @@ type GophkeeperClient interface {
 	HandleGetListLoginPassword(ctx context.Context, in *GetListLoginPasswordRequest, opts ...grpc.CallOption) (*GetListLoginPasswordResponse, error)
 	HandleDeleteLoginPassword(ctx context.Context, in *DeleteLoginPasswordRequest, opts ...grpc.CallOption) (*DeleteLoginPasswordResponse, error)
 	HandleUpdateLoginPassword(ctx context.Context, in *UpdateLoginPasswordRequest, opts ...grpc.CallOption) (*UpdateLoginPasswordResponse, error)
+	HandleUploadBinary(ctx context.Context, in *UploadBinaryRequest, opts ...grpc.CallOption) (*UploadBinaryResponse, error)
+	HandleGetNodeBinary(ctx context.Context, in *GetNodeBinaryRequest, opts ...grpc.CallOption) (*GetNodeBinaryResponse, error)
+	HandleGetListBinary(ctx context.Context, in *GetListBinaryRequest, opts ...grpc.CallOption) (*GetListBinaryResponse, error)
+	HandleDeleteBinary(ctx context.Context, in *DeleteBinaryRequest, opts ...grpc.CallOption) (*DeleteBinaryResponse, error)
+	HandleDownloadBinary(ctx context.Context, in *DownloadBinaryRequest, opts ...grpc.CallOption) (*DownloadBinaryResponse, error)
 }
 
 type gophkeeperClient struct {
@@ -244,6 +254,51 @@ func (c *gophkeeperClient) HandleUpdateLoginPassword(ctx context.Context, in *Up
 	return out, nil
 }
 
+func (c *gophkeeperClient) HandleUploadBinary(ctx context.Context, in *UploadBinaryRequest, opts ...grpc.CallOption) (*UploadBinaryResponse, error) {
+	out := new(UploadBinaryResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleUploadBinary_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gophkeeperClient) HandleGetNodeBinary(ctx context.Context, in *GetNodeBinaryRequest, opts ...grpc.CallOption) (*GetNodeBinaryResponse, error) {
+	out := new(GetNodeBinaryResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetNodeBinary_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gophkeeperClient) HandleGetListBinary(ctx context.Context, in *GetListBinaryRequest, opts ...grpc.CallOption) (*GetListBinaryResponse, error) {
+	out := new(GetListBinaryResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetListBinary_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gophkeeperClient) HandleDeleteBinary(ctx context.Context, in *DeleteBinaryRequest, opts ...grpc.CallOption) (*DeleteBinaryResponse, error) {
+	out := new(DeleteBinaryResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleDeleteBinary_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gophkeeperClient) HandleDownloadBinary(ctx context.Context, in *DownloadBinaryRequest, opts ...grpc.CallOption) (*DownloadBinaryResponse, error) {
+	out := new(DownloadBinaryResponse)
+	err := c.cc.Invoke(ctx, Gophkeeper_HandleDownloadBinary_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GophkeeperServer is the server API for Gophkeeper service.
 // All implementations must embed UnimplementedGophkeeperServer
 // for forward compatibility
@@ -267,6 +322,11 @@ type GophkeeperServer interface {
 	HandleGetListLoginPassword(context.Context, *GetListLoginPasswordRequest) (*GetListLoginPasswordResponse, error)
 	HandleDeleteLoginPassword(context.Context, *DeleteLoginPasswordRequest) (*DeleteLoginPasswordResponse, error)
 	HandleUpdateLoginPassword(context.Context, *UpdateLoginPasswordRequest) (*UpdateLoginPasswordResponse, error)
+	HandleUploadBinary(context.Context, *UploadBinaryRequest) (*UploadBinaryResponse, error)
+	HandleGetNodeBinary(context.Context, *GetNodeBinaryRequest) (*GetNodeBinaryResponse, error)
+	HandleGetListBinary(context.Context, *GetListBinaryRequest) (*GetListBinaryResponse, error)
+	HandleDeleteBinary(context.Context, *DeleteBinaryRequest) (*DeleteBinaryResponse, error)
+	HandleDownloadBinary(context.Context, *DownloadBinaryRequest) (*DownloadBinaryResponse, error)
 	mustEmbedUnimplementedGophkeeperServer()
 }
 
@@ -330,6 +390,21 @@ func (UnimplementedGophkeeperServer) HandleDeleteLoginPassword(context.Context, 
 }
 func (UnimplementedGophkeeperServer) HandleUpdateLoginPassword(context.Context, *UpdateLoginPasswordRequest) (*UpdateLoginPasswordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleUpdateLoginPassword not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleUploadBinary(context.Context, *UploadBinaryRequest) (*UploadBinaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleUploadBinary not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleGetNodeBinary(context.Context, *GetNodeBinaryRequest) (*GetNodeBinaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleGetNodeBinary not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleGetListBinary(context.Context, *GetListBinaryRequest) (*GetListBinaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleGetListBinary not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleDeleteBinary(context.Context, *DeleteBinaryRequest) (*DeleteBinaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleDeleteBinary not implemented")
+}
+func (UnimplementedGophkeeperServer) HandleDownloadBinary(context.Context, *DownloadBinaryRequest) (*DownloadBinaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleDownloadBinary not implemented")
 }
 func (UnimplementedGophkeeperServer) mustEmbedUnimplementedGophkeeperServer() {}
 
@@ -686,6 +761,96 @@ func _Gophkeeper_HandleUpdateLoginPassword_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gophkeeper_HandleUploadBinary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadBinaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleUploadBinary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleUploadBinary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleUploadBinary(ctx, req.(*UploadBinaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Gophkeeper_HandleGetNodeBinary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNodeBinaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleGetNodeBinary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleGetNodeBinary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleGetNodeBinary(ctx, req.(*GetNodeBinaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Gophkeeper_HandleGetListBinary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetListBinaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleGetListBinary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleGetListBinary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleGetListBinary(ctx, req.(*GetListBinaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Gophkeeper_HandleDeleteBinary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteBinaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleDeleteBinary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleDeleteBinary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleDeleteBinary(ctx, req.(*DeleteBinaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Gophkeeper_HandleDownloadBinary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadBinaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GophkeeperServer).HandleDownloadBinary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gophkeeper_HandleDownloadBinary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GophkeeperServer).HandleDownloadBinary(ctx, req.(*DownloadBinaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Gophkeeper_ServiceDesc is the grpc.ServiceDesc for Gophkeeper service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -768,6 +933,26 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HandleUpdateLoginPassword",
 			Handler:    _Gophkeeper_HandleUpdateLoginPassword_Handler,
+		},
+		{
+			MethodName: "HandleUploadBinary",
+			Handler:    _Gophkeeper_HandleUploadBinary_Handler,
+		},
+		{
+			MethodName: "HandleGetNodeBinary",
+			Handler:    _Gophkeeper_HandleGetNodeBinary_Handler,
+		},
+		{
+			MethodName: "HandleGetListBinary",
+			Handler:    _Gophkeeper_HandleGetListBinary_Handler,
+		},
+		{
+			MethodName: "HandleDeleteBinary",
+			Handler:    _Gophkeeper_HandleDeleteBinary_Handler,
+		},
+		{
+			MethodName: "HandleDownloadBinary",
+			Handler:    _Gophkeeper_HandleDownloadBinary_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
