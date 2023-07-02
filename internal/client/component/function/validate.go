@@ -53,7 +53,7 @@ func ValidateLoginPasswordForm(loginPasswordNameEntry *widget.Entry, loginPasswo
 	return "", true
 }
 
-func ValidateTextForm(textNameEntry *widget.Entry, textEntry *widget.Entry, textDescriptionEntry *widget.Entry) (string, bool) {
+func ValidateTextForm(textNameEntry *widget.Entry, textDescriptionEntry *widget.Entry, textEntry *widget.Entry) (string, bool) {
 	if textNameEntry.Text == "" {
 		return errors.ErrNameEmpty, false
 	}

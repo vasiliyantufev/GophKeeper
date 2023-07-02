@@ -16,11 +16,12 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/errors"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/labels"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/layouts"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/windows"
 )
 
 func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	window := application.NewWindow("GophKeeper")
-	window.Resize(fyne.NewSize(250, 80))
+	window.Resize(fyne.NewSize(windows.WindowSwitcherWidth.Size(), windows.WindowSwitcherHeight.Size()))
 	var dataTblLoginPassword = [][]string{{"NAME", "DESCRIPTION", "LOGIN", "PASSWORD", "CREATED AT", "UPDATED AT"}}
 	var dataTblText = [][]string{{"NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}}
 	var dataTblCard = [][]string{{"NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}}
@@ -169,12 +170,12 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		log.Println("Radio set to ", value)
 		if value == "Login" {
 			window.SetContent(containerFormLogin)
-			window.Resize(fyne.NewSize(500, 100))
+			window.Resize(fyne.NewSize(windows.WindowAuthWidth.Size(), windows.WindowAuthHeight.Size()))
 			window.Show()
 		}
 		if value == "Registration" {
 			window.SetContent(containerFormRegistration)
-			window.Resize(fyne.NewSize(500, 100))
+			window.Resize(fyne.NewSize(windows.WindowAuthWidth.Size(), windows.WindowAuthHeight.Size()))
 			window.Show()
 		}
 	})
@@ -389,7 +390,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		labelAlertCardCreate.Hide()
 		labelAlertCardUpdate.Hide()
 		window.SetContent(containerTabs)
-		window.Resize(fyne.NewSize(1250, 300))
+		window.Resize(fyne.NewSize(windows.WindowMainWidth.Size(), windows.WindowMainHeight.Size()))
 		window.Show()
 	})
 	//---------------------------------------------------------------------- table login password init
@@ -465,7 +466,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 						log.Error(err)
 					} else {
 						window.SetContent(containerTabs)
-						window.Resize(fyne.NewSize(1250, 300))
+						window.Resize(fyne.NewSize(windows.WindowMainWidth.Size(), windows.WindowMainHeight.Size()))
 						window.Show()
 					}
 				}
@@ -493,7 +494,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 					} else {
 						password = passwordRegistrationEntry.Text
 						window.SetContent(containerTabs)
-						window.Resize(fyne.NewSize(1250, 300))
+						window.Resize(fyne.NewSize(windows.WindowMainWidth.Size(), windows.WindowMainHeight.Size()))
 						window.Show()
 					}
 				}

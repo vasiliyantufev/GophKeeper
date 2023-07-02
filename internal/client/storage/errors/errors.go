@@ -8,7 +8,7 @@ var (
 	ErrPasswordIncorrect           = "Пароль должен состоять минимум из 8 букв, 1 цифра, 1 верхний регистр, 1 специальный символ (пример: Password-123)"
 	ErrPasswordDifferent           = "Пароли не совпали"
 	ErrNameEmpty                   = "Name не заполнен"
-	ErrTextEmpty                   = "Text не заполнен"
+	ErrTextEmpty                   = "Data не заполнен"
 	ErrDescriptionEmpty            = "Description не заполнен"
 	ErrTextExist                   = "Текст с таким name уже существует"
 	ErrLoginPasswordExist          = "Логин пароль с таким name уже существует"
