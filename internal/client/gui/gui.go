@@ -215,7 +215,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		window.SetContent(containerFormCardCreate)
 		window.Show()
 	})
-
 	//---------------------------------------------------------------------- login password event delete
 	buttonLoginPasswordDelete = widget.NewButton(labels.BtnDeleteLoginPassword, func() {
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
@@ -258,7 +257,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertCard.SetText(errors.ErrCardTblIndexDelete)
 		}
 	})
-
 	//---------------------------------------------------------------------- switch form update
 	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
 		if indexTblLoginPassword > 0 {
@@ -350,7 +348,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			log.Error(errMsg)
 		}
 	})
-
 	//---------------------------------------------------------------------- card event update
 	buttonCardFormUpdate = widget.NewButton(labels.BtnUpdate, func() {
 		labelAlertCardUpdate.Show()
@@ -457,7 +454,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		})
 	function.SetDefaultColumnsWidthCard(tblBinary)
 	//---------------------------------------------------------------------- containerTabs
-
 	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTopSynchronization, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate, labelAlertLoginPassword)
 	tabText = tab.GetTabTexts(tblText, buttonTopSynchronization, buttonText, buttonTextDelete, buttonTextUpdate, labelAlertText)
 	tabCard = tab.GetTabCards(tblCard, buttonTopSynchronization, buttonCard, buttonCardDelete, buttonCardUpdate, labelAlertCard)
