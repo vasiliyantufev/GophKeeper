@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"context"
+	"io"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -384,12 +384,17 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 
 		file_Dialog := dialog.NewFileOpen(
 			func(r fyne.URIReadCloser, _ error) {
-				//logrus.Info(r.URI())
 
-				// Show file select
-				name, err := client.Upload(context.Background(), r.URI().String())
+				data, err := io.ReadAll(r)
 				if err != nil {
-					logrus.Error(err)
+					labelAlertBinary.SetText(err.Error())
+					log.Error(err)
+
+				}
+				name, err := client.EventUpload(r.URI().Name(), password, data, accessToken)
+				if err != nil {
+					labelAlertBinary.SetText(err.Error())
+					log.Error(err)
 				}
 				logrus.Info(name)
 
