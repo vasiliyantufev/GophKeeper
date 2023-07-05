@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+//import "google/protobuf/empty.proto";
 
 package api;
 
@@ -36,6 +37,8 @@ service Gophkeeper {
   rpc HandleGetListBinary(GetListBinaryRequest) returns (GetListBinaryResponse) {}
   rpc HandleDeleteBinary(DeleteBinaryRequest) returns (DeleteBinaryResponse) {}
   rpc HandleDownloadBinary(DownloadBinaryRequest) returns (DownloadBinaryResponse) {}
+
+  rpc Upload(stream UploadRequest) returns (UploadResponse) {}
 }
 //------------------------------------
 message PingRequest {}
@@ -280,3 +283,11 @@ message Metadata {
   google.protobuf.Timestamp deletedAt = 7;
 }
 //------------------------------------
+message UploadRequest {
+  string mime = 1;
+  bytes chunk = 2;
+}
+
+message UploadResponse {
+  string name = 1;
+}

@@ -1,10 +1,12 @@
 package gui
 
 import (
+	"context"
 	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 	"github.com/sirupsen/logrus"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/api/events"
@@ -379,6 +381,21 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	})
 	//---------------------------------------------------------------------- binary events
 	buttonBinaryUpload = widget.NewButton(labels.BtnUploadBinary, func() {
+
+		file_Dialog := dialog.NewFileOpen(
+			func(r fyne.URIReadCloser, _ error) {
+				//logrus.Info(r.URI())
+
+				// Show file select
+				name, err := client.Upload(context.Background(), r.URI().String())
+				if err != nil {
+					logrus.Error(err)
+				}
+				logrus.Info(name)
+
+			}, window)
+		file_Dialog.Show()
+
 		logrus.Info(labels.BtnUploadBinary)
 	})
 	buttonBinaryDelete = widget.NewButton(labels.BtnDeleteBinary, func() {
