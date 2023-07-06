@@ -238,7 +238,7 @@ message UploadBinaryRequest {
   Token  accessToken = 3;
 }
 message UploadBinaryResponse {
-  Binary data = 1;
+  string name = 1;
 }
 message GetNodeBinaryRequest {
   string name = 1;

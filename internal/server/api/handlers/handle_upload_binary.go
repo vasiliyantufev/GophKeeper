@@ -59,5 +59,5 @@ func (h *Handler) HandleUploadBinary(ctx context.Context, req *grpc.UploadBinary
 	}
 
 	h.logger.Debug(UploadBinary.Name)
-	return &grpc.UploadBinaryResponse{}, nil
+	return &grpc.UploadBinaryResponse{Name: UploadBinary.Name}, nil
 }

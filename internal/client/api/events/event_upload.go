@@ -8,7 +8,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
 
-func (c Event) EventUpload(name string, password string, file []byte, token model.Token) (error, error) {
+func (c Event) EventUpload(name string, password string, file []byte, token model.Token) (string, error) {
 	c.logger.Info("Upload binary data")
 
 	//secretKey := encryption.AesKeySecureRandom([]byte(password))
@@ -25,8 +25,8 @@ func (c Event) EventUpload(name string, password string, file []byte, token mode
 				CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
 		c.logger.Error(err)
-		return err, nil
+		return "", err
 	}
-	c.logger.Debug(uploadFile.Data)
-	return nil, nil
+	c.logger.Debug(uploadFile.Name)
+	return uploadFile.Name, nil
 }
