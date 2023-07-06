@@ -1,9 +1,11 @@
 package service
 
 import (
+	"io"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 func CreateStorageUser(dirPath string, id int64) error {
@@ -25,4 +27,15 @@ func UploadFile(dirPath string, id int64, name string, data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func DownloadFile(dirPath string, id int64, name string) ([]byte, error) {
+	userId := strconv.Itoa(int(id))
+	path := filepath.Join(dirPath, userId, "/", name)
+	reader := strings.NewReader(path)
+	data, err := io.ReadAll(reader)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }

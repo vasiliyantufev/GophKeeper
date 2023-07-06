@@ -62,7 +62,3 @@ func (t *Binary) FileExists(binaryRequest *model.UploadBinaryRequest) (bool, err
 func (t *Binary) DeleteBinary(binaryID int64) error {
 	return nil
 }
-
-func (t *Binary) DownloadBinary(binaryID int64, data []byte) error {
-	return nil
-}

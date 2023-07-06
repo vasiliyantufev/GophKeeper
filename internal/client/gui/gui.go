@@ -382,7 +382,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- binary events
 	buttonBinaryUpload = widget.NewButton(labels.BtnUploadBinary, func() {
 
-		file_Dialog := dialog.NewFileOpen(
+		fileDialog := dialog.NewFileOpen(
 			func(r fyne.URIReadCloser, _ error) {
 
 				data, err := io.ReadAll(r)
@@ -399,7 +399,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				logrus.Info(name)
 
 			}, window)
-		file_Dialog.Show()
+		fileDialog.Show()
 
 		logrus.Info(labels.BtnUploadBinary)
 	})
