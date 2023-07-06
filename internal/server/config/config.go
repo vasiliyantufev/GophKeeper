@@ -24,7 +24,7 @@ func NewConfig(log *logrus.Logger) *Config {
 		GRPC:                "localhost:8080",
 		DSN:                 "host=localhost port=5432 user=user password=password dbname=gophkeeper sslmode=disable",
 		AccessTokenLifetime: 300 * time.Second,
-		FileFolder:          "./data/keeper",
+		FileFolder:          "./data/server_keeper",
 	}
 
 	flag.StringVar(&configServer.GRPC, "g", configServer.GRPC, "Server address")

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -18,6 +19,14 @@ func (h *Handler) HandleUploadBinary(ctx context.Context, req *grpc.UploadBinary
 		h.logger.Error(errors.ErrNotValidateToken)
 		return &grpc.UploadBinaryResponse{}, status.Errorf(
 			codes.Unauthenticated, errors.ErrNotValidateToken.Error(),
+		)
+	}
+
+	err := service.UploadFile(h.config.FileFolder, req.AccessToken.UserId, req.Name, req.Data)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.UploadBinaryResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
 		)
 	}
 

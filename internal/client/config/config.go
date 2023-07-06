@@ -18,7 +18,7 @@ func NewConfig(log *logrus.Logger) *Config {
 	// Set default values
 	configClient := Config{
 		GRPC:       "localhost:8080",
-		FileFolder: "./data/keeper",
+		FileFolder: "./data/client_keeper",
 	}
 
 	flag.StringVar(&configClient.GRPC, "g", configClient.GRPC, "Server address")
