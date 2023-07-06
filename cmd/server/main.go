@@ -42,7 +42,8 @@ func main() {
 	ctx, cnl := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT)
 	defer cnl()
 
-	var handlerGrpc = grpcHandler.NewHandler(db, userRepository, textRepository, cardRepository, loginPasswordRepository, metadataRepository, storage, tokenRepository, logger)
+	var handlerGrpc = grpcHandler.NewHandler(db, userRepository, textRepository, cardRepository,
+		loginPasswordRepository, metadataRepository, storage, tokenRepository, logger)
 	go api.StartService(handlerGrpc, config, logger)
 
 	<-ctx.Done()
