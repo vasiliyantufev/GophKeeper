@@ -16,7 +16,8 @@ type Binary struct {
 	DeletedAt time.Time
 }
 
-type UploadBinaryRequest struct {
+// ----------------------------------------
+type BinaryRequest struct {
 	UserID      int64
 	Name        string
 	AccessToken string
@@ -24,6 +25,11 @@ type UploadBinaryRequest struct {
 
 type UploadBinaryResponse struct {
 	Binary Binary
+}
+
+// ----------------------------------------
+type DownloadBinaryResponse struct {
+	Data []byte
 }
 
 // ----------------------------------------

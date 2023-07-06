@@ -23,7 +23,7 @@ func (h *Handler) HandleUploadBinary(ctx context.Context, req *grpc.UploadBinary
 		)
 	}
 
-	BinaryData := &model.UploadBinaryRequest{}
+	BinaryData := &model.BinaryRequest{}
 	BinaryData.UserID = req.AccessToken.UserId
 	BinaryData.Name = req.Name
 
@@ -58,6 +58,6 @@ func (h *Handler) HandleUploadBinary(ctx context.Context, req *grpc.UploadBinary
 		)
 	}
 
-	h.logger.Debug(UploadBinary)
+	h.logger.Debug(UploadBinary.Name)
 	return &grpc.UploadBinaryResponse{}, nil
 }

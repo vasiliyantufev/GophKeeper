@@ -3,7 +3,9 @@ package handlers
 import (
 	"context"
 
+	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -21,5 +23,32 @@ func (h *Handler) HandleDownloadBinary(ctx context.Context, req *grpc.DownloadBi
 		)
 	}
 
-	return &grpc.DownloadBinaryResponse{}, nil
+	BinaryData := &model.BinaryRequest{}
+	BinaryData.UserID = req.AccessToken.UserId
+	BinaryData.Name = req.Name
+
+	exists, err := h.binary.FileExists(BinaryData)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.DownloadBinaryResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+	if exists == true {
+		err = errors.ErrKeyAlreadyExists
+		h.logger.Error(err)
+		return &grpc.DownloadBinaryResponse{}, status.Errorf(
+			codes.AlreadyExists, err.Error(),
+		)
+	}
+
+	data, err := service.DownloadFile(h.config.FileFolder, req.AccessToken.UserId, req.Name)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.DownloadBinaryResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
+	return &grpc.DownloadBinaryResponse{Data: data}, nil
 }
