@@ -27,7 +27,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var dataTblLoginPassword = [][]string{{"NAME", "DESCRIPTION", "LOGIN", "PASSWORD", "CREATED AT", "UPDATED AT"}}
 	var dataTblText = [][]string{{"NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}}
 	var dataTblCard = [][]string{{"NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}}
-	var dataTblBinary = [][]string{{"NAME", "DESCRIPTION", "SIZE", "CREATED AT"}}
+	var dataTblBinary = [][]string{{"NAME", "CREATED AT"}}
 
 	var indexTblLoginPassword = 0
 	var selectedRowTblLoginPassword []string
@@ -379,33 +379,42 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			log.Error(errMsg)
 		}
 	})
-	//---------------------------------------------------------------------- binary events
+	//----------------------------------------------------------------------  upload event
 	buttonBinaryUpload = widget.NewButton(labels.BtnUploadBinary, func() {
-
 		fileDialog := dialog.NewFileOpen(
 			func(r fyne.URIReadCloser, _ error) {
 
+				labelAlertBinary.Show()
+				exist = table.SearchByColumn(dataTblBinary, 0, r.URI().Name()) // search in map
+				if exist {
+					labelAlertBinary.SetText(errors.ErrBinaryExist)
+					log.Error(labelAlertBinary.Text)
+				}
+
 				data, err := io.ReadAll(r)
 				if err != nil {
-					labelAlertBinary.SetText(err.Error())
+					labelAlertBinary.SetText(errors.ErrUpload)
 					log.Error(err)
-
 				}
 				name, err := client.EventUpload(r.URI().Name(), password, data, accessToken)
 				if err != nil {
-					labelAlertBinary.SetText(err.Error())
+					labelAlertBinary.SetText(errors.ErrUpload)
 					log.Error(err)
-				}
-				logrus.Info(name)
+				} else {
+					dataTblBinary = append(dataTblBinary, []string{name, time.Now().Format(layouts.LayoutDateAndTime.ToString())})
+					log.Info("Файл добавлен: " + name)
 
+					labelAlertBinary.Hide()
+					window.SetContent(containerTabs)
+					window.Show()
+				}
 			}, window)
 		fileDialog.Show()
-
-		logrus.Info(labels.BtnUploadBinary)
 	})
 	buttonBinaryDelete = widget.NewButton(labels.BtnDeleteBinary, func() {
 		logrus.Info(labels.BtnDeleteBinary)
 	})
+	//----------------------------------------------------------------------  download event
 	buttonBinaryDownload = widget.NewButton(labels.BtnDownloadBinary, func() {
 		logrus.Info(labels.BtnDownloadBinary)
 	})
@@ -474,7 +483,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			o.(*widget.Label).SetText(dataTblBinary[i.Row][i.Col])
 		})
-	function.SetDefaultColumnsWidthCard(tblBinary)
+	function.SetDefaultColumnsWidthBinary(tblBinary)
 	//---------------------------------------------------------------------- containerTabs
 	tabLoginPassword = tab.GetTabLoginPassword(tblLoginPassword, buttonTopSynchronization, buttonLoginPassword, buttonLoginPasswordDelete, buttonLoginPasswordUpdate, labelAlertLoginPassword)
 	tabText = tab.GetTabTexts(tblText, buttonTopSynchronization, buttonText, buttonTextDelete, buttonTextUpdate, labelAlertText)

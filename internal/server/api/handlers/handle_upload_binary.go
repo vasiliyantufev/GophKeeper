@@ -35,7 +35,7 @@ func (h *Handler) HandleUploadBinary(ctx context.Context, req *grpc.UploadBinary
 		)
 	}
 	if exists == true {
-		err = errors.ErrKeyAlreadyExists
+		err = errors.ErrNameAlreadyExists
 		h.logger.Error(err)
 		return &grpc.UploadBinaryResponse{}, status.Errorf(
 			codes.AlreadyExists, err.Error(),

@@ -12,6 +12,7 @@ var (
 	ErrDescriptionEmpty            = "Description не заполнен"
 	ErrTextExist                   = "Текст с таким name уже существует"
 	ErrLoginPasswordExist          = "Логин пароль с таким name уже существует"
+	ErrBinaryExist                 = "Файл с таким name уже существует"
 	ErrLoginEmpty                  = "Login не заполнен"
 	ErrPasswordEmpty               = "Password не заполнен"
 	ErrCardExist                   = "Карта с таким name уже существует"
@@ -35,4 +36,5 @@ var (
 	ErrTextTblIndexUpdate          = "Выберите в таблице текст, который хотите изменить"
 	ErrCardTblIndexDelete          = "Выберите в таблице карту, которую хотите удалить"
 	ErrCardTblIndexUpdate          = "Выберите в таблице карту, которую хотите изменить"
+	ErrUpload                      = "Ошибка при загрузке файла (попробуйте обновить данные)"
 )
