@@ -26,5 +26,11 @@ func (c Event) EventRegistration(username, password string) (model.Token, error)
 	token = model.Token{AccessToken: registeredUser.AccessToken.Token, UserID: registeredUser.AccessToken.UserId,
 		CreatedAt: createdToken, EndDateAt: endDateToken}
 
+	err = service.CreateStorageUser(c.config.FileFolder, token.UserID)
+	if err != nil {
+		c.logger.Error(err)
+		return token, err
+	}
+
 	return token, nil
 }

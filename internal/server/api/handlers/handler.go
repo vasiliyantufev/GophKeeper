@@ -29,7 +29,9 @@ type Handler struct {
 }
 
 // NewHandler - creates a new grpc server instance
-func NewHandler(db *database.DB, config *config.Config, userRepository *user.User, textRepository *text.Text, cardRepository *card.Card, loginPasswordRepository *loginPassword.LoginPassword, metadataRepository *metadata.Metadata, storage storage.Storage, tokenRepository *token.Token, log *logrus.Logger) *Handler {
+func NewHandler(db *database.DB, config *config.Config, userRepository *user.User, textRepository *text.Text, cardRepository *card.Card,
+	loginPasswordRepository *loginPassword.LoginPassword, metadataRepository *metadata.Metadata, storage storage.Storage,
+	tokenRepository *token.Token, log *logrus.Logger) *Handler {
 	return &Handler{database: db, config: config, user: userRepository, text: textRepository, card: cardRepository,
 		loginPassword: loginPasswordRepository, metadata: metadataRepository, storage: storage, token: tokenRepository, logger: log}
 }
