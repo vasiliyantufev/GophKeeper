@@ -22,7 +22,8 @@ func (c Event) EventUpload(name string, password string, file []byte, token mode
 	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	createdFile, err := c.grpc.HandleUploadBinary(context.Background(),
 		&grpc.UploadBinaryRequest{Name: name, Data: []byte(encryptFile),
-			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
+				CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
 		c.logger.Error(err)
 		return err, nil

@@ -42,7 +42,7 @@ func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.Registration
 	}
 	user := model.GetUserData(registeredUser)
 
-	token, err := h.token.Create(user.UserId)
+	token, err := h.token.Create(user.UserId, h.config.AccessTokenLifetime)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.RegistrationResponse{}, status.Errorf(
@@ -51,6 +51,16 @@ func (h *Handler) HandleRegistration(ctx context.Context, req *grpc.Registration
 	}
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+
+	err = service.CreateStorageUser(h.config.FileFolder, token.UserID)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.RegistrationResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
 	h.logger.Debug(registeredUser)
-	return &grpc.RegistrationResponse{AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}}, nil
+	return &grpc.RegistrationResponse{AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
+		CreatedAt: created, EndDateAt: endDate}}, nil
 }

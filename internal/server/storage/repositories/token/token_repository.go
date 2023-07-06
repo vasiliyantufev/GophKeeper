@@ -11,7 +11,6 @@ import (
 )
 
 const lengthToken = 32
-const lifetimeToken = 100 * time.Hour
 
 type TokenRepository interface {
 	Create(user *model.User) (string, error)
@@ -27,7 +26,7 @@ func New(db *database.DB) *Token {
 	}
 }
 
-func (t Token) Create(userID int64) (*model.Token, error) {
+func (t Token) Create(userID int64, lifetime time.Duration) (*model.Token, error) {
 	token := &model.Token{}
 	accessToken := encryption.GenerateAccessToken(lengthToken)
 	currentTime := time.Now()
@@ -37,7 +36,7 @@ func (t Token) Create(userID int64) (*model.Token, error) {
 		accessToken,
 		userID,
 		currentTime,
-		currentTime.Add(time.Hour+lifetimeToken),
+		currentTime.Add(time.Hour+lifetime),
 	).Scan(&token.AccessToken, &token.UserID, &token.CreatedAt, &token.EndDateAt); err != nil {
 		return nil, err
 	}
