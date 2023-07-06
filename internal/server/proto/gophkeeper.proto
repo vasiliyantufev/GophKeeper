@@ -38,7 +38,6 @@ service Gophkeeper {
   rpc HandleDeleteBinary(DeleteBinaryRequest) returns (DeleteBinaryResponse) {}
   rpc HandleDownloadBinary(DownloadBinaryRequest) returns (DownloadBinaryResponse) {}
 
-  rpc Upload(stream UploadRequest) returns (UploadResponse) {}
 }
 //------------------------------------
 message PingRequest {}
@@ -228,18 +227,15 @@ message UpdateLoginPasswordResponse {
 message Binary {
   int64  id = 1;
   int64  userId = 2;
-  string key = 3;
-  string value = 4;
-  bytes  data = 5;
-  google.protobuf.Timestamp createdAt = 6;
-  google.protobuf.Timestamp updatedAt = 7;
-  google.protobuf.Timestamp deletedAt = 8;
+  string name = 3;
+  google.protobuf.Timestamp createdAt = 4;
+  google.protobuf.Timestamp updatedAt = 5;
+  google.protobuf.Timestamp deletedAt = 6;
 }
 message UploadBinaryRequest {
   string name = 1;
-  string description = 2;
-  bytes  data = 3;
-  Token  accessToken = 4;
+  bytes  data = 2;
+  Token  accessToken = 3;
 }
 message UploadBinaryResponse {
   Binary data = 1;
@@ -266,11 +262,11 @@ message DeleteBinaryResponse {
 }
 message DownloadBinaryRequest {
   string name = 1;
-  bytes  data = 2;
   Token accessToken = 3;
 }
 message DownloadBinaryResponse {
   int64  id = 1;
+  bytes  data = 2;
 }
 //------------------------------------
 message Metadata {
@@ -283,11 +279,3 @@ message Metadata {
   google.protobuf.Timestamp deletedAt = 7;
 }
 //------------------------------------
-message UploadRequest {
-  string mime = 1;
-  bytes chunk = 2;
-}
-
-message UploadResponse {
-  string name = 1;
-}

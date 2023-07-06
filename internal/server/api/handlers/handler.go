@@ -6,6 +6,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/binary"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/card"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/login_password"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/metadata"
@@ -21,6 +22,7 @@ type Handler struct {
 	text          *text.Text
 	card          *card.Card
 	loginPassword *loginPassword.LoginPassword
+	binary        *binary.Binary
 	metadata      *metadata.Metadata
 	storage       storage.Storage
 	token         *token.Token
@@ -30,8 +32,8 @@ type Handler struct {
 
 // NewHandler - creates a new grpc server instance
 func NewHandler(db *database.DB, config *config.Config, userRepository *user.User, textRepository *text.Text, cardRepository *card.Card,
-	loginPasswordRepository *loginPassword.LoginPassword, metadataRepository *metadata.Metadata, storage storage.Storage,
+	loginPasswordRepository *loginPassword.LoginPassword, binaryRepository *binary.Binary, metadataRepository *metadata.Metadata, storage storage.Storage,
 	tokenRepository *token.Token, log *logrus.Logger) *Handler {
 	return &Handler{database: db, config: config, user: userRepository, text: textRepository, card: cardRepository,
-		loginPassword: loginPasswordRepository, metadata: metadataRepository, storage: storage, token: tokenRepository, logger: log}
+		loginPassword: loginPasswordRepository, binary: binaryRepository, metadata: metadataRepository, storage: storage, token: tokenRepository, logger: log}
 }

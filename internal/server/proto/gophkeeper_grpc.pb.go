@@ -43,7 +43,6 @@ const (
 	Gophkeeper_HandleGetListBinary_FullMethodName        = "/api.Gophkeeper/HandleGetListBinary"
 	Gophkeeper_HandleDeleteBinary_FullMethodName         = "/api.Gophkeeper/HandleDeleteBinary"
 	Gophkeeper_HandleDownloadBinary_FullMethodName       = "/api.Gophkeeper/HandleDownloadBinary"
-	Gophkeeper_Upload_FullMethodName                     = "/api.Gophkeeper/Upload"
 )
 
 // GophkeeperClient is the client API for Gophkeeper service.
@@ -74,7 +73,6 @@ type GophkeeperClient interface {
 	HandleGetListBinary(ctx context.Context, in *GetListBinaryRequest, opts ...grpc.CallOption) (*GetListBinaryResponse, error)
 	HandleDeleteBinary(ctx context.Context, in *DeleteBinaryRequest, opts ...grpc.CallOption) (*DeleteBinaryResponse, error)
 	HandleDownloadBinary(ctx context.Context, in *DownloadBinaryRequest, opts ...grpc.CallOption) (*DownloadBinaryResponse, error)
-	Upload(ctx context.Context, opts ...grpc.CallOption) (Gophkeeper_UploadClient, error)
 }
 
 type gophkeeperClient struct {
@@ -301,40 +299,6 @@ func (c *gophkeeperClient) HandleDownloadBinary(ctx context.Context, in *Downloa
 	return out, nil
 }
 
-func (c *gophkeeperClient) Upload(ctx context.Context, opts ...grpc.CallOption) (Gophkeeper_UploadClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Gophkeeper_ServiceDesc.Streams[0], Gophkeeper_Upload_FullMethodName, opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &gophkeeperUploadClient{stream}
-	return x, nil
-}
-
-type Gophkeeper_UploadClient interface {
-	Send(*UploadRequest) error
-	CloseAndRecv() (*UploadResponse, error)
-	grpc.ClientStream
-}
-
-type gophkeeperUploadClient struct {
-	grpc.ClientStream
-}
-
-func (x *gophkeeperUploadClient) Send(m *UploadRequest) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *gophkeeperUploadClient) CloseAndRecv() (*UploadResponse, error) {
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	m := new(UploadResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
 // GophkeeperServer is the server API for Gophkeeper service.
 // All implementations must embed UnimplementedGophkeeperServer
 // for forward compatibility
@@ -363,7 +327,6 @@ type GophkeeperServer interface {
 	HandleGetListBinary(context.Context, *GetListBinaryRequest) (*GetListBinaryResponse, error)
 	HandleDeleteBinary(context.Context, *DeleteBinaryRequest) (*DeleteBinaryResponse, error)
 	HandleDownloadBinary(context.Context, *DownloadBinaryRequest) (*DownloadBinaryResponse, error)
-	Upload(Gophkeeper_UploadServer) error
 	mustEmbedUnimplementedGophkeeperServer()
 }
 
@@ -442,9 +405,6 @@ func (UnimplementedGophkeeperServer) HandleDeleteBinary(context.Context, *Delete
 }
 func (UnimplementedGophkeeperServer) HandleDownloadBinary(context.Context, *DownloadBinaryRequest) (*DownloadBinaryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleDownloadBinary not implemented")
-}
-func (UnimplementedGophkeeperServer) Upload(Gophkeeper_UploadServer) error {
-	return status.Errorf(codes.Unimplemented, "method Upload not implemented")
 }
 func (UnimplementedGophkeeperServer) mustEmbedUnimplementedGophkeeperServer() {}
 
@@ -891,32 +851,6 @@ func _Gophkeeper_HandleDownloadBinary_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gophkeeper_Upload_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(GophkeeperServer).Upload(&gophkeeperUploadServer{stream})
-}
-
-type Gophkeeper_UploadServer interface {
-	SendAndClose(*UploadResponse) error
-	Recv() (*UploadRequest, error)
-	grpc.ServerStream
-}
-
-type gophkeeperUploadServer struct {
-	grpc.ServerStream
-}
-
-func (x *gophkeeperUploadServer) SendAndClose(m *UploadResponse) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *gophkeeperUploadServer) Recv() (*UploadRequest, error) {
-	m := new(UploadRequest)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
 // Gophkeeper_ServiceDesc is the grpc.ServiceDesc for Gophkeeper service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1021,12 +955,6 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Gophkeeper_HandleDownloadBinary_Handler,
 		},
 	},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "Upload",
-			Handler:       _Gophkeeper_Upload_Handler,
-			ClientStreams: true,
-		},
-	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "gophkeeper.proto",
 }

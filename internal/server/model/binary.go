@@ -10,9 +10,7 @@ import (
 type Binary struct {
 	ID        int64
 	UserID    int64
-	Key       string
-	Value     string
-	Data      []byte
+	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt time.Time
@@ -21,9 +19,6 @@ type Binary struct {
 type UploadBinaryRequest struct {
 	UserID      int64
 	Name        string
-	Description string
-	Type        string
-	Data        []byte
 	AccessToken string
 }
 
@@ -34,15 +29,12 @@ type UploadBinaryResponse struct {
 // ----------------------------------------
 type GetNodeBinaryRequest struct {
 	UserID      int64
-	Key         string
-	Value       string
+	Name        string
 	AccessToken string
 }
 
 type GetNodeBinaryResponse struct {
-	Key   string
-	Value string
-	Data  Binary
+	Name string
 }
 
 // ----------------------------------------
@@ -61,7 +53,7 @@ func GetBinary(binary *Binary) *grpc.Binary {
 	deleted, _ := service.ConvertTimeToTimestamp(binary.DeletedAt)
 	return &grpc.Binary{
 		UserId:    binary.UserID,
-		Data:      binary.Data,
+		Name:      binary.Name,
 		CreatedAt: created,
 		UpdatedAt: updated,
 		DeletedAt: deleted,
@@ -73,7 +65,7 @@ func GetListBinary(binary []Binary) []*grpc.Binary {
 	for i := range binary {
 		created, _ := service.ConvertTimeToTimestamp(binary[i].CreatedAt)
 		updated, _ := service.ConvertTimeToTimestamp(binary[i].UpdatedAt)
-		items[i] = &grpc.Binary{Id: binary[i].ID, Key: binary[i].Key, Data: binary[i].Data, Value: binary[i].Value, CreatedAt: created, UpdatedAt: updated}
+		items[i] = &grpc.Binary{Id: binary[i].ID, Name: binary[i].Name, CreatedAt: created, UpdatedAt: updated}
 	}
 	return items
 }

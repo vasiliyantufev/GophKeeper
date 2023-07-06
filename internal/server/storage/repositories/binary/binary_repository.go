@@ -1,6 +1,8 @@
 package binary
 
 import (
+	"time"
+
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 )
@@ -17,6 +19,16 @@ func New(db *database.DB) *Binary {
 
 func (t *Binary) UploadBinary(binaryRequest *model.UploadBinaryRequest) (*model.Binary, error) {
 	binary := &model.Binary{}
+	if err := t.db.Pool.QueryRow(
+		"INSERT INTO binary_data (user_id, name, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
+			"RETURNING binary_id, name",
+		binaryRequest.UserID,
+		binaryRequest.Name,
+		time.Now(),
+		time.Now(),
+	).Scan(&binary.ID, &binary.Name); err != nil {
+		return nil, err
+	}
 	return binary, nil
 }
 
@@ -35,8 +47,15 @@ func (t *Binary) GetIdBinary(value string, userID int64) (int64, error) {
 	return BinaryID, nil
 }
 
-func (t *Binary) KeyExists(BinaryRequest *model.UploadBinaryRequest) (bool, error) {
+func (t *Binary) FileExists(binaryRequest *model.UploadBinaryRequest) (bool, error) {
 	var exists bool
+	row := t.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM binary_data "+
+		"where binary_data.user_id = $1 and binary_data.name = $2 and binary_data.deleted_at IS NULL)",
+		binaryRequest.UserID,
+		binaryRequest.Name)
+	if err := row.Scan(&exists); err != nil {
+		return exists, err
+	}
 	return exists, nil
 }
 
