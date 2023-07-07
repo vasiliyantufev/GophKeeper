@@ -1,10 +1,12 @@
 package binary
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 )
 
 type Binary struct {
@@ -32,19 +34,29 @@ func (b *Binary) UploadBinary(binaryRequest *model.BinaryRequest) (*model.Binary
 	return binary, nil
 }
 
-func (b *Binary) GetNodeBinary(binaryRequest *model.GetNodeBinaryRequest) (*model.Binary, error) {
-	binary := &model.Binary{}
-	return binary, nil
-}
-
 func (b *Binary) GetListBinary(userId int64) ([]model.Binary, error) {
 	listBinary := []model.Binary{}
-	return listBinary, nil
-}
 
-func (b *Binary) GetIdBinary(value string, userID int64) (int64, error) {
-	var BinaryID int64
-	return BinaryID, nil
+	rows, err := b.db.Pool.Query("SELECT binary_id, user_id, name, created_at FROM binary_data "+
+		"where user_id = $1 and deleted_at IS NULL", userId)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrRecordNotFound
+		} else {
+			return nil, err
+		}
+	}
+	defer rows.Close()
+	for rows.Next() {
+		binary := model.Binary{}
+		err = rows.Scan(&binary.ID, &binary.UserID, &binary.Name, &binary.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		listBinary = append(listBinary, binary)
+	}
+	return listBinary, nil
 }
 
 func (b *Binary) FileExists(binaryRequest *model.BinaryRequest) (bool, error) {
