@@ -229,8 +229,7 @@ message Binary {
   int64  userId = 2;
   string name = 3;
   google.protobuf.Timestamp createdAt = 4;
-  google.protobuf.Timestamp updatedAt = 5;
-  google.protobuf.Timestamp deletedAt = 6;
+  google.protobuf.Timestamp deletedAt = 5;
 }
 message UploadBinaryRequest {
   string name = 1;

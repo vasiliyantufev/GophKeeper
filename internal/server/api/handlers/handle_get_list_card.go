@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleGetListText - get list card
+// HandleGetListCard - get list card
 func (h *Handler) HandleGetListCard(ctx context.Context, req *grpc.GetListCardRequest) (*grpc.GetListCardResponse, error) {
 	h.logger.Info("Get list card")
 

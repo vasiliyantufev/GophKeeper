@@ -55,13 +55,11 @@ type GetListBinaryResponse struct {
 
 func GetBinary(binary *Binary) *grpc.Binary {
 	created, _ := service.ConvertTimeToTimestamp(binary.CreatedAt)
-	updated, _ := service.ConvertTimeToTimestamp(binary.UpdatedAt)
 	deleted, _ := service.ConvertTimeToTimestamp(binary.DeletedAt)
 	return &grpc.Binary{
 		UserId:    binary.UserID,
 		Name:      binary.Name,
 		CreatedAt: created,
-		UpdatedAt: updated,
 		DeletedAt: deleted,
 	}
 }
@@ -70,8 +68,7 @@ func GetListBinary(binary []Binary) []*grpc.Binary {
 	items := make([]*grpc.Binary, len(binary))
 	for i := range binary {
 		created, _ := service.ConvertTimeToTimestamp(binary[i].CreatedAt)
-		updated, _ := service.ConvertTimeToTimestamp(binary[i].UpdatedAt)
-		items[i] = &grpc.Binary{Id: binary[i].ID, Name: binary[i].Name, CreatedAt: created, UpdatedAt: updated}
+		items[i] = &grpc.Binary{Id: binary[i].ID, Name: binary[i].Name, CreatedAt: created}
 	}
 	return items
 }
