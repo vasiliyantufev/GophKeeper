@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 
+	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"google.golang.org/grpc/codes"
@@ -21,5 +22,17 @@ func (h *Handler) HandleDeleteBinary(ctx context.Context, req *grpc.DeleteBinary
 		)
 	}
 
-	return &grpc.DeleteBinaryResponse{}, nil
+	BinaryData := &model.BinaryRequest{}
+	BinaryData.UserID = req.AccessToken.UserId
+	BinaryData.Name = req.Name
+
+	BinaryId, err := h.binary.DeleteBinary(BinaryData)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.DeleteBinaryResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
+	return &grpc.DeleteBinaryResponse{Id: BinaryId}, nil
 }
