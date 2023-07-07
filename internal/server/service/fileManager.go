@@ -39,3 +39,13 @@ func DownloadFile(dirPath string, id int64, name string) ([]byte, error) {
 	}
 	return data, nil
 }
+
+func RemoveFile(dirPath string, id int64, name string) error {
+	userId := strconv.Itoa(int(id))
+	path := filepath.Join(dirPath, userId, "/", name)
+	err := os.Remove(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
