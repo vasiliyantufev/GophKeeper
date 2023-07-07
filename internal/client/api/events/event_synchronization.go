@@ -87,24 +87,6 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 		}
 	}
 
-	for _, node := range nodesBinary.Node {
-		table.AppendBinary(node, dataTblBinaryPointer)
-	}
-
-	for _, node := range nodesText.Node {
-		plaintext, err = encryption.Decrypt(string(node.Data), secretKey)
-		if err != nil {
-			c.logger.Error(err)
-			return dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err
-		}
-		index := table.GetIndex(dataTblText, table.ColId, strconv.Itoa(int(node.Id)))
-		if index == 0 { // entity_id does not exist, add record
-			table.AppendText(node, dataTblTextPointer, plaintext)
-		} else { // entity_id exists, update tags
-			table.UpdateText(node, dataTblTextPointer, index)
-		}
-	}
-
 	for _, node := range nodesCard.Node {
 		plaintext, err = encryption.Decrypt(string(node.Data), secretKey)
 		if err != nil {
@@ -147,12 +129,17 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 		}
 	}
 
+	for _, node := range nodesBinary.Node {
+		table.AppendBinary(node, dataTblBinaryPointer)
+	}
+
 	table.DeleteColId(dataTblTextPointer)
 	table.DeleteColId(dataTblCardPointer)
 	table.DeleteColId(dataTblLoginPasswordPointer)
 	logrus.Debug(dataTblText)
 	logrus.Debug(dataTblCard)
 	logrus.Debug(dataTblLoginPassword)
+	logrus.Debug(dataTblBinary)
 
 	return dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, nil
 }
