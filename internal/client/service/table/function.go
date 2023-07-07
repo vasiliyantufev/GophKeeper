@@ -145,3 +145,9 @@ func DeleteColId(dataTblText *[][]string) {
 		(*dataTblText)[index] = (*dataTblText)[index][1:]
 	}
 }
+
+func AppendBinary(node *grpc.Binary, dataTblBinary *[][]string) {
+	created, _ := service.ConvertTimestampToTime(node.CreatedAt)
+	row := []string{node.Name, created.Format(layouts.LayoutDateAndTime.ToString())}
+	*dataTblBinary = append(*dataTblBinary, row)
+}
