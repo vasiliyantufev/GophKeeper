@@ -261,6 +261,20 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			labelAlertCard.SetText(errors.ErrCardTblIndexDelete)
 		}
 	})
+	//---------------------------------------------------------------------- binary event delete
+	buttonBinaryDelete = widget.NewButton(labels.BtnDeleteBinary, func() {
+		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
+		if indexTblBinary > 0 {
+			//client.EventDeleteCard(selectedRowTblCard, accessToken)
+			// Удаляем строку с индексом indexTblCard
+			dataTblBinary = table.RemoveRow(dataTblBinary, indexTblBinary)
+			indexTblBinary = 0
+		} else {
+			log.Error(errors.ErrBinaryTblIndexDelete)
+			labelAlertCard.Show()
+			labelAlertCard.SetText(errors.ErrBinaryTblIndexDelete)
+		}
+	})
 	//---------------------------------------------------------------------- switch form update
 	buttonLoginPasswordUpdate = widget.NewButton(labels.BtnUpdateLoginPassword, func() {
 		if indexTblLoginPassword > 0 {
@@ -414,9 +428,6 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				}
 			}, window)
 		fileDialog.Show()
-	})
-	buttonBinaryDelete = widget.NewButton(labels.BtnDeleteBinary, func() {
-		logrus.Info(labels.BtnDeleteBinary)
 	})
 	//----------------------------------------------------------------------  download event
 	buttonBinaryDownload = widget.NewButton(labels.BtnDownloadBinary, func() {
