@@ -35,6 +35,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var selectedRowTblText []string
 	var indexTblCard = 0
 	var selectedRowTblCard []string
+	var indexTblBinary = 0
+	var selectedRowTblBinary []string
 
 	var radioOptions = []string{"Login", "Registration"}
 	var accessToken = model.Token{}
@@ -226,7 +228,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			dataTblLoginPassword = table.RemoveRow(dataTblLoginPassword, indexTblLoginPassword)
 			indexTblLoginPassword = 0
 		} else {
-			logrus.Error(errors.ErrLoginPasswordTblIndexDelete)
+			log.Error(errors.ErrLoginPasswordTblIndexDelete)
 			labelAlertLoginPassword.Show()
 			labelAlertLoginPassword.SetText(errors.ErrLoginPasswordTblIndexDelete)
 		}
@@ -240,7 +242,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			dataTblText = table.RemoveRow(dataTblText, indexTblText)
 			indexTblText = 0
 		} else {
-			logrus.Error(errors.ErrTextTblIndexDelete)
+			log.Error(errors.ErrTextTblIndexDelete)
 			labelAlertText.Show()
 			labelAlertText.SetText(errors.ErrTextTblIndexDelete)
 		}
@@ -254,7 +256,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			dataTblCard = table.RemoveRow(dataTblCard, indexTblCard)
 			indexTblCard = 0
 		} else {
-			logrus.Error(errors.ErrCardTblIndexDelete)
+			log.Error(errors.ErrCardTblIndexDelete)
 			labelAlertCard.Show()
 			labelAlertCard.SetText(errors.ErrCardTblIndexDelete)
 		}
@@ -267,7 +269,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			window.SetContent(containerFormLoginPasswordUpdate)
 			window.Show()
 		} else {
-			logrus.Error(errors.ErrLoginPasswordTblIndexUpdate)
+			log.Error(errors.ErrLoginPasswordTblIndexUpdate)
 			labelAlertLoginPassword.Show()
 			labelAlertLoginPassword.SetText(errors.ErrLoginPasswordTblIndexUpdate)
 		}
@@ -279,7 +281,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 			window.SetContent(containerFormTextUpdate)
 			window.Show()
 		} else {
-			logrus.Error(errors.ErrTextTblIndexUpdate)
+			log.Error(errors.ErrTextTblIndexUpdate)
 			labelAlertText.Show()
 			labelAlertText.SetText(errors.ErrTextTblIndexUpdate)
 		}
@@ -287,11 +289,12 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonCardUpdate = widget.NewButton(labels.BtnUpdateCard, func() {
 		if indexTblCard > 0 {
 			function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard)
-			function.SetCardData(selectedRowTblCard, cardNameEntryUpdate, cardDescriptionEntryUpdate, paymentSystemEntryUpdate, numberEntryUpdate, holderEntryUpdate, cvcEntryUpdate, endDateEntryUpdate)
+			function.SetCardData(selectedRowTblCard, cardNameEntryUpdate, cardDescriptionEntryUpdate, paymentSystemEntryUpdate,
+				numberEntryUpdate, holderEntryUpdate, cvcEntryUpdate, endDateEntryUpdate)
 			window.SetContent(containerFormCardUpdate)
 			window.Show()
 		} else {
-			logrus.Error(errors.ErrCardTblIndexUpdate)
+			log.Error(errors.ErrCardTblIndexUpdate)
 			labelAlertCard.Show()
 			labelAlertCard.SetText(errors.ErrCardTblIndexUpdate)
 		}
@@ -311,7 +314,8 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				log.Error(err)
 			} else {
 
-				dataTblLoginPassword = table.UpdateRowLoginPassword(loginEntryUpdate.Text, passwordEntryUpdate.Text, dataTblLoginPassword, indexTblLoginPassword)
+				dataTblLoginPassword = table.UpdateRowLoginPassword(loginEntryUpdate.Text, passwordEntryUpdate.Text, dataTblLoginPassword,
+					indexTblLoginPassword)
 				log.Info("Логин-пароль изменен")
 
 				labelAlertLoginPasswordUpdate.Hide()
@@ -416,7 +420,19 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	})
 	//----------------------------------------------------------------------  download event
 	buttonBinaryDownload = widget.NewButton(labels.BtnDownloadBinary, func() {
-		logrus.Info(labels.BtnDownloadBinary)
+		if indexTblBinary > 0 {
+			err = client.EventDownload(selectedRowTblBinary[0], password, accessToken)
+			if err != nil {
+				labelAlertBinary.SetText(errors.ErrLogin)
+				log.Error(err)
+			}
+			log.Info(indexTblBinary)
+			log.Info(selectedRowTblBinary[0])
+		} else {
+			log.Error(errors.ErrBinaryTblIndexDownload)
+			labelAlertBinary.Show()
+			labelAlertBinary.SetText(errors.ErrBinaryTblIndexDownload)
+		}
 	})
 	//----------------------------------------------------------------------
 	buttonTopBack = widget.NewButton(labels.BtnBack, func() {
@@ -503,6 +519,10 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	tblCard.OnSelected = func(id widget.TableCellID) {
 		indexTblCard = id.Row
 		selectedRowTblCard = dataTblCard[id.Row]
+	}
+	tblBinary.OnSelected = func(id widget.TableCellID) {
+		indexTblBinary = id.Row
+		selectedRowTblBinary = dataTblBinary[id.Row]
 	}
 	//---------------------------------------------------------------------- auth event
 	buttonAuth = widget.NewButton("Submit", func() {

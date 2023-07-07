@@ -34,8 +34,8 @@ func (h *Handler) HandleDownloadBinary(ctx context.Context, req *grpc.DownloadBi
 			codes.Internal, err.Error(),
 		)
 	}
-	if exists == true {
-		err = errors.ErrKeyAlreadyExists
+	if exists != true {
+		err = errors.ErrFileNotExists
 		h.logger.Error(err)
 		return &grpc.DownloadBinaryResponse{}, status.Errorf(
 			codes.AlreadyExists, err.Error(),
