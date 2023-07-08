@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
@@ -11,12 +12,7 @@ import (
 func (c Event) EventDownload(name string, password string, token model.Token) error {
 	c.logger.Info("Download binary data")
 
-	//secretKey := encryption.AesKeySecureRandom([]byte(password))
-	//encryptFile, err := encryption.Encrypt(string(file), secretKey)
-	//if err != nil {
-	//	c.logger.Error(err)
-	//	return err, nil
-	//}
+	secretKey := encryption.AesKeySecureRandom([]byte(password))
 	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 
@@ -28,7 +24,13 @@ func (c Event) EventDownload(name string, password string, token model.Token) er
 		return err
 	}
 
-	err = service.UploadFile(c.config.FileFolder, token.UserID, name, downloadFile.Data)
+	file, err := encryption.Decrypt(string(downloadFile.Data), secretKey)
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
+
+	err = service.UploadFile(c.config.FileFolder, token.UserID, name, []byte(file))
 	if err != nil {
 		c.logger.Error(err)
 		return err
