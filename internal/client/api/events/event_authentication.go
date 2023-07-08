@@ -21,9 +21,17 @@ func (c Event) EventAuthentication(username, password string) (model.Token, erro
 		c.logger.Error(err)
 		return token, err
 	}
+
 	createdToken, _ := service.ConvertTimestampToTime(authenticatedUser.AccessToken.CreatedAt)
 	endDateToken, _ := service.ConvertTimestampToTime(authenticatedUser.AccessToken.EndDateAt)
 	token = model.Token{AccessToken: authenticatedUser.AccessToken.Token, UserID: authenticatedUser.AccessToken.UserId,
 		CreatedAt: createdToken, EndDateAt: endDateToken}
+
+	err = service.CreateStorageNotExistsUser(c.config.FileFolder, token.UserID)
+	if err != nil {
+		c.logger.Error(err)
+		return token, err
+	}
+
 	return token, nil
 }
