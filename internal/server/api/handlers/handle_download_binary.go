@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleDownloadBinary - Download  binary data
+// HandleDownloadBinary - Download binary data
 func (h *Handler) HandleDownloadBinary(ctx context.Context, req *grpc.DownloadBinaryRequest) (*grpc.DownloadBinaryResponse, error) {
 	h.logger.Info("Download binary data")
 

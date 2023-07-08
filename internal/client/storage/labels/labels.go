@@ -15,7 +15,7 @@ var (
 	BtnUpdateLoginPassword = "Изменить логин пароль"
 	BtnUpdateText          = "Изменить текстовые данные"
 	BtnUpdateCard          = "Изменить банковскую карту"
-	BtnDownloadBinary      = "Отправить файл"
+	BtnDownloadBinary      = "Скачать файл"
 	BtnDeleteBinary        = "Удалить файл"
-	BtnUploadBinary        = "Получить файл"
+	BtnUploadBinary        = "Загрузить файл"
 )

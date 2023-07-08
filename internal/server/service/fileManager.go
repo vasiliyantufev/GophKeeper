@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 )
 
 func CreateStorageUser(dirPath string, id int64) error {
@@ -32,8 +31,12 @@ func UploadFile(dirPath string, id int64, name string, data []byte) error {
 func DownloadFile(dirPath string, id int64, name string) ([]byte, error) {
 	userId := strconv.Itoa(int(id))
 	path := filepath.Join(dirPath, userId, "/", name)
-	reader := strings.NewReader(path)
-	data, err := io.ReadAll(reader)
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	data, err := io.ReadAll(file)
 	if err != nil {
 		return nil, err
 	}

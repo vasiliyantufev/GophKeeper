@@ -12,5 +12,5 @@ func GetTabBinaries(tblBinary *widget.Table, buttonSynchronization *widget.Butto
 	bottomContainer := container.New(layout.NewHBoxLayout(), binaryAdd, binaryDelete, binaryDownload, labelAlertBinary)
 	containerTblBinary := layout.NewBorderLayout(buttonSynchronization, bottomContainer, nil, nil)
 	boxBinary := fyne.NewContainerWithLayout(containerTblBinary, buttonSynchronization, tblBinary, bottomContainer)
-	return container.NewTabItem("Бинарные файлы", boxBinary)
+	return container.NewTabItem("Файлы", boxBinary)
 }
