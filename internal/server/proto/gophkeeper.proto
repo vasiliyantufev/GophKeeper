@@ -38,7 +38,12 @@ service Gophkeeper {
   rpc HandleDeleteBinary(DeleteBinaryRequest) returns (DeleteBinaryResponse) {}
   rpc HandleDownloadBinary(DownloadBinaryRequest) returns (DownloadBinaryResponse) {}
 
+  rpc HandleCreateEntity(CreateEntityRequest) returns (CreateEntityResponse) {}
+  rpc HandleGetListEntity(GetListEntityRequest) returns (GetListEntityResponse) {}
+  rpc HandleDeleteEntity(DeleteEntityRequest) returns (DeleteEntityResponse) {}
+  rpc HandleUpdateEntity(UpdateEntityRequest) returns (UpdateEntityResponse) {}
 }
+
 //------------------------------------
 message PingRequest {}
 message PingResponse {
@@ -278,3 +283,43 @@ message Metadata {
   google.protobuf.Timestamp deletedAt = 7;
 }
 //------------------------------------
+message Entity {
+  int64  id = 1;
+  int64  userId = 2;
+  bytes  data = 3;
+  string metadata = 4;
+  string type = 5;
+  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp updatedAt = 7;
+  google.protobuf.Timestamp deletedAt = 8;
+}
+message CreateEntityRequest {
+  bytes data = 1;
+  string metadata = 2;
+  string  type = 3;
+  Token  accessToken = 4;
+}
+message CreateEntityResponse {
+  Entity data = 1;
+}
+message GetListEntityRequest {
+  Token accessToken = 1;
+}
+message GetListEntityResponse {
+  repeated Entity node = 1;
+}
+message DeleteEntityRequest {
+  string name = 1;
+  Token accessToken = 2;
+}
+message DeleteEntityResponse {
+  int64  id = 1;
+}
+message UpdateEntityRequest {
+  string name = 1;
+  bytes  data = 2;
+  Token accessToken = 3;
+}
+message UpdateEntityResponse {
+  int64  id = 1;
+}

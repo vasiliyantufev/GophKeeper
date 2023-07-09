@@ -30,7 +30,7 @@ func main() {
 		logger.Fatal(err)
 	} else {
 		defer db.Close()
-		//db.CreateTablesMigration("file://../migrations")
+		db.CreateTablesMigration("file://../migrations")
 	}
 
 	userRepository := user.New(db)

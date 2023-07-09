@@ -106,7 +106,7 @@ func TestHandlers(t *testing.T) {
 
 	t.Run("authentication", func(t *testing.T) {
 		_, err = handlerGrpc.HandleAuthentication(context.Background(), &grpcKeeper.AuthenticationRequest{Username: username, Password: password})
-		assert.NoError(t, err, "Authentication failed")
+		assert.NoError(t, err, "authentication failed")
 	})
 
 }
