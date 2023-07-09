@@ -37,7 +37,6 @@ func main() {
 
 	username := randomizer.RandStringRunes(10)
 	password := "Пароль-1"
-
 	password, err = encryption.HashPassword(password)
 	if err != nil {
 		log.Fatal(err)
