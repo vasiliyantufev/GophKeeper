@@ -43,7 +43,7 @@ func (db DB) Close() error {
 // Ping - checks the database connection
 func (db DB) Ping() error {
 	if err := db.Pool.Ping(); err != nil {
-		db.log.Error(err)
+		//db.log.Error(err)
 		return err
 	}
 	return nil

@@ -11,7 +11,9 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/config"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/api/events"
+	clientConfig "github.com/vasiliyantufev/gophkeeper/internal/client/config"
+	serverConfig "github.com/vasiliyantufev/gophkeeper/internal/server/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/test/bufconn"
@@ -22,6 +24,7 @@ import (
 const bufSize = 1024 * 1024
 
 var lis *bufconn.Listener
+var handlerGrpc Handler
 
 func init() {
 
@@ -44,7 +47,7 @@ func init() {
 	databaseURI, err := container.ConnectionString(context.Background(), "sslmode=disable")
 
 	logger := logrus.New()
-	db, err := database.New(&config.Config{DSN: databaseURI}, logger)
+	db, err := database.New(&serverConfig.Config{DSN: databaseURI}, logger)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,18 +62,18 @@ func init() {
 		log.Fatal(err)
 	}
 
-	config := &config.Config{
+	config := &serverConfig.Config{
 		GRPC:                "localhost:8080",
 		DSN:                 databaseURI,
 		AccessTokenLifetime: 300 * time.Second,
 	}
 
-	var handlerGrpc = NewHandler(db, config, nil, nil, nil, nil,
+	handlerGrpc = *NewHandler(db, config, nil, nil, nil, nil,
 		nil, nil, nil, nil, logger)
 
 	lis = bufconn.Listen(bufSize)
 	s := grpc.NewServer()
-	grpcKeeper.RegisterGophkeeperServer(s, handlerGrpc)
+	grpcKeeper.RegisterGophkeeperServer(s, &handlerGrpc)
 	go func() {
 		if err := s.Serve(lis); err != nil {
 			log.Fatalf("Server exited with error: %v", err)
@@ -84,17 +87,26 @@ func bufferDialer(context.Context, string) (net.Conn, error) {
 
 func TestHandlers(t *testing.T) {
 
-	//ctx := context.Background()
-	//conn, err := grpc.DialContext(ctx, "bufferNet", grpc.WithContextDialer(bufferDialer), grpc.WithInsecure())
-	//if err != nil {
-	//	t.Fatalf("Failed to dial bufferNet: %v", err)
-	//}
-	//defer conn.Close()
-	//client := grpcKeeper.NewGophkeeperClient(conn)
-	//resp, err := client.HandlePing(ctx, &grpcKeeper.PingRequest{})
-	//if err != nil {
-	//	t.Fatalf("Ping failed: %v", err)
-	//}
-	//log.Printf("Response: %+v", resp)
+	ctx := context.Background()
+	log := logrus.New()
+
+	config := &clientConfig.Config{
+		GRPC: "localhost:8080",
+	}
+
+	conn, err := grpc.DialContext(ctx, "bufferNet", grpc.WithContextDialer(bufferDialer), grpc.WithInsecure())
+	if err != nil {
+		t.Fatalf("Failed to dial bufferNet: %v", err)
+	}
+	defer conn.Close()
+	gophkeeperClient := grpcKeeper.NewGophkeeperClient(conn)
+
+	client := events.NewEvent(ctx, config, log, gophkeeperClient)
+
+	resp, err := client.EventPing()
+	if err != nil {
+		t.Fatalf("Ping failed: %v", err)
+	}
+	log.Printf("Response: %+v", resp)
 	// Test for output here.
 }
