@@ -24,7 +24,7 @@ type Handler struct {
 	loginPassword *loginPassword.LoginPassword
 	binary        *binary.Binary
 	metadata      *metadata.Metadata
-	storage       storage.Storage
+	storage       *storage.Storage
 	token         *token.Token
 	logger        *logrus.Logger
 	grpc.UnimplementedGophkeeperServer
@@ -32,7 +32,7 @@ type Handler struct {
 
 // NewHandler - creates a new grpc server instance
 func NewHandler(db *database.DB, config *config.Config, userRepository *user.User, textRepository *text.Text, cardRepository *card.Card,
-	loginPasswordRepository *loginPassword.LoginPassword, binaryRepository *binary.Binary, metadataRepository *metadata.Metadata, storage storage.Storage,
+	loginPasswordRepository *loginPassword.LoginPassword, binaryRepository *binary.Binary, metadataRepository *metadata.Metadata, storage *storage.Storage,
 	tokenRepository *token.Token, log *logrus.Logger) *Handler {
 	return &Handler{database: db, config: config, user: userRepository, text: textRepository, card: cardRepository,
 		loginPassword: loginPasswordRepository, binary: binaryRepository, metadata: metadataRepository, storage: storage, token: tokenRepository, logger: log}

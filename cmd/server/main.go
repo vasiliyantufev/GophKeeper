@@ -30,6 +30,7 @@ func main() {
 		logger.Fatal(err)
 	} else {
 		defer db.Close()
+		//db.CreateTablesMigration("file://../migrations")
 	}
 
 	userRepository := user.New(db)
@@ -45,7 +46,7 @@ func main() {
 	defer cnl()
 
 	var handlerGrpc = grpcHandler.NewHandler(db, config, userRepository, textRepository, cardRepository,
-		loginPasswordRepository, binaryRepository, metadataRepository, storage, tokenRepository, logger)
+		loginPasswordRepository, binaryRepository, metadataRepository, &storage, tokenRepository, logger)
 	go api.StartService(handlerGrpc, config, logger)
 
 	<-ctx.Done()

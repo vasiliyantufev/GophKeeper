@@ -9,10 +9,10 @@ import (
 )
 
 type Config struct {
-	GRPC                string        `env:"GRPC"`
-	DSN                 string        `env:"DATABASE_DSN"`
-	MigrationsPath      string        `env:"ROOT_PATH" envDefault:"file://./migrations"`
-	DebugLevel          logrus.Level  `env:"DEBUG_LEVEL" envDefault:"debug"`
+	GRPC string `env:"GRPC"`
+	DSN  string `env:"DATABASE_DSN"`
+	//MigrationsPath      string        `env:"ROOT_PATH"`
+	DebugLevel          logrus.Level  `env:"DEBUG_LEVEL"`
 	AccessTokenLifetime time.Duration `env:"ACCESS_TOKEN_LIFETIME"`
 	FileFolder          string        `env:"DATA_FOLDER"`
 }
@@ -21,10 +21,12 @@ type Config struct {
 func NewConfig(log *logrus.Logger) *Config {
 	// Set default values
 	configServer := Config{
-		GRPC:                "localhost:8080",
-		DSN:                 "host=localhost port=5432 user=user password=password dbname=gophkeeper sslmode=disable",
+		GRPC: "localhost:8080",
+		DSN:  "host=localhost port=5432 user=user password=password dbname=gophkeeper sslmode=disable",
+		//MigrationsPath:      "file://./migrations",
 		AccessTokenLifetime: 300 * time.Second,
 		FileFolder:          "./data/server_keeper",
+		DebugLevel:          logrus.DebugLevel,
 	}
 
 	flag.StringVar(&configServer.GRPC, "g", configServer.GRPC, "Server address")
