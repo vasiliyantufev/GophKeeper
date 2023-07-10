@@ -21,5 +21,13 @@ func (h *Handler) HandleEntityDelete(ctx context.Context, req *grpc.DeleteEntity
 		)
 	}
 
+	err := h.entity.Delete(req.AccessToken.UserId, req.Name)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.DeleteEntityResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
 	return &grpc.DeleteEntityResponse{}, nil
 }

@@ -39,7 +39,7 @@ func (e *Entity) Create(entityRequest *model.CreateEntityRequest) (int64, error)
 	return id, nil
 }
 
-func (e *Entity) GetList(userId int64) ([]model.Entity, error) {
+func (e *Entity) GetList(userID int64) ([]model.Entity, error) {
 	entity := []model.Entity{}
 	return entity, nil
 }
@@ -55,8 +55,16 @@ func (e *Entity) Exists(entityRequest *model.CreateEntityRequest) (bool, error) 
 	return exists, nil
 }
 
-func (e *Entity) Delete(EntityID int64) error {
-	//var id int64
+func (e *Entity) Delete(userID int64, name string) error {
+	var id int64
+	if err := e.db.Pool.QueryRow("UPDATE entity SET deleted_at = $1 "+
+		"WHERE user_id = $2 and metadata->>'name' = $3 RETURNING entity_id",
+		time.Now(),
+		userID,
+		name,
+	).Scan(&id); err != nil {
+		return err
+	}
 	return nil
 }
 
