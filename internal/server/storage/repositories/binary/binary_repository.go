@@ -22,11 +22,10 @@ func New(db *database.DB) *Binary {
 func (b *Binary) UploadBinary(binaryRequest *model.BinaryRequest) (*model.Binary, error) {
 	binary := &model.Binary{}
 	if err := b.db.Pool.QueryRow(
-		"INSERT INTO binary_data (user_id, name, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
+		"INSERT INTO binary_data (user_id, name, created_at) VALUES ($1, $2, $3) "+
 			"RETURNING binary_id, name",
 		binaryRequest.UserID,
 		binaryRequest.Name,
-		time.Now(),
 		time.Now(),
 	).Scan(&binary.ID, &binary.Name); err != nil {
 		return nil, err
