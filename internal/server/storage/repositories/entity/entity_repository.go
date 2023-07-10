@@ -47,21 +47,22 @@ func (e *Entity) GetList(userID int64) ([]model.Entity, error) {
 func (e *Entity) Exists(entityRequest *model.CreateEntityRequest) (bool, error) {
 	var exists bool
 	row := e.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM entity "+
-		"where entity.metadata->>'name' = $1 and entity.user_id = $2 and entity.metadata->>'type' = $3 and entity.deleted_at IS NULL)",
-		entityRequest.Metadata.Name, entityRequest.UserID, entityRequest.Metadata.Type)
+		"where entity.user_id = $1 and entity.metadata->>'name' = $2 and entity.metadata->>'type' = $3 and entity.deleted_at IS NULL)",
+		entityRequest.UserID, entityRequest.Metadata.Name, entityRequest.Metadata.Type)
 	if err := row.Scan(&exists); err != nil {
 		return exists, err
 	}
 	return exists, nil
 }
 
-func (e *Entity) Delete(userID int64, name string) error {
+func (e *Entity) Delete(userID int64, name string, typeEntity string) error {
 	var id int64
 	if err := e.db.Pool.QueryRow("UPDATE entity SET deleted_at = $1 "+
-		"WHERE user_id = $2 and metadata->>'name' = $3 RETURNING entity_id",
+		"where entity.user_id = $2 and entity.metadata->>'name' = $3 and entity.metadata->>'type' = $4 and entity.deleted_at IS NULL",
 		time.Now(),
 		userID,
 		name,
+		typeEntity,
 	).Scan(&id); err != nil {
 		return err
 	}
