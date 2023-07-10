@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 
+	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 	"google.golang.org/grpc/codes"
@@ -21,13 +22,20 @@ func (h *Handler) HandleEntityGetList(ctx context.Context, req *grpc.GetListEnti
 		)
 	}
 
-	//ListEntity, err := h.entity.GetList(req.AccessToken.UserId, req.Type)
-	//if err != nil {
-	//	h.logger.Error(err)
-	//	return &grpc.GetListEntityResponse{}, status.Errorf(
-	//		codes.Internal, err.Error(),
-	//	)
-	//}
+	ListEntity, err := h.entity.GetList(req.AccessToken.UserId, req.Type)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.GetListEntityResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+	list, err := model.GetListEntity(ListEntity)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.GetListEntityResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
 
-	return &grpc.GetListEntityResponse{}, nil
+	return &grpc.GetListEntityResponse{Node: list}, nil
 }

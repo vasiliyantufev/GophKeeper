@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/json"
 	"time"
 
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
@@ -17,6 +18,12 @@ type Entity struct {
 	DeletedAt time.Time
 }
 
+type MetadataEntity struct {
+	Name        string
+	Description string
+	Type        string
+}
+
 type CreateEntityRequest struct {
 	UserID      int64
 	Data        []byte
@@ -24,31 +31,23 @@ type CreateEntityRequest struct {
 	AccessToken string
 }
 
-type CreateEntityResponse struct {
-	Entity Entity
-}
-
-type MetadataEntity struct {
-	Name        string
-	Description string
-	Type        string
-}
-
-func GetEntity(data *Entity) *grpc.Entity {
-	//var metadata MetadataEntity
-	created, _ := service.ConvertTimeToTimestamp(data.CreatedAt)
-	updated, _ := service.ConvertTimeToTimestamp(data.UpdatedAt)
-	deleted, _ := service.ConvertTimeToTimestamp(data.DeletedAt)
-	//err := json.Unmarshal([]byte(data.Metadata), &metadata)
-	//if err != nil {
-	//	return &grpc.Entity{}, err
-	//}
-	return &grpc.Entity{
-		UserId: data.UserID,
-		Data:   data.Data,
-		//Metadata: data.Metadata,
-		CreatedAt: created,
-		UpdatedAt: updated,
-		DeletedAt: deleted,
+func GetListEntity(data []Entity) ([]*grpc.Entity, error) {
+	items := make([]*grpc.Entity, len(data))
+	for i := range data {
+		jsonMetadata, err := json.Marshal(data[i].Metadata)
+		if err != nil {
+			return items, err
+		}
+		created, err := service.ConvertTimeToTimestamp(data[i].CreatedAt)
+		if err != nil {
+			return items, err
+		}
+		updated, err := service.ConvertTimeToTimestamp(data[i].UpdatedAt)
+		if err != nil {
+			return items, err
+		}
+		items[i] = &grpc.Entity{Id: data[i].ID, UserId: data[i].UserID, Data: data[i].Data,
+			Metadata: string(jsonMetadata), CreatedAt: created, UpdatedAt: updated}
 	}
+	return items, nil
 }
