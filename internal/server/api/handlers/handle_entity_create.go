@@ -57,7 +57,7 @@ func (h *Handler) HandleEntityCreate(ctx context.Context, req *grpc.CreateEntity
 		)
 	}
 
-	CreatedEntity, err := h.entity.Create(EntityData)
+	CreatedEntityID, err := h.entity.Create(EntityData)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.CreateEntityResponse{}, status.Errorf(
@@ -65,5 +65,5 @@ func (h *Handler) HandleEntityCreate(ctx context.Context, req *grpc.CreateEntity
 		)
 	}
 
-	return &grpc.CreateEntityResponse{Id: CreatedEntity.ID}, nil
+	return &grpc.CreateEntityResponse{Id: CreatedEntityID}, nil
 }
