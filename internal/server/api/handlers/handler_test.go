@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"testing"
 	"time"
@@ -15,8 +16,11 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/randomizer"
 	serverConfig "github.com/vasiliyantufev/gophkeeper/internal/server/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/entity"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/token"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/user"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/test/bufconn"
 
@@ -69,11 +73,12 @@ func TestHandlers(t *testing.T) {
 
 	// repositories
 	userRepository := user.New(db)
+	entityRepository := entity.New(db)
 	tokenRepository := token.New(db)
 
 	// setup server service
 	handlerGrpc := *NewHandler(db, config, userRepository, nil, nil, nil,
-		nil, nil, nil, tokenRepository, logger)
+		nil, nil, nil, entityRepository, tokenRepository, logger)
 
 	lis = bufconn.Listen(bufSize)
 	s := grpc.NewServer()
@@ -86,12 +91,14 @@ func TestHandlers(t *testing.T) {
 	}()
 
 	// -- TEST DATA --
+	var authenticatedUser *grpcKeeper.AuthenticationResponse
+	data := randomizer.RandStringRunes(10)
 	username := randomizer.RandStringRunes(10)
-	password := "Password-00"
-	password, err = encryption.HashPassword(password)
-	if err != nil {
-		log.Fatal(err)
-	}
+	password, _ := encryption.HashPassword("Password-00")
+	name := randomizer.RandStringRunes(10)
+	description := randomizer.RandStringRunes(10)
+	metadata := model.MetadataEntity{Name: name, Description: description, Type: variables.Text.ToString()}
+	jsonMetadata, _ := json.Marshal(metadata)
 
 	// -- TESTS --
 	t.Run("ping db", func(t *testing.T) {
@@ -100,13 +107,28 @@ func TestHandlers(t *testing.T) {
 	})
 
 	t.Run("registration", func(t *testing.T) {
-		_, err = handlerGrpc.HandleRegistration(context.Background(), &grpcKeeper.RegistrationRequest{Username: username, Password: password})
+		_, err := handlerGrpc.HandleRegistration(context.Background(), &grpcKeeper.RegistrationRequest{Username: username, Password: password})
 		assert.NoError(t, err, "registration failed")
 	})
 
 	t.Run("authentication", func(t *testing.T) {
-		_, err = handlerGrpc.HandleAuthentication(context.Background(), &grpcKeeper.AuthenticationRequest{Username: username, Password: password})
+		authenticatedUser, err = handlerGrpc.HandleAuthentication(context.Background(), &grpcKeeper.AuthenticationRequest{Username: username, Password: password})
 		assert.NoError(t, err, "authentication failed")
 	})
 
+	t.Run("create entity", func(t *testing.T) {
+		_, err = handlerGrpc.HandleCreateEntity(context.Background(),
+			&grpcKeeper.CreateEntityRequest{Data: []byte(data), Metadata: string(jsonMetadata),
+				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
+					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
+		assert.NoError(t, err, "create entity failed")
+	})
+
+	t.Run("delete entity", func(t *testing.T) {
+		_, err := handlerGrpc.HandleDeleteEntity(context.Background(),
+			&grpcKeeper.DeleteEntityRequest{Name: name, Type: variables.Text.ToString(),
+				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
+					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
+		assert.NoError(t, err, "delete entity failed")
+	})
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 )
 
 func (c Event) EventDeleteText(text []string, token model.Token) error {
@@ -29,16 +30,16 @@ func (c Event) EventDeleteText(text []string, token model.Token) error {
 		return err
 	}
 
-	//deletedTextEntity, err := c.grpc.HandleDeleteEntity(context.Background(),
-	//	&grpc.DeleteEntityRequest{Name: text[0], Type: variables.Text.ToString(),
-	//		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
-	//if err != nil {
-	//	c.logger.Error(err)
-	//	return err
-	//}
+	deletedTextEntity, err := c.grpc.HandleDeleteEntity(context.Background(),
+		&grpc.DeleteEntityRequest{Name: text[0], Type: variables.Text.ToString(),
+			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
 
 	c.logger.Debug(text)
 	c.logger.Debug(deletedText)
-	//c.logger.Debug(deletedTextEntity)
+	c.logger.Debug(deletedTextEntity)
 	return nil
 }

@@ -28,7 +28,7 @@ func (e *Entity) Create(entityRequest *model.CreateEntityRequest) (int64, error)
 		return 0, err
 	}
 	if err = e.db.Pool.QueryRow(
-		"INSERT INTO entity (user_id, data, metadata, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)  RETURNING entity_id",
+		"INSERT INTO entity (user_id, data, metadata, created_at, updated_at) VALUES ($1, $2, $3, $4, $5) RETURNING entity_id",
 		entityRequest.UserID,
 		entityRequest.Data,
 		jsonMetadata,
@@ -43,7 +43,7 @@ func (e *Entity) Create(entityRequest *model.CreateEntityRequest) (int64, error)
 func (e *Entity) GetList(userID int64, typeEntity string) ([]model.Entity, error) {
 	entities := []model.Entity{}
 	rows, err := e.db.Pool.Query("SELECT entity_id, user_id, data, metadata, created_at, updated_at FROM entity "+
-		"where user_id = $1 and metadata->>'type' = $2 and deleted_at IS NULL",
+		"where user_id = $1 and metadata->>'Type' = $2 and deleted_at IS NULL",
 		userID, typeEntity)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -68,7 +68,7 @@ func (e *Entity) GetList(userID int64, typeEntity string) ([]model.Entity, error
 func (e *Entity) Exists(entityRequest *model.CreateEntityRequest) (bool, error) {
 	var exists bool
 	row := e.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM entity "+
-		"where entity.user_id = $1 and entity.metadata->>'name' = $2 and entity.metadata->>'type' = $3 and entity.deleted_at IS NULL)",
+		"where entity.user_id = $1 and entity.metadata->>'Name' = $2 and entity.metadata->>'Type' = $3 and entity.deleted_at IS NULL)",
 		entityRequest.UserID, entityRequest.Metadata.Name, entityRequest.Metadata.Type)
 	if err := row.Scan(&exists); err != nil {
 		return exists, err
@@ -78,8 +78,12 @@ func (e *Entity) Exists(entityRequest *model.CreateEntityRequest) (bool, error) 
 
 func (e *Entity) Delete(userID int64, name string, typeEntity string) (int64, error) {
 	var id int64
+	//name = "jjjjj"
 	if err := e.db.Pool.QueryRow("UPDATE entity SET deleted_at = $1 "+
-		"where entity.user_id = $2 and entity.metadata->>'name' = $3 and entity.metadata->>'type' = $4",
+		"where entity.user_id = $2 and entity.metadata->>'Name' = $3 and entity.metadata->>'Type' = $4 RETURNING entity_id",
+		//"where entity.metadata->>'Name' = $2",
+		//time.Now(),
+		//name,
 		time.Now(),
 		userID,
 		name,
@@ -93,7 +97,7 @@ func (e *Entity) Delete(userID int64, name string, typeEntity string) (int64, er
 func (e *Entity) Update(userID int64, name string, typeEntity string, data []byte) (int64, error) {
 	var id int64
 	if err := e.db.Pool.QueryRow("UPDATE entity SET data = $1 "+
-		"where entity.user_id = $2 and entity.metadata->>'name' = $3 and entity.metadata->>'type' = $4",
+		"where entity.user_id = $2 and entity.metadata->>'Name' = $3 and entity.metadata->>'Type' = $4 RETURNING entity_id",
 		data,
 		userID,
 		name,
