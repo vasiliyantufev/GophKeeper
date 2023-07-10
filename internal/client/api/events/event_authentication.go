@@ -22,8 +22,16 @@ func (c Event) EventAuthentication(username, password string) (model.Token, erro
 		return token, err
 	}
 
-	createdToken, _ := service.ConvertTimestampToTime(authenticatedUser.AccessToken.CreatedAt)
-	endDateToken, _ := service.ConvertTimestampToTime(authenticatedUser.AccessToken.EndDateAt)
+	createdToken, err := service.ConvertTimestampToTime(authenticatedUser.AccessToken.CreatedAt)
+	if err != nil {
+		c.logger.Error(err)
+		return token, err
+	}
+	endDateToken, err := service.ConvertTimestampToTime(authenticatedUser.AccessToken.EndDateAt)
+	if err != nil {
+		c.logger.Error(err)
+		return token, err
+	}
 	token = model.Token{AccessToken: authenticatedUser.AccessToken.Token, UserID: authenticatedUser.AccessToken.UserId,
 		CreatedAt: createdToken, EndDateAt: endDateToken}
 

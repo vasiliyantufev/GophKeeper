@@ -21,8 +21,16 @@ func (c Event) EventRegistration(username, password string) (model.Token, error)
 		c.logger.Error(err)
 		return token, err
 	}
-	createdToken, _ := service.ConvertTimestampToTime(registeredUser.AccessToken.CreatedAt)
-	endDateToken, _ := service.ConvertTimestampToTime(registeredUser.AccessToken.EndDateAt)
+	createdToken, err := service.ConvertTimestampToTime(registeredUser.AccessToken.CreatedAt)
+	if err != nil {
+		c.logger.Error(err)
+		return token, err
+	}
+	endDateToken, err := service.ConvertTimestampToTime(registeredUser.AccessToken.EndDateAt)
+	if err != nil {
+		c.logger.Error(err)
+		return token, err
+	}
 	token = model.Token{AccessToken: registeredUser.AccessToken.Token, UserID: registeredUser.AccessToken.UserId,
 		CreatedAt: createdToken, EndDateAt: endDateToken}
 

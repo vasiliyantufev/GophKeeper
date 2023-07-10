@@ -45,7 +45,7 @@ func (c Event) EventCreateText(name, description, password, plaintext string, to
 		return err
 	}
 
-	createdEntity, err := c.grpc.HandleCreateEntity(context.Background(),
+	createdEntityID, err := c.grpc.HandleCreateEntity(context.Background(),
 		&grpc.CreateEntityRequest{Data: []byte(encryptText), Metadata: string(jsonMetadata),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
@@ -53,7 +53,7 @@ func (c Event) EventCreateText(name, description, password, plaintext string, to
 		return err
 	}
 
-	c.logger.Debug(createdEntity)
+	c.logger.Debug(createdEntityID)
 	c.logger.Debug(createdText.Text)
 	return nil
 }

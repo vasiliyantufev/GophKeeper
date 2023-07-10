@@ -30,7 +30,7 @@ func (c Event) EventDeleteText(text []string, token model.Token) error {
 		return err
 	}
 
-	deletedTextEntity, err := c.grpc.HandleDeleteEntity(context.Background(),
+	deletedTextEntityID, err := c.grpc.HandleDeleteEntity(context.Background(),
 		&grpc.DeleteEntityRequest{Name: text[0], Type: variables.Text.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
@@ -40,6 +40,6 @@ func (c Event) EventDeleteText(text []string, token model.Token) error {
 
 	c.logger.Debug(text)
 	c.logger.Debug(deletedText)
-	c.logger.Debug(deletedTextEntity)
+	c.logger.Debug(deletedTextEntityID)
 	return nil
 }

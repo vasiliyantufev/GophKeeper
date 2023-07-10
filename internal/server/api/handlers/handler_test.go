@@ -112,6 +112,11 @@ func TestHandlers(t *testing.T) {
 		assert.NoError(t, err, "registration failed")
 	})
 
+	t.Run("user exist", func(t *testing.T) {
+		_, err := handlerGrpc.HandleUserExist(context.Background(), &grpcKeeper.UserExistRequest{Username: username})
+		assert.NoError(t, err, "user exist failed")
+	})
+
 	t.Run("authentication", func(t *testing.T) {
 		authenticatedUser, err = handlerGrpc.HandleAuthentication(context.Background(), &grpcKeeper.AuthenticationRequest{Username: username, Password: password})
 		assert.NoError(t, err, "authentication failed")
