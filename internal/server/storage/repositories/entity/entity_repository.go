@@ -20,7 +20,6 @@ func New(db *database.DB) *Entity {
 
 func (e *Entity) Create(entityRequest *model.CreateEntityRequest) (int64, error) {
 	var id int64
-
 	metadata := model.MetadataEntity{Name: entityRequest.Metadata.Name, Description: entityRequest.Metadata.Description, Type: entityRequest.Metadata.Type}
 	jsonMetadata, err := json.Marshal(metadata)
 	if err != nil {
@@ -47,6 +46,12 @@ func (e *Entity) GetList(userId int64) ([]model.Entity, error) {
 
 func (e *Entity) Exists(entityRequest *model.CreateEntityRequest) (bool, error) {
 	var exists bool
+	row := e.db.Pool.QueryRow("SELECT EXISTS(SELECT 1 FROM entity "+
+		"where entity.metadata->>'name' = $1 and entity.user_id = $2 and entity.metadata->>'type' = $3 and entity.deleted_at IS NULL)",
+		entityRequest.Metadata.Name, entityRequest.UserID, entityRequest.Metadata.Type)
+	if err := row.Scan(&exists); err != nil {
+		return exists, err
+	}
 	return exists, nil
 }
 
