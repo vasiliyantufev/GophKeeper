@@ -295,8 +295,7 @@ message Entity {
 message CreateEntityRequest {
   bytes data = 1;
   string metadata = 2;
-  string  type = 3;
-  Token  accessToken = 4;
+  Token  accessToken = 3;
 }
 message CreateEntityResponse {
   int64  id = 1;
@@ -318,7 +317,7 @@ message DeleteEntityResponse {
 }
 message UpdateEntityRequest {
   string name = 1;
-  string  type = 2;
+  string type = 2;
   bytes  data = 3;
   Token accessToken = 4;
 }
