@@ -93,6 +93,7 @@ func TestHandlers(t *testing.T) {
 	// -- TEST DATA --
 	var authenticatedUser *grpcKeeper.AuthenticationResponse
 	data := randomizer.RandStringRunes(10)
+	dataUpdate := randomizer.RandStringRunes(10)
 	username := randomizer.RandStringRunes(10)
 	password, _ := encryption.HashPassword("Password-00")
 	name := randomizer.RandStringRunes(10)
@@ -122,6 +123,14 @@ func TestHandlers(t *testing.T) {
 				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
 					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
 		assert.NoError(t, err, "create entity failed")
+	})
+
+	t.Run("update entity", func(t *testing.T) {
+		_, err := handlerGrpc.HandleUpdateEntity(context.Background(),
+			&grpcKeeper.UpdateEntityRequest{Name: name, Data: []byte(dataUpdate), Type: variables.Text.ToString(),
+				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
+					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
+		assert.NoError(t, err, "update entity failed")
 	})
 
 	t.Run("delete entity", func(t *testing.T) {

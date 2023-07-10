@@ -78,12 +78,8 @@ func (e *Entity) Exists(entityRequest *model.CreateEntityRequest) (bool, error) 
 
 func (e *Entity) Delete(userID int64, name string, typeEntity string) (int64, error) {
 	var id int64
-	//name = "jjjjj"
 	if err := e.db.Pool.QueryRow("UPDATE entity SET deleted_at = $1 "+
 		"where entity.user_id = $2 and entity.metadata->>'Name' = $3 and entity.metadata->>'Type' = $4 RETURNING entity_id",
-		//"where entity.metadata->>'Name' = $2",
-		//time.Now(),
-		//name,
 		time.Now(),
 		userID,
 		name,
