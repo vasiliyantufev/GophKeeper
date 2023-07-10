@@ -1,6 +1,7 @@
 package table
 
 import (
+	"encoding/json"
 	"strconv"
 	"time"
 
@@ -74,25 +75,25 @@ func UpdateRowCard(paymentSystem, number, holder, cvc, endDate string, slice [][
 	return slice
 }
 
-func AppendText(node *grpc.Text, dataTblText *[][]string, plaintext string) {
-	created, _ := service.ConvertTimestampToTime(node.CreatedAt)
-	updated, _ := service.ConvertTimestampToTime(node.UpdatedAt)
-	if node.Key == string(variables.Name) {
-		row := []string{strconv.Itoa(int(node.Id)), node.Value, "", plaintext, created.Format(layouts.LayoutDateAndTime.ToString()), updated.Format(layouts.LayoutDateAndTime.ToString())}
-		*dataTblText = append(*dataTblText, row)
-	} else if node.Key == string(variables.Description) {
-		row := []string{strconv.Itoa(int(node.Id)), "", node.Value, plaintext, created.Format(layouts.LayoutDateAndTime.ToString()), updated.Format(layouts.LayoutDateAndTime.ToString())}
-		*dataTblText = append(*dataTblText, row)
-	}
-}
-
-func UpdateText(node *grpc.Text, dataTblText *[][]string, index int) {
-	if node.Key == string(variables.Name) {
-		(*dataTblText)[index][ColName] = node.Value
-	} else if node.Key == string(variables.Description) {
-		(*dataTblText)[index][ColDescription] = node.Value
-	}
-}
+//func AppendText(node *grpc.Text, dataTblText *[][]string, plaintext string) {
+//	created, _ := service.ConvertTimestampToTime(node.CreatedAt)
+//	updated, _ := service.ConvertTimestampToTime(node.UpdatedAt)
+//	if node.Key == string(variables.Name) {
+//		row := []string{strconv.Itoa(int(node.Id)), node.Value, "", plaintext, created.Format(layouts.LayoutDateAndTime.ToString()), updated.Format(layouts.LayoutDateAndTime.ToString())}
+//		*dataTblText = append(*dataTblText, row)
+//	} else if node.Key == string(variables.Description) {
+//		row := []string{strconv.Itoa(int(node.Id)), "", node.Value, plaintext, created.Format(layouts.LayoutDateAndTime.ToString()), updated.Format(layouts.LayoutDateAndTime.ToString())}
+//		*dataTblText = append(*dataTblText, row)
+//	}
+//}
+//
+//func UpdateText(node *grpc.Text, dataTblText *[][]string, index int) {
+//	if node.Key == string(variables.Name) {
+//		(*dataTblText)[index][ColName] = node.Value
+//	} else if node.Key == string(variables.Description) {
+//		(*dataTblText)[index][ColDescription] = node.Value
+//	}
+//}
 
 func AppendCard(node *grpc.Card, dataTblCard *[][]string, jsonCard model.Card) {
 	created, _ := service.ConvertTimestampToTime(node.CreatedAt)
@@ -150,4 +151,26 @@ func AppendBinary(node *grpc.Binary, dataTblBinary *[][]string) {
 	created, _ := service.ConvertTimestampToTime(node.CreatedAt)
 	row := []string{node.Name, created.Format(layouts.LayoutDateAndTime.ToString())}
 	*dataTblBinary = append(*dataTblBinary, row)
+}
+
+//-------------------------------------------------
+
+func AppendTextEntity(node *grpc.Entity, dataTblText *[][]string, plaintext string) error {
+	created, err := service.ConvertTimestampToTime(node.CreatedAt)
+	if err != nil {
+		return err
+	}
+	updated, err := service.ConvertTimestampToTime(node.UpdatedAt)
+	if err != nil {
+		return err
+	}
+	var metadata model.MetadataEntity
+	err = json.Unmarshal([]byte(node.Metadata), &metadata)
+	if err != nil {
+		return err
+	}
+
+	row := []string{metadata.Name, metadata.Description, plaintext, created.Format(layouts.LayoutDateAndTime.ToString()), updated.Format(layouts.LayoutDateAndTime.ToString())}
+	*dataTblText = append(*dataTblText, row)
+	return nil
 }

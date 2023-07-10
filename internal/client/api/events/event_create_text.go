@@ -31,13 +31,13 @@ func (c Event) EventCreateText(name, description, password, plaintext string, to
 		return err
 	}
 
-	createdText, err := c.grpc.HandleCreateText(context.Background(),
-		&grpc.CreateTextRequest{Name: name, Description: description, Text: []byte(encryptText),
-			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
-	if err != nil {
-		c.logger.Error(err)
-		return err
-	}
+	//createdText, err := c.grpc.HandleCreateText(context.Background(),
+	//	&grpc.CreateTextRequest{Name: name, Description: description, Text: []byte(encryptText),
+	//		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	//if err != nil {
+	//	c.logger.Error(err)
+	//	return err
+	//}
 
 	metadata := model.MetadataEntity{Name: name, Description: description, Type: variables.Text.ToString()}
 	jsonMetadata, err := json.Marshal(metadata)
@@ -54,6 +54,6 @@ func (c Event) EventCreateText(name, description, password, plaintext string, to
 	}
 
 	c.logger.Debug(createdEntityID)
-	c.logger.Debug(createdText.Text)
+	//c.logger.Debug(createdText.Text)
 	return nil
 }

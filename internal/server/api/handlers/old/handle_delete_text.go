@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 )
 
 // HandleDeleteText - delete text
-func (h *Handler) HandleDeleteText(ctx context.Context, req *grpc.DeleteTextRequest) (*grpc.DeleteTextResponse, error) {
+func (h *handlers.Handler) HandleDeleteText(ctx context.Context, req *grpc.DeleteTextRequest) (*grpc.DeleteTextResponse, error) {
 	h.logger.Info("Delete text")
 
 	valid := h.token.Validate(req.AccessToken)

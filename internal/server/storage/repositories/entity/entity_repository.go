@@ -47,21 +47,29 @@ func (e *Entity) GetList(userID int64, typeEntity string) ([]model.Entity, error
 		userID, typeEntity)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errors.ErrRecordNotFound
+			return entities, errors.ErrRecordNotFound
 		} else {
-			return nil, err
+			return entities, err
 		}
 	}
 	defer rows.Close()
 	for rows.Next() {
 		entity := model.Entity{}
-		err = rows.Scan(&entity.ID, &entity.UserID, &entity.Data, &entity.Metadata, &entity.CreatedAt, &entity.UpdatedAt)
+		entityMetadata := model.MetadataEntity{}
+
+		var jsonEntity string
+		err = rows.Scan(&entity.ID, &entity.UserID, &entity.Data, &jsonEntity, &entity.CreatedAt, &entity.UpdatedAt)
 		if err != nil {
-			return nil, err
+			return entities, err
 		}
+
+		err = json.Unmarshal([]byte(jsonEntity), &entityMetadata)
+		if err != nil {
+			return entities, err
+		}
+		entity.Metadata = entityMetadata
 		entities = append(entities, entity)
 	}
-
 	return entities, nil
 }
 

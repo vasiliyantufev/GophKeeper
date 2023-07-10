@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 )
 
 // HandleUpdateText - Update text
-func (h *Handler) HandleUpdateText(ctx context.Context, req *grpc.UpdateTextRequest) (*grpc.UpdateTextResponse, error) {
+func (h *handlers.Handler) HandleUpdateText(ctx context.Context, req *grpc.UpdateTextRequest) (*grpc.UpdateTextResponse, error) {
 	h.logger.Info("Update text")
 
 	valid := h.token.Validate(req.AccessToken)

@@ -10,6 +10,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 )
 
 func (c Event) EventSynchronization(password string, token model.Token) ([][]string, [][]string, [][]string, [][]string, error) {
@@ -22,13 +23,24 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
 	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 
-	nodesText, err := c.grpc.HandleGetListText(c.context,
-		&grpc.GetListTextRequest{AccessToken: &grpc.Token{Token: token.AccessToken,
-			UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
+	//nodesText, err := c.grpc.HandleGetListText(c.context,
+	//	&grpc.GetListTextRequest{AccessToken: &grpc.Token{Token: token.AccessToken,
+	//		UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
+	//if err != nil {
+	//	c.logger.Error(err)
+	//	return dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err
+	//}
+
+	nodesTextEntity, err := c.grpc.HandleGetListEntity(c.context,
+		&grpc.GetListEntityRequest{Type: variables.Text.ToString(),
+			AccessToken: &grpc.Token{Token: token.AccessToken,
+				UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
 	if err != nil {
 		c.logger.Error(err)
 		return dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err
 	}
+
+	//-----------------------------------------------
 
 	nodesCard, err := c.grpc.HandleGetListCard(c.context,
 		&grpc.GetListCardRequest{AccessToken: &grpc.Token{Token: token.AccessToken,
@@ -57,7 +69,8 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 	var plaintext string
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
 
-	titleText := []string{"ID", "NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}
+	//titleText := []string{"ID", "NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}
+	titleText := []string{"NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}
 	titleCard := []string{"ID", "NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC",
 		"END DATE", "CREATED AT", "UPDATED AT"}
 	titleLoginPassword := []string{"ID", "NAME", "DESCRIPTION", "LOGIN", "PASSWORD", "CREATED AT", "UPDATED AT"}
@@ -73,19 +86,34 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 	dataTblLoginPasswordPointer := &dataTblLoginPassword
 	dataTblBinaryPointer := &dataTblBinary
 
-	for _, node := range nodesText.Node {
+	//for _, node := range nodesText.Node {
+	//	plaintext, err = encryption.Decrypt(string(node.Data), secretKey)
+	//	if err != nil {
+	//		c.logger.Error(err)
+	//		return dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err
+	//	}
+	//	index := table.GetIndex(dataTblText, table.ColId, strconv.Itoa(int(node.Id)))
+	//	if index == 0 { // entity_id does not exist, add record
+	//		table.AppendText(node, dataTblTextPointer, plaintext)
+	//	} else { // entity_id exists, update tags
+	//		table.UpdateText(node, dataTblTextPointer, index)
+	//	}
+	//}
+
+	for _, node := range nodesTextEntity.Node {
 		plaintext, err = encryption.Decrypt(string(node.Data), secretKey)
 		if err != nil {
 			c.logger.Error(err)
 			return dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err
 		}
-		index := table.GetIndex(dataTblText, table.ColId, strconv.Itoa(int(node.Id)))
-		if index == 0 { // entity_id does not exist, add record
-			table.AppendText(node, dataTblTextPointer, plaintext)
-		} else { // entity_id exists, update tags
-			table.UpdateText(node, dataTblTextPointer, index)
+		err = table.AppendTextEntity(node, dataTblTextPointer, plaintext)
+		if err != nil {
+			c.logger.Error(err)
+			return dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err
 		}
 	}
+
+	//-----------------------------------------------
 
 	for _, node := range nodesCard.Node {
 		plaintext, err = encryption.Decrypt(string(node.Data), secretKey)
@@ -95,11 +123,6 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 		}
 
 		var card model.Card
-		err = json.Unmarshal([]byte(plaintext), &card)
-		if err != nil {
-			c.logger.Error(err)
-			return dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err
-		}
 		index := table.GetIndex(dataTblCard, table.ColId, strconv.Itoa(int(node.Id)))
 		if index == 0 { // entity_id does not exist, add record
 			table.AppendCard(node, dataTblCardPointer, card)
@@ -133,10 +156,10 @@ func (c Event) EventSynchronization(password string, token model.Token) ([][]str
 		table.AppendBinary(node, dataTblBinaryPointer)
 	}
 
-	table.DeleteColId(dataTblTextPointer)
+	//table.DeleteColId(dataTblTextPointer)
 	table.DeleteColId(dataTblCardPointer)
 	table.DeleteColId(dataTblLoginPasswordPointer)
-	logrus.Debug(dataTblText)
+	//logrus.Debug(dataTblText)
 	logrus.Debug(dataTblCard)
 	logrus.Debug(dataTblLoginPassword)
 	logrus.Debug(dataTblBinary)

@@ -30,12 +30,12 @@ func (c Event) EventUpdateText(name, passwordSecure, text string, token model.To
 		c.logger.Error(err)
 		return err
 	}
-	updateText, err := c.grpc.HandleUpdateText(context.Background(), &grpc.UpdateTextRequest{Name: name, Data: []byte(encryptText),
-		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
-	if err != nil {
-		c.logger.Error(err)
-		return err
-	}
+	//updateText, err := c.grpc.HandleUpdateText(context.Background(), &grpc.UpdateTextRequest{Name: name, Data: []byte(encryptText),
+	//	AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	//if err != nil {
+	//	c.logger.Error(err)
+	//	return err
+	//}
 
 	updatedTextEntityID, err := c.grpc.HandleUpdateEntity(context.Background(),
 		&grpc.UpdateEntityRequest{Name: name, Data: []byte(encryptText), Type: variables.Text.ToString(),
@@ -45,7 +45,7 @@ func (c Event) EventUpdateText(name, passwordSecure, text string, token model.To
 		return err
 	}
 
-	c.logger.Debug(updateText)
+	//c.logger.Debug(updateText)
 	c.logger.Debug(updatedTextEntityID)
 	return nil
 }

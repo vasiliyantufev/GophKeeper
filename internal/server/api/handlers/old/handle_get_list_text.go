@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 )
 
 // HandleGetListText - get list text
-func (h *Handler) HandleGetListText(ctx context.Context, req *grpc.GetListTextRequest) (*grpc.GetListTextResponse, error) {
+func (h *handlers.Handler) HandleGetListText(ctx context.Context, req *grpc.GetListTextRequest) (*grpc.GetListTextResponse, error) {
 	h.logger.Info("Get list text")
 
 	valid := h.token.Validate(req.AccessToken)

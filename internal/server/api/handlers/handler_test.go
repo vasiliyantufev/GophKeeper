@@ -138,6 +138,14 @@ func TestHandlers(t *testing.T) {
 		assert.NoError(t, err, "update entity failed")
 	})
 
+	t.Run("get list entity", func(t *testing.T) {
+		_, err = handlerGrpc.HandleGetListEntity(context.Background(),
+			&grpcKeeper.GetListEntityRequest{Type: variables.Text.ToString(),
+				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
+					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
+		assert.NoError(t, err, "get list failed")
+	})
+
 	t.Run("delete entity", func(t *testing.T) {
 		_, err := handlerGrpc.HandleDeleteEntity(context.Background(),
 			&grpcKeeper.DeleteEntityRequest{Name: name, Type: variables.Text.ToString(),
