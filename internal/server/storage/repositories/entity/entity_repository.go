@@ -15,27 +15,27 @@ func New(db *database.DB) *Entity {
 	}
 }
 
-func (e *Entity) CreateEntity(entityRequest *model.CreateEntityRequest) (*model.Entity, error) {
+func (e *Entity) Create(entityRequest *model.CreateEntityRequest) (*model.Entity, error) {
 	entity := &model.Entity{}
 	return entity, nil
 }
 
-func (e *Entity) GetListEntity(userId int64) ([]model.Entity, error) {
+func (e *Entity) GetList(userId int64) ([]model.Entity, error) {
 	entity := []model.Entity{}
 	return entity, nil
 }
 
-func (e *Entity) EntityExists(entityRequest *model.CreateEntityRequest) (bool, error) {
+func (e *Entity) Exists(entityRequest *model.CreateEntityRequest) (bool, error) {
 	var exists bool
 	return exists, nil
 }
 
-func (e *Entity) DeleteEntity(EntityID int64) error {
+func (e *Entity) Delete(EntityID int64) error {
 	//var id int64
 	return nil
 }
 
-func (e *Entity) UpdateEntity(entityID int64, data []byte) error {
+func (e *Entity) Update(entityID int64, data []byte) error {
 	//var id int64
 	return nil
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/binary"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/card"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/entity"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/login_password"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/metadata"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/text"
@@ -25,15 +26,15 @@ type Handler struct {
 	binary        *binary.Binary
 	metadata      *metadata.Metadata
 	storage       *storage.Storage
+	entity        *entity.Entity
 	token         *token.Token
 	logger        *logrus.Logger
 	grpc.UnimplementedGophkeeperServer
 }
 
 // NewHandler - creates a new grpc server instance
-func NewHandler(db *database.DB, config *config.Config, userRepository *user.User, textRepository *text.Text, cardRepository *card.Card,
-	loginPasswordRepository *loginPassword.LoginPassword, binaryRepository *binary.Binary, metadataRepository *metadata.Metadata, storage *storage.Storage,
-	tokenRepository *token.Token, log *logrus.Logger) *Handler {
+func NewHandler(db *database.DB, config *config.Config, userRepository *user.User, textRepository *text.Text, cardRepository *card.Card, loginPasswordRepository *loginPassword.LoginPassword, binaryRepository *binary.Binary, metadataRepository *metadata.Metadata, storage *storage.Storage, entityRepository *entity.Entity, tokenRepository *token.Token, log *logrus.Logger) *Handler {
 	return &Handler{database: db, config: config, user: userRepository, text: textRepository, card: cardRepository,
-		loginPassword: loginPasswordRepository, binary: binaryRepository, metadata: metadataRepository, storage: storage, token: tokenRepository, logger: log}
+		loginPassword: loginPasswordRepository, binary: binaryRepository, metadata: metadataRepository, storage: storage,
+		entity: entityRepository, token: tokenRepository, logger: log}
 }

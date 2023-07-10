@@ -288,10 +288,9 @@ message Entity {
   int64  userId = 2;
   bytes  data = 3;
   string metadata = 4;
-  string type = 5;
-  google.protobuf.Timestamp createdAt = 6;
-  google.protobuf.Timestamp updatedAt = 7;
-  google.protobuf.Timestamp deletedAt = 8;
+  google.protobuf.Timestamp createdAt = 5;
+  google.protobuf.Timestamp updatedAt = 6;
+  google.protobuf.Timestamp deletedAt = 7;
 }
 message CreateEntityRequest {
   bytes data = 1;
@@ -300,7 +299,7 @@ message CreateEntityRequest {
   Token  accessToken = 4;
 }
 message CreateEntityResponse {
-  Entity data = 1;
+  int64  id = 1;
 }
 message GetListEntityRequest {
   Token accessToken = 1;
