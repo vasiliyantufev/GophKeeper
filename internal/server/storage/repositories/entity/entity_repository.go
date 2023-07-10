@@ -55,7 +55,7 @@ func (e *Entity) Exists(entityRequest *model.CreateEntityRequest) (bool, error) 
 	return exists, nil
 }
 
-func (e *Entity) Delete(userID int64, name string, typeEntity string) error {
+func (e *Entity) Delete(userID int64, name string, typeEntity string) (int64, error) {
 	var id int64
 	if err := e.db.Pool.QueryRow("UPDATE entity SET deleted_at = $1 "+
 		"where entity.user_id = $2 and entity.metadata->>'name' = $3 and entity.metadata->>'type' = $4",
@@ -64,12 +64,21 @@ func (e *Entity) Delete(userID int64, name string, typeEntity string) error {
 		name,
 		typeEntity,
 	).Scan(&id); err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return id, nil
 }
 
-func (e *Entity) Update(entityID int64, data []byte) error {
-	//var id int64
-	return nil
+func (e *Entity) Update(userID int64, name string, typeEntity string, data []byte) (int64, error) {
+	var id int64
+	if err := e.db.Pool.QueryRow("UPDATE entity SET data = $1 "+
+		"where entity.user_id = $2 and entity.metadata->>'name' = $3 and entity.metadata->>'type' = $4",
+		data,
+		userID,
+		name,
+		typeEntity,
+	).Scan(&id); err != nil {
+		return 0, err
+	}
+	return id, nil
 }

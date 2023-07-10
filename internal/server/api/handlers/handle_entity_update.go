@@ -21,5 +21,13 @@ func (h *Handler) HandleEntityUpdate(ctx context.Context, req *grpc.UpdateEntity
 		)
 	}
 
-	return &grpc.UpdateEntityResponse{}, nil
+	UpdatedEntityID, err := h.entity.Update(req.AccessToken.UserId, req.Name, req.Type, req.Data)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.UpdateEntityResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
+	return &grpc.UpdateEntityResponse{Id: UpdatedEntityID}, nil
 }

@@ -21,7 +21,7 @@ func (h *Handler) HandleEntityDelete(ctx context.Context, req *grpc.DeleteEntity
 		)
 	}
 
-	err := h.entity.Delete(req.AccessToken.UserId, req.Name, req.Type)
+	DeletedEntityID, err := h.entity.Delete(req.AccessToken.UserId, req.Name, req.Type)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.DeleteEntityResponse{}, status.Errorf(
@@ -29,5 +29,5 @@ func (h *Handler) HandleEntityDelete(ctx context.Context, req *grpc.DeleteEntity
 		)
 	}
 
-	return &grpc.DeleteEntityResponse{}, nil
+	return &grpc.DeleteEntityResponse{Id: DeletedEntityID}, nil
 }
