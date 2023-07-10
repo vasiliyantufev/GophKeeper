@@ -29,5 +29,6 @@ func (h *Handler) HandleEntityUpdate(ctx context.Context, req *grpc.UpdateEntity
 		)
 	}
 
+	h.logger.Debug(UpdatedEntityID)
 	return &grpc.UpdateEntityResponse{Id: UpdatedEntityID}, nil
 }

@@ -21,5 +21,13 @@ func (h *Handler) HandleEntityGetList(ctx context.Context, req *grpc.GetListEnti
 		)
 	}
 
+	//ListEntity, err := h.entity.GetList(req.AccessToken.UserId, req.Type)
+	//if err != nil {
+	//	h.logger.Error(err)
+	//	return &grpc.GetListEntityResponse{}, status.Errorf(
+	//		codes.Internal, err.Error(),
+	//	)
+	//}
+
 	return &grpc.GetListEntityResponse{}, nil
 }

@@ -65,5 +65,6 @@ func (h *Handler) HandleEntityCreate(ctx context.Context, req *grpc.CreateEntity
 		)
 	}
 
+	h.logger.Debug(CreatedEntityID)
 	return &grpc.CreateEntityResponse{Id: CreatedEntityID}, nil
 }

@@ -29,5 +29,6 @@ func (h *Handler) HandleEntityDelete(ctx context.Context, req *grpc.DeleteEntity
 		)
 	}
 
+	h.logger.Debug(DeletedEntityID)
 	return &grpc.DeleteEntityResponse{Id: DeletedEntityID}, nil
 }
