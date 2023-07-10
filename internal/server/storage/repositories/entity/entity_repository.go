@@ -28,8 +28,7 @@ func (e *Entity) Create(entityRequest *model.CreateEntityRequest) (int64, error)
 		return 0, err
 	}
 	if err = e.db.Pool.QueryRow(
-		"INSERT INTO entity (user_id, data, metadata, created_at, updated_at) VALUES ($1, $2, $3, $4) "+
-			"RETURNING entity_id",
+		"INSERT INTO entity (user_id, data, metadata, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)  RETURNING entity_id",
 		entityRequest.UserID,
 		entityRequest.Data,
 		jsonMetadata,

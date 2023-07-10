@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleEntityDelete - delete entity
-func (h *Handler) HandleEntityDelete(ctx context.Context, req *grpc.DeleteEntityRequest) (*grpc.DeleteEntityResponse, error) {
+// HandleDeleteEntity - delete entity
+func (h *Handler) HandleDeleteEntity(ctx context.Context, req *grpc.DeleteEntityRequest) (*grpc.DeleteEntityResponse, error) {
 	h.logger.Info("Delete entity")
 
 	valid := h.token.Validate(req.AccessToken)

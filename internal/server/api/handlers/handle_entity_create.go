@@ -11,8 +11,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleEntityCreate - create entity
-func (h *Handler) HandleEntityCreate(ctx context.Context, req *grpc.CreateEntityRequest) (*grpc.CreateEntityResponse, error) {
+// HandleCreateEntity - create entity
+func (h *Handler) HandleCreateEntity(ctx context.Context, req *grpc.CreateEntityRequest) (*grpc.CreateEntityResponse, error) {
 	h.logger.Info("Create entity")
 
 	valid := h.token.Validate(req.AccessToken)

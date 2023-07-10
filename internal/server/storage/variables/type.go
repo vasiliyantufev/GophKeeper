@@ -8,3 +8,7 @@ const (
 	Binary        Types = "Binary data"
 	Card          Types = "Bank card data"
 )
+
+func (t Types) ToString() string {
+	return string(t)
+}

@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleEntityUpdate - update entity
-func (h *Handler) HandleEntityUpdate(ctx context.Context, req *grpc.UpdateEntityRequest) (*grpc.UpdateEntityResponse, error) {
+// HandleUpdateEntity - update entity
+func (h *Handler) HandleUpdateEntity(ctx context.Context, req *grpc.UpdateEntityRequest) (*grpc.UpdateEntityResponse, error) {
 	h.logger.Info("Update entity")
 
 	valid := h.token.Validate(req.AccessToken)

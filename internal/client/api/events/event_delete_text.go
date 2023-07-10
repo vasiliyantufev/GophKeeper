@@ -11,8 +11,17 @@ import (
 func (c Event) EventDeleteText(text []string, token model.Token) error {
 	c.logger.Info("Delete text")
 
-	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+	createdToken, err := service.ConvertTimeToTimestamp(token.CreatedAt)
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
+	endDateToken, err := service.ConvertTimeToTimestamp(token.EndDateAt)
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
+
 	deletedText, err := c.grpc.HandleDeleteText(context.Background(),
 		&grpc.DeleteTextRequest{Name: text[0], AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
@@ -20,7 +29,16 @@ func (c Event) EventDeleteText(text []string, token model.Token) error {
 		return err
 	}
 
+	//deletedTextEntity, err := c.grpc.HandleDeleteEntity(context.Background(),
+	//	&grpc.DeleteEntityRequest{Name: text[0], Type: variables.Text.ToString(),
+	//		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	//if err != nil {
+	//	c.logger.Error(err)
+	//	return err
+	//}
+
 	c.logger.Debug(text)
 	c.logger.Debug(deletedText)
+	//c.logger.Debug(deletedTextEntity)
 	return nil
 }
