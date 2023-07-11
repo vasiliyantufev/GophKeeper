@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 )
 
 // HandleGetNodeLoginPassword - get node login password
-func (h *Handler) HandleGetNodeLoginPassword(ctx context.Context, req *grpc.GetNodeLoginPasswordRequest) (*grpc.GetNodeLoginPasswordResponse, error) {
+func (h *handlers.Handler) HandleGetNodeLoginPassword(ctx context.Context, req *grpc.GetNodeLoginPasswordRequest) (*grpc.GetNodeLoginPasswordResponse, error) {
 	h.logger.Info("Get node login password")
 
 	valid := h.token.Validate(req.AccessToken)

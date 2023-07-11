@@ -11,6 +11,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/layouts"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 )
 
 func (c Event) EventCreateCard(name, description, password, paymentSystem, number, holder, cvc, endDate string, token model.Token) error {
@@ -39,16 +40,39 @@ func (c Event) EventCreateCard(name, description, password, paymentSystem, numbe
 		c.logger.Error(err)
 		return err
 	}
+	createdToken, err := service.ConvertTimeToTimestamp(token.CreatedAt)
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
+	endDateToken, err := service.ConvertTimeToTimestamp(token.EndDateAt)
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
 
-	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
-	createdCard, err := c.grpc.HandleCreateCard(context.Background(),
-		&grpc.CreateCardRequest{Name: name, Description: description, Data: []byte(encryptCard),
+	//createdCard, err := c.grpc.HandleCreateCard(context.Background(),
+	//	&grpc.CreateCardRequest{Name: name, Description: description, Data: []byte(encryptCard),
+	//		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	//if err != nil {
+	//	c.logger.Error(err)
+	//	return err
+	//}
+
+	metadata := model.MetadataEntity{Name: name, Description: description, Type: variables.Card.ToString()}
+	jsonMetadata, err := json.Marshal(metadata)
+	if err != nil {
+		return err
+	}
+	createdEntityID, err := c.grpc.HandleCreateEntity(context.Background(),
+		&grpc.CreateEntityRequest{Data: []byte(encryptCard), Metadata: string(jsonMetadata),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
 		c.logger.Error(err)
 		return err
 	}
-	c.logger.Debug(createdCard)
+
+	//c.logger.Debug(createdCard)
+	c.logger.Debug(createdEntityID)
 	return nil
 }

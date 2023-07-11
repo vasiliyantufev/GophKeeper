@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 )
 
 // HandleUpdateLoginPassword - Update login password
-func (h *Handler) HandleUpdateLoginPassword(ctx context.Context, req *grpc.UpdateLoginPasswordRequest) (*grpc.UpdateLoginPasswordResponse, error) {
+func (h *handlers.Handler) HandleUpdateLoginPassword(ctx context.Context, req *grpc.UpdateLoginPasswordRequest) (*grpc.UpdateLoginPasswordResponse, error) {
 	h.logger.Info("Update login password")
 
 	valid := h.token.Validate(req.AccessToken)

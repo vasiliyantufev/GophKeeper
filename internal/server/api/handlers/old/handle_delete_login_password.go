@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 )
 
 // HandleDeleteLoginPassword - delete login password
-func (h *Handler) HandleDeleteLoginPassword(ctx context.Context, req *grpc.DeleteLoginPasswordRequest) (*grpc.DeleteLoginPasswordResponse, error) {
+func (h *handlers.Handler) HandleDeleteLoginPassword(ctx context.Context, req *grpc.DeleteLoginPasswordRequest) (*grpc.DeleteLoginPasswordResponse, error) {
 	h.logger.Info("Delete login password")
 
 	valid := h.token.Validate(req.AccessToken)

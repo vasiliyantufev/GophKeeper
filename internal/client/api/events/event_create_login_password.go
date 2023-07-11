@@ -38,13 +38,13 @@ func (c Event) EventCreateLoginPassword(name, description, passwordSecure, login
 		return err
 	}
 
-	createdLoginPassword, err := c.grpc.HandleCreateLoginPassword(context.Background(),
-		&grpc.CreateLoginPasswordRequest{Name: name, Description: description, Data: []byte(encryptLoginPassword),
-			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
-	if err != nil {
-		c.logger.Error(err)
-		return err
-	}
+	//createdLoginPassword, err := c.grpc.HandleCreateLoginPassword(context.Background(),
+	//	&grpc.CreateLoginPasswordRequest{Name: name, Description: description, Data: []byte(encryptLoginPassword),
+	//		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	//if err != nil {
+	//	c.logger.Error(err)
+	//	return err
+	//}
 
 	metadata := model.MetadataEntity{Name: name, Description: description, Type: variables.LoginPassword.ToString()}
 	jsonMetadata, err := json.Marshal(metadata)
@@ -59,7 +59,7 @@ func (c Event) EventCreateLoginPassword(name, description, passwordSecure, login
 		return err
 	}
 
-	c.logger.Debug(createdLoginPassword.Data)
-	c.logger.Debug(createdEntityID.Id)
+	//c.logger.Debug(createdLoginPassword.Data)
+	c.logger.Debug(createdEntityID)
 	return nil
 }

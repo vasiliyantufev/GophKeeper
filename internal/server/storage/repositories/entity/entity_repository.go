@@ -100,9 +100,10 @@ func (e *Entity) Delete(userID int64, name string, typeEntity string) (int64, er
 
 func (e *Entity) Update(userID int64, name string, typeEntity string, data []byte) (int64, error) {
 	var id int64
-	if err := e.db.Pool.QueryRow("UPDATE entity SET data = $1 "+
-		"where entity.user_id = $2 and entity.metadata->>'Name' = $3 and entity.metadata->>'Type' = $4 RETURNING entity_id",
+	if err := e.db.Pool.QueryRow("UPDATE entity SET data = $1, updated_at = $2 "+
+		"where entity.user_id = $3 and entity.metadata->>'Name' = $4 and entity.metadata->>'Type' = $5 RETURNING entity_id",
 		data,
+		time.Now(),
 		userID,
 		name,
 		typeEntity,

@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 )
 
 // HandleGetListLoginPassword - get list login password
-func (h *Handler) HandleGetListLoginPassword(ctx context.Context, req *grpc.GetListLoginPasswordRequest) (*grpc.GetListLoginPasswordResponse, error) {
+func (h *handlers.Handler) HandleGetListLoginPassword(ctx context.Context, req *grpc.GetListLoginPasswordRequest) (*grpc.GetListLoginPasswordResponse, error) {
 	h.logger.Info("Get list login password")
 
 	valid := h.token.Validate(req.AccessToken)

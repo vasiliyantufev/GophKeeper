@@ -11,6 +11,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/layouts"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 )
 
 func (c Event) EventUpdateCard(name, passwordSecure, paymentSystem, number, holder, cvc, endDateCard string, token model.Token) error {
@@ -40,15 +41,32 @@ func (c Event) EventUpdateCard(name, passwordSecure, paymentSystem, number, hold
 		return err
 	}
 
-	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
-	updateCard, err := c.grpc.HandleUpdateCard(context.Background(), &grpc.UpdateCardRequest{Name: name, Data: []byte(encryptCard),
-		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	createdToken, err := service.ConvertTimeToTimestamp(token.CreatedAt)
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
+	endDateToken, err := service.ConvertTimeToTimestamp(token.EndDateAt)
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
+	//updateCard, err := c.grpc.HandleUpdateCard(context.Background(), &grpc.UpdateCardRequest{Name: name, Data: []byte(encryptCard),
+	//	AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	//if err != nil {
+	//	c.logger.Error(err)
+	//	return err
+	//}
+
+	updatedCardEntityID, err := c.grpc.HandleUpdateEntity(context.Background(),
+		&grpc.UpdateEntityRequest{Name: name, Data: []byte(encryptCard), Type: variables.Card.ToString(),
+			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {
 		c.logger.Error(err)
 		return err
 	}
 
-	c.logger.Debug(updateCard)
+	//c.logger.Debug(updateCard)
+	c.logger.Debug(updatedCardEntityID)
 	return nil
 }

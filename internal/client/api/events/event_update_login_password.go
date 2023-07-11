@@ -38,12 +38,12 @@ func (c Event) EventUpdateLoginPassword(name, passwordSecure, login, password st
 		return err
 	}
 
-	updateLoginPassword, err := c.grpc.HandleUpdateLoginPassword(context.Background(), &grpc.UpdateLoginPasswordRequest{Name: name, Data: []byte(encryptLoginPassword),
-		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
-	if err != nil {
-		c.logger.Error(err)
-		return err
-	}
+	//updateLoginPassword, err := c.grpc.HandleUpdateLoginPassword(context.Background(), &grpc.UpdateLoginPasswordRequest{Name: name, Data: []byte(encryptLoginPassword),
+	//	AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	//if err != nil {
+	//	c.logger.Error(err)
+	//	return err
+	//}
 
 	updatedLoginPasswordEntityID, err := c.grpc.HandleUpdateEntity(context.Background(),
 		&grpc.UpdateEntityRequest{Name: name, Data: []byte(encryptLoginPassword), Type: variables.LoginPassword.ToString(),
@@ -53,7 +53,7 @@ func (c Event) EventUpdateLoginPassword(name, passwordSecure, login, password st
 		return err
 	}
 
-	c.logger.Debug(updateLoginPassword)
+	//c.logger.Debug(updateLoginPassword)
 	c.logger.Debug(updatedLoginPasswordEntityID)
 	return nil
 }

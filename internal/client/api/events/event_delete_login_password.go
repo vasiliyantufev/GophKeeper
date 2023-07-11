@@ -23,13 +23,13 @@ func (c Event) EventDeleteLoginPassword(loginPassword []string, token model.Toke
 		return err
 	}
 
-	deletedLoginPassword, err := c.grpc.HandleDeleteLoginPassword(context.Background(),
-		&grpc.DeleteLoginPasswordRequest{Name: loginPassword[0],
-			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
-	if err != nil {
-		c.logger.Error(err)
-		return err
-	}
+	//deletedLoginPassword, err := c.grpc.HandleDeleteLoginPassword(context.Background(),
+	//	&grpc.DeleteLoginPasswordRequest{Name: loginPassword[0],
+	//		AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	//if err != nil {
+	//	c.logger.Error(err)
+	//	return err
+	//}
 
 	deletedLoginPasswordEntityID, err := c.grpc.HandleDeleteEntity(context.Background(),
 		&grpc.DeleteEntityRequest{Name: loginPassword[0], Type: variables.LoginPassword.ToString(),
@@ -40,7 +40,7 @@ func (c Event) EventDeleteLoginPassword(loginPassword []string, token model.Toke
 		return err
 	}
 
-	c.logger.Debug(deletedLoginPassword.Id)
+	//c.logger.Debug(deletedLoginPassword.Id)
 	c.logger.Debug(deletedLoginPasswordEntityID)
 	return nil
 }

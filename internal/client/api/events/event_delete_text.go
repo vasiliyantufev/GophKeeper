@@ -39,7 +39,7 @@ func (c Event) EventDeleteText(text []string, token model.Token) error {
 		return err
 	}
 
-	c.logger.Debug(text)
+	//c.logger.Debug(text)
 	//c.logger.Debug(deletedText)
 	c.logger.Debug(deletedTextEntityID)
 	return nil
