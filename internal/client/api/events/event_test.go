@@ -13,6 +13,8 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 	clientConfig "github.com/vasiliyantufev/gophkeeper/internal/client/config"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/service/randomizer"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/api/handlers"
 	serverConfig "github.com/vasiliyantufev/gophkeeper/internal/server/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
@@ -24,12 +26,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/user"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/test/bufconn"
 )
-
-const bufSize = 1024 * 1024
-
-var lis *bufconn.Listener
 
 func TestEvents(t *testing.T) {
 
@@ -112,10 +109,26 @@ func TestEvents(t *testing.T) {
 	grpcClient := grpcKeeper.NewGophkeeperClient(connectionClient)
 	client := NewEvent(context.Background(), clientConfig, logger, grpcClient)
 
+	// -- TEST DATA --
+	username := randomizer.RandStringRunes(10)
+	password, _ := encryption.HashPassword("Password-00")
+
 	// -- TESTS --
 	t.Run("ping db", func(t *testing.T) {
 		_, err = client.Ping()
 		assert.NoError(t, err, "failed ping db")
+	})
+	t.Run("registration", func(t *testing.T) {
+		_, err = client.Registration(username, password)
+		assert.NoError(t, err, "failed registration")
+	})
+	t.Run("user exist", func(t *testing.T) {
+		_, err = client.UserExist(username)
+		assert.NoError(t, err, "failed registration")
+	})
+	t.Run("authentication", func(t *testing.T) {
+		_, err = client.Authentication(username, password)
+		assert.NoError(t, err, "failed authentication")
 	})
 
 }
