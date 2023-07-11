@@ -10,9 +10,9 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleAuthentication - authentication user
+// Authentication - authentication user
 func (h *Handler) Authentication(ctx context.Context, req *grpc.AuthenticationRequest) (*grpc.AuthenticationResponse, error) {
-	h.logger.Info("Authentication")
+	h.logger.Info("authentication")
 	UserData := &model.UserRequest{
 		Username: req.Username,
 		Password: req.Password,

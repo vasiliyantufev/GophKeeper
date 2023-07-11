@@ -43,7 +43,7 @@ func (c Event) LoginPasswordCreate(name, description, passwordSecure, login, pas
 	if err != nil {
 		return err
 	}
-	createdEntityID, err := c.grpc.HandleCreateEntity(context.Background(),
+	createdEntityID, err := c.grpc.EntityCreate(context.Background(),
 		&grpc.CreateEntityRequest{Data: []byte(encryptLoginPassword), Metadata: string(jsonMetadata),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {

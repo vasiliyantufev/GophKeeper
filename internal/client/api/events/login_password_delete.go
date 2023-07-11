@@ -23,7 +23,7 @@ func (c Event) LoginPasswordDelete(loginPassword []string, token model.Token) er
 		return err
 	}
 
-	deletedLoginPasswordEntityID, err := c.grpc.HandleDeleteEntity(context.Background(),
+	deletedLoginPasswordEntityID, err := c.grpc.EntityDelete(context.Background(),
 		&grpc.DeleteEntityRequest{Name: loginPassword[0], Type: variables.LoginPassword.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
 				CreatedAt: createdToken, EndDateAt: endDateToken}})

@@ -31,7 +31,7 @@ func (c Event) TextUpdate(name, passwordSecure, text string, token model.Token) 
 		return err
 	}
 
-	updatedTextEntityID, err := c.grpc.HandleUpdateEntity(context.Background(),
+	updatedTextEntityID, err := c.grpc.EntityUpdate(context.Background(),
 		&grpc.UpdateEntityRequest{Name: name, Data: []byte(encryptText), Type: variables.Text.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {

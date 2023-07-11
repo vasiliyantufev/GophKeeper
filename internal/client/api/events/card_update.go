@@ -52,7 +52,7 @@ func (c Event) CardUpdate(name, passwordSecure, paymentSystem, number, holder, c
 		return err
 	}
 
-	updatedCardEntityID, err := c.grpc.HandleUpdateEntity(context.Background(),
+	updatedCardEntityID, err := c.grpc.EntityUpdate(context.Background(),
 		&grpc.UpdateEntityRequest{Name: name, Data: []byte(encryptCard), Type: variables.Card.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {

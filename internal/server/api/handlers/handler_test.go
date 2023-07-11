@@ -126,7 +126,7 @@ func TestHandlers(t *testing.T) {
 	})
 
 	t.Run("create entity", func(t *testing.T) {
-		_, err = handlerGrpc.HandleCreateEntity(context.Background(),
+		_, err = handlerGrpc.EntityCreate(context.Background(),
 			&grpcKeeper.CreateEntityRequest{Data: []byte(data), Metadata: string(jsonMetadata),
 				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
 					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
@@ -134,7 +134,7 @@ func TestHandlers(t *testing.T) {
 	})
 
 	t.Run("update entity", func(t *testing.T) {
-		_, err = handlerGrpc.HandleUpdateEntity(context.Background(),
+		_, err = handlerGrpc.EntityUpdate(context.Background(),
 			&grpcKeeper.UpdateEntityRequest{Name: name, Data: []byte(dataUpdate), Type: variables.Text.ToString(),
 				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
 					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
@@ -142,7 +142,7 @@ func TestHandlers(t *testing.T) {
 	})
 
 	t.Run("get list entity", func(t *testing.T) {
-		_, err = handlerGrpc.HandleGetListEntity(context.Background(),
+		_, err = handlerGrpc.EntityGetList(context.Background(),
 			&grpcKeeper.GetListEntityRequest{Type: variables.Text.ToString(),
 				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
 					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
@@ -150,7 +150,7 @@ func TestHandlers(t *testing.T) {
 	})
 
 	t.Run("delete entity", func(t *testing.T) {
-		_, err = handlerGrpc.HandleDeleteEntity(context.Background(),
+		_, err = handlerGrpc.EntityDelete(context.Background(),
 			&grpcKeeper.DeleteEntityRequest{Name: name, Type: variables.Text.ToString(),
 				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
 					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})

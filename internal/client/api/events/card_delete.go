@@ -23,7 +23,7 @@ func (c Event) CardDelete(card []string, token model.Token) error {
 		return err
 	}
 
-	deletedCardEntityID, err := c.grpc.HandleDeleteEntity(context.Background(),
+	deletedCardEntityID, err := c.grpc.EntityDelete(context.Background(),
 		&grpc.DeleteEntityRequest{Name: card[0], Type: variables.Card.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
 				CreatedAt: createdToken, EndDateAt: endDateToken}})

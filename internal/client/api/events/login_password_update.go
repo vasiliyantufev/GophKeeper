@@ -38,7 +38,7 @@ func (c Event) LoginPasswordUpdate(name, passwordSecure, login, password string,
 		return err
 	}
 
-	updatedLoginPasswordEntityID, err := c.grpc.HandleUpdateEntity(context.Background(),
+	updatedLoginPasswordEntityID, err := c.grpc.EntityUpdate(context.Background(),
 		&grpc.UpdateEntityRequest{Name: name, Data: []byte(encryptLoginPassword), Type: variables.LoginPassword.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {

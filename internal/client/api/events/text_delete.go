@@ -23,7 +23,7 @@ func (c Event) TextDelete(text []string, token model.Token) error {
 		return err
 	}
 
-	deletedTextEntityID, err := c.grpc.HandleDeleteEntity(context.Background(),
+	deletedTextEntityID, err := c.grpc.EntityDelete(context.Background(),
 		&grpc.DeleteEntityRequest{Name: text[0], Type: variables.Text.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
 				CreatedAt: createdToken, EndDateAt: endDateToken}})

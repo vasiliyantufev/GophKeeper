@@ -56,7 +56,7 @@ func (c Event) CardCreate(name, description, password, paymentSystem, number, ho
 	if err != nil {
 		return err
 	}
-	createdEntityID, err := c.grpc.HandleCreateEntity(context.Background(),
+	createdEntityID, err := c.grpc.EntityCreate(context.Background(),
 		&grpc.CreateEntityRequest{Data: []byte(encryptCard), Metadata: string(jsonMetadata),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {

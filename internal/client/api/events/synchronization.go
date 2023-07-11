@@ -50,7 +50,7 @@ func (c Event) Synchronization(password string, token model.Token) ([][]string, 
 	dataTblBinaryPointer := &dataTblBinary
 
 	//-----------------------------------------------
-	nodesTextEntity, err := c.grpc.HandleGetListEntity(c.context,
+	nodesTextEntity, err := c.grpc.EntityGetList(c.context,
 		&grpc.GetListEntityRequest{Type: variables.Text.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken,
 				UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
@@ -73,7 +73,7 @@ func (c Event) Synchronization(password string, token model.Token) ([][]string, 
 	}
 
 	//-----------------------------------------------
-	nodesCardEntity, err := c.grpc.HandleGetListEntity(c.context,
+	nodesCardEntity, err := c.grpc.EntityGetList(c.context,
 		&grpc.GetListEntityRequest{Type: variables.Card.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken,
 				UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
@@ -102,7 +102,7 @@ func (c Event) Synchronization(password string, token model.Token) ([][]string, 
 		}
 	}
 	//-----------------------------------------------
-	nodesLoginPasswordEntity, err := c.grpc.HandleGetListEntity(c.context,
+	nodesLoginPasswordEntity, err := c.grpc.EntityGetList(c.context,
 		&grpc.GetListEntityRequest{Type: variables.LoginPassword.ToString(),
 			AccessToken: &grpc.Token{Token: token.AccessToken,
 				UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})

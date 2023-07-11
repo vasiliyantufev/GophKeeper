@@ -11,9 +11,9 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleRegistration - registration new user
+// Registration - registration new user
 func (h *Handler) Registration(ctx context.Context, req *grpc.RegistrationRequest) (*grpc.RegistrationResponse, error) {
-	h.logger.Info("Registration")
+	h.logger.Info("registration")
 
 	UserData := &model.UserRequest{}
 	UserData.Username = req.Username

@@ -10,8 +10,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleGetListEntity - get list entity
-func (h *Handler) HandleGetListEntity(ctx context.Context, req *grpc.GetListEntityRequest) (*grpc.GetListEntityResponse, error) {
+// EntityGetList - get list entity
+func (h *Handler) EntityGetList(ctx context.Context, req *grpc.GetListEntityRequest) (*grpc.GetListEntityResponse, error) {
 	h.logger.Info("Get list entity")
 
 	valid := h.token.Validate(req.AccessToken)

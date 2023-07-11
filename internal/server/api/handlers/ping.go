@@ -8,9 +8,9 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandlePing - checks the database connection
+// Ping - checks the database connection
 func (h *Handler) Ping(ctx context.Context, req *grpc.PingRequest) (*grpc.PingResponse, error) {
-	h.logger.Info("Ping")
+	h.logger.Info("ping")
 	var msg string
 	err := h.database.Ping()
 	if err != nil {

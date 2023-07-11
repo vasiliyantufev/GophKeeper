@@ -13,7 +13,7 @@ import (
 
 // FileUpload - file upload
 func (h *Handler) FileUpload(ctx context.Context, req *grpc.UploadBinaryRequest) (*grpc.UploadBinaryResponse, error) {
-	h.logger.Info("File upload")
+	h.logger.Info("file upload")
 
 	valid := h.token.Validate(req.AccessToken)
 	if !valid {

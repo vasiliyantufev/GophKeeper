@@ -19,18 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Gophkeeper_Ping_FullMethodName                = "/api.Gophkeeper/Ping"
-	Gophkeeper_UserExist_FullMethodName           = "/api.Gophkeeper/UserExist"
-	Gophkeeper_Authentication_FullMethodName      = "/api.Gophkeeper/Authentication"
-	Gophkeeper_Registration_FullMethodName        = "/api.Gophkeeper/Registration"
-	Gophkeeper_FileUpload_FullMethodName          = "/api.Gophkeeper/FileUpload"
-	Gophkeeper_FileGetList_FullMethodName         = "/api.Gophkeeper/FileGetList"
-	Gophkeeper_FileRemove_FullMethodName          = "/api.Gophkeeper/FileRemove"
-	Gophkeeper_FileDownload_FullMethodName        = "/api.Gophkeeper/FileDownload"
-	Gophkeeper_HandleCreateEntity_FullMethodName  = "/api.Gophkeeper/HandleCreateEntity"
-	Gophkeeper_HandleGetListEntity_FullMethodName = "/api.Gophkeeper/HandleGetListEntity"
-	Gophkeeper_HandleDeleteEntity_FullMethodName  = "/api.Gophkeeper/HandleDeleteEntity"
-	Gophkeeper_HandleUpdateEntity_FullMethodName  = "/api.Gophkeeper/HandleUpdateEntity"
+	Gophkeeper_Ping_FullMethodName           = "/api.Gophkeeper/Ping"
+	Gophkeeper_UserExist_FullMethodName      = "/api.Gophkeeper/UserExist"
+	Gophkeeper_Authentication_FullMethodName = "/api.Gophkeeper/Authentication"
+	Gophkeeper_Registration_FullMethodName   = "/api.Gophkeeper/Registration"
+	Gophkeeper_FileUpload_FullMethodName     = "/api.Gophkeeper/FileUpload"
+	Gophkeeper_FileGetList_FullMethodName    = "/api.Gophkeeper/FileGetList"
+	Gophkeeper_FileRemove_FullMethodName     = "/api.Gophkeeper/FileRemove"
+	Gophkeeper_FileDownload_FullMethodName   = "/api.Gophkeeper/FileDownload"
+	Gophkeeper_EntityCreate_FullMethodName   = "/api.Gophkeeper/EntityCreate"
+	Gophkeeper_EntityGetList_FullMethodName  = "/api.Gophkeeper/EntityGetList"
+	Gophkeeper_EntityDelete_FullMethodName   = "/api.Gophkeeper/EntityDelete"
+	Gophkeeper_EntityUpdate_FullMethodName   = "/api.Gophkeeper/EntityUpdate"
 )
 
 // GophkeeperClient is the client API for Gophkeeper service.
@@ -45,10 +45,10 @@ type GophkeeperClient interface {
 	FileGetList(ctx context.Context, in *GetListBinaryRequest, opts ...grpc.CallOption) (*GetListBinaryResponse, error)
 	FileRemove(ctx context.Context, in *DeleteBinaryRequest, opts ...grpc.CallOption) (*DeleteBinaryResponse, error)
 	FileDownload(ctx context.Context, in *DownloadBinaryRequest, opts ...grpc.CallOption) (*DownloadBinaryResponse, error)
-	HandleCreateEntity(ctx context.Context, in *CreateEntityRequest, opts ...grpc.CallOption) (*CreateEntityResponse, error)
-	HandleGetListEntity(ctx context.Context, in *GetListEntityRequest, opts ...grpc.CallOption) (*GetListEntityResponse, error)
-	HandleDeleteEntity(ctx context.Context, in *DeleteEntityRequest, opts ...grpc.CallOption) (*DeleteEntityResponse, error)
-	HandleUpdateEntity(ctx context.Context, in *UpdateEntityRequest, opts ...grpc.CallOption) (*UpdateEntityResponse, error)
+	EntityCreate(ctx context.Context, in *CreateEntityRequest, opts ...grpc.CallOption) (*CreateEntityResponse, error)
+	EntityGetList(ctx context.Context, in *GetListEntityRequest, opts ...grpc.CallOption) (*GetListEntityResponse, error)
+	EntityDelete(ctx context.Context, in *DeleteEntityRequest, opts ...grpc.CallOption) (*DeleteEntityResponse, error)
+	EntityUpdate(ctx context.Context, in *UpdateEntityRequest, opts ...grpc.CallOption) (*UpdateEntityResponse, error)
 }
 
 type gophkeeperClient struct {
@@ -131,36 +131,36 @@ func (c *gophkeeperClient) FileDownload(ctx context.Context, in *DownloadBinaryR
 	return out, nil
 }
 
-func (c *gophkeeperClient) HandleCreateEntity(ctx context.Context, in *CreateEntityRequest, opts ...grpc.CallOption) (*CreateEntityResponse, error) {
+func (c *gophkeeperClient) EntityCreate(ctx context.Context, in *CreateEntityRequest, opts ...grpc.CallOption) (*CreateEntityResponse, error) {
 	out := new(CreateEntityResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleCreateEntity_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Gophkeeper_EntityCreate_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *gophkeeperClient) HandleGetListEntity(ctx context.Context, in *GetListEntityRequest, opts ...grpc.CallOption) (*GetListEntityResponse, error) {
+func (c *gophkeeperClient) EntityGetList(ctx context.Context, in *GetListEntityRequest, opts ...grpc.CallOption) (*GetListEntityResponse, error) {
 	out := new(GetListEntityResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleGetListEntity_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Gophkeeper_EntityGetList_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *gophkeeperClient) HandleDeleteEntity(ctx context.Context, in *DeleteEntityRequest, opts ...grpc.CallOption) (*DeleteEntityResponse, error) {
+func (c *gophkeeperClient) EntityDelete(ctx context.Context, in *DeleteEntityRequest, opts ...grpc.CallOption) (*DeleteEntityResponse, error) {
 	out := new(DeleteEntityResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleDeleteEntity_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Gophkeeper_EntityDelete_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *gophkeeperClient) HandleUpdateEntity(ctx context.Context, in *UpdateEntityRequest, opts ...grpc.CallOption) (*UpdateEntityResponse, error) {
+func (c *gophkeeperClient) EntityUpdate(ctx context.Context, in *UpdateEntityRequest, opts ...grpc.CallOption) (*UpdateEntityResponse, error) {
 	out := new(UpdateEntityResponse)
-	err := c.cc.Invoke(ctx, Gophkeeper_HandleUpdateEntity_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Gophkeeper_EntityUpdate_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -179,10 +179,10 @@ type GophkeeperServer interface {
 	FileGetList(context.Context, *GetListBinaryRequest) (*GetListBinaryResponse, error)
 	FileRemove(context.Context, *DeleteBinaryRequest) (*DeleteBinaryResponse, error)
 	FileDownload(context.Context, *DownloadBinaryRequest) (*DownloadBinaryResponse, error)
-	HandleCreateEntity(context.Context, *CreateEntityRequest) (*CreateEntityResponse, error)
-	HandleGetListEntity(context.Context, *GetListEntityRequest) (*GetListEntityResponse, error)
-	HandleDeleteEntity(context.Context, *DeleteEntityRequest) (*DeleteEntityResponse, error)
-	HandleUpdateEntity(context.Context, *UpdateEntityRequest) (*UpdateEntityResponse, error)
+	EntityCreate(context.Context, *CreateEntityRequest) (*CreateEntityResponse, error)
+	EntityGetList(context.Context, *GetListEntityRequest) (*GetListEntityResponse, error)
+	EntityDelete(context.Context, *DeleteEntityRequest) (*DeleteEntityResponse, error)
+	EntityUpdate(context.Context, *UpdateEntityRequest) (*UpdateEntityResponse, error)
 	mustEmbedUnimplementedGophkeeperServer()
 }
 
@@ -214,17 +214,17 @@ func (UnimplementedGophkeeperServer) FileRemove(context.Context, *DeleteBinaryRe
 func (UnimplementedGophkeeperServer) FileDownload(context.Context, *DownloadBinaryRequest) (*DownloadBinaryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FileDownload not implemented")
 }
-func (UnimplementedGophkeeperServer) HandleCreateEntity(context.Context, *CreateEntityRequest) (*CreateEntityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleCreateEntity not implemented")
+func (UnimplementedGophkeeperServer) EntityCreate(context.Context, *CreateEntityRequest) (*CreateEntityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EntityCreate not implemented")
 }
-func (UnimplementedGophkeeperServer) HandleGetListEntity(context.Context, *GetListEntityRequest) (*GetListEntityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleGetListEntity not implemented")
+func (UnimplementedGophkeeperServer) EntityGetList(context.Context, *GetListEntityRequest) (*GetListEntityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EntityGetList not implemented")
 }
-func (UnimplementedGophkeeperServer) HandleDeleteEntity(context.Context, *DeleteEntityRequest) (*DeleteEntityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleDeleteEntity not implemented")
+func (UnimplementedGophkeeperServer) EntityDelete(context.Context, *DeleteEntityRequest) (*DeleteEntityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EntityDelete not implemented")
 }
-func (UnimplementedGophkeeperServer) HandleUpdateEntity(context.Context, *UpdateEntityRequest) (*UpdateEntityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HandleUpdateEntity not implemented")
+func (UnimplementedGophkeeperServer) EntityUpdate(context.Context, *UpdateEntityRequest) (*UpdateEntityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EntityUpdate not implemented")
 }
 func (UnimplementedGophkeeperServer) mustEmbedUnimplementedGophkeeperServer() {}
 
@@ -383,74 +383,74 @@ func _Gophkeeper_FileDownload_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gophkeeper_HandleCreateEntity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Gophkeeper_EntityCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateEntityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleCreateEntity(ctx, in)
+		return srv.(GophkeeperServer).EntityCreate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gophkeeper_HandleCreateEntity_FullMethodName,
+		FullMethod: Gophkeeper_EntityCreate_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleCreateEntity(ctx, req.(*CreateEntityRequest))
+		return srv.(GophkeeperServer).EntityCreate(ctx, req.(*CreateEntityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gophkeeper_HandleGetListEntity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Gophkeeper_EntityGetList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetListEntityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleGetListEntity(ctx, in)
+		return srv.(GophkeeperServer).EntityGetList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gophkeeper_HandleGetListEntity_FullMethodName,
+		FullMethod: Gophkeeper_EntityGetList_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleGetListEntity(ctx, req.(*GetListEntityRequest))
+		return srv.(GophkeeperServer).EntityGetList(ctx, req.(*GetListEntityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gophkeeper_HandleDeleteEntity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Gophkeeper_EntityDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteEntityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleDeleteEntity(ctx, in)
+		return srv.(GophkeeperServer).EntityDelete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gophkeeper_HandleDeleteEntity_FullMethodName,
+		FullMethod: Gophkeeper_EntityDelete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleDeleteEntity(ctx, req.(*DeleteEntityRequest))
+		return srv.(GophkeeperServer).EntityDelete(ctx, req.(*DeleteEntityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gophkeeper_HandleUpdateEntity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Gophkeeper_EntityUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateEntityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GophkeeperServer).HandleUpdateEntity(ctx, in)
+		return srv.(GophkeeperServer).EntityUpdate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gophkeeper_HandleUpdateEntity_FullMethodName,
+		FullMethod: Gophkeeper_EntityUpdate_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GophkeeperServer).HandleUpdateEntity(ctx, req.(*UpdateEntityRequest))
+		return srv.(GophkeeperServer).EntityUpdate(ctx, req.(*UpdateEntityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -495,20 +495,20 @@ var Gophkeeper_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Gophkeeper_FileDownload_Handler,
 		},
 		{
-			MethodName: "HandleCreateEntity",
-			Handler:    _Gophkeeper_HandleCreateEntity_Handler,
+			MethodName: "EntityCreate",
+			Handler:    _Gophkeeper_EntityCreate_Handler,
 		},
 		{
-			MethodName: "HandleGetListEntity",
-			Handler:    _Gophkeeper_HandleGetListEntity_Handler,
+			MethodName: "EntityGetList",
+			Handler:    _Gophkeeper_EntityGetList_Handler,
 		},
 		{
-			MethodName: "HandleDeleteEntity",
-			Handler:    _Gophkeeper_HandleDeleteEntity_Handler,
+			MethodName: "EntityDelete",
+			Handler:    _Gophkeeper_EntityDelete_Handler,
 		},
 		{
-			MethodName: "HandleUpdateEntity",
-			Handler:    _Gophkeeper_HandleUpdateEntity_Handler,
+			MethodName: "EntityUpdate",
+			Handler:    _Gophkeeper_EntityUpdate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
