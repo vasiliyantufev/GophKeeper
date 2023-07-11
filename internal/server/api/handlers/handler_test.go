@@ -17,8 +17,8 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/binary"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/entity"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/file"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/token"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/user"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
@@ -74,13 +74,13 @@ func TestHandlers(t *testing.T) {
 
 	// repositories
 	userRepository := user.New(db)
-	binaryRepository := binary.New(db)
+	fileRepository := file.New(db)
 	storage := storage.New("/tmp")
 	entityRepository := entity.New(db)
 	tokenRepository := token.New(db)
 
 	// setup server service
-	handlerGrpc := *NewHandler(db, config, userRepository, binaryRepository, &storage,
+	handlerGrpc := *NewHandler(db, config, userRepository, fileRepository, &storage,
 		entityRepository, tokenRepository, logger)
 
 	lis = bufconn.Listen(bufSize)

@@ -7,7 +7,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 )
 
-type Binary struct {
+type File struct {
 	ID        int64
 	UserID    int64
 	Name      string
@@ -16,13 +16,13 @@ type Binary struct {
 	DeletedAt time.Time
 }
 
-type BinaryRequest struct {
+type FileRequest struct {
 	UserID      int64
 	Name        string
 	AccessToken string
 }
 
-func GetListBinary(binary []Binary) []*grpc.Binary {
+func GetListFile(binary []File) []*grpc.Binary {
 	items := make([]*grpc.Binary, len(binary))
 	for i := range binary {
 		created, _ := service.ConvertTimeToTimestamp(binary[i].CreatedAt)

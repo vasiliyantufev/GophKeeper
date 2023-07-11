@@ -23,11 +23,11 @@ func (h *Handler) FileUpload(ctx context.Context, req *grpc.UploadBinaryRequest)
 		)
 	}
 
-	BinaryData := &model.BinaryRequest{}
-	BinaryData.UserID = req.AccessToken.UserId
-	BinaryData.Name = req.Name
+	FileData := &model.FileRequest{}
+	FileData.UserID = req.AccessToken.UserId
+	FileData.Name = req.Name
 
-	exists, err := h.binary.FileExists(BinaryData)
+	exists, err := h.file.FileExists(FileData)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.UploadBinaryResponse{}, status.Errorf(
@@ -42,7 +42,7 @@ func (h *Handler) FileUpload(ctx context.Context, req *grpc.UploadBinaryRequest)
 		)
 	}
 
-	UploadBinary, err := h.binary.UploadBinary(BinaryData)
+	UploadFile, err := h.file.UploadFile(FileData)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.UploadBinaryResponse{}, status.Errorf(
@@ -58,6 +58,6 @@ func (h *Handler) FileUpload(ctx context.Context, req *grpc.UploadBinaryRequest)
 		)
 	}
 
-	h.logger.Debug(UploadBinary.Name)
-	return &grpc.UploadBinaryResponse{Name: UploadBinary.Name}, nil
+	h.logger.Debug(UploadFile.Name)
+	return &grpc.UploadBinaryResponse{Name: UploadFile.Name}, nil
 }

@@ -23,11 +23,11 @@ func (h *Handler) FileDownload(ctx context.Context, req *grpc.DownloadBinaryRequ
 		)
 	}
 
-	BinaryData := &model.BinaryRequest{}
-	BinaryData.UserID = req.AccessToken.UserId
-	BinaryData.Name = req.Name
+	FileData := &model.FileRequest{}
+	FileData.UserID = req.AccessToken.UserId
+	FileData.Name = req.Name
 
-	exists, err := h.binary.FileExists(BinaryData)
+	exists, err := h.file.FileExists(FileData)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.DownloadBinaryResponse{}, status.Errorf(

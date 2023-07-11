@@ -1,1 +1,0 @@
-drop table binary_data

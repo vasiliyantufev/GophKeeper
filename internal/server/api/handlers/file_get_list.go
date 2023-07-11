@@ -22,15 +22,15 @@ func (h *Handler) FileGetList(ctx context.Context, req *grpc.GetListBinaryReques
 		)
 	}
 
-	ListBinary, err := h.binary.GetListBinary(req.AccessToken.UserId)
+	ListFile, err := h.file.GetListFile(req.AccessToken.UserId)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.GetListBinaryResponse{}, status.Errorf(
 			codes.Internal, err.Error(),
 		)
 	}
-	list := model.GetListBinary(ListBinary)
+	list := model.GetListFile(ListFile)
 
-	h.logger.Debug(ListBinary)
+	h.logger.Debug(ListFile)
 	return &grpc.GetListBinaryResponse{Node: list}, nil
 }

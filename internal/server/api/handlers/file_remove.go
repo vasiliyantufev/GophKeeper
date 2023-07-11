@@ -23,11 +23,11 @@ func (h *Handler) FileRemove(ctx context.Context, req *grpc.DeleteBinaryRequest)
 		)
 	}
 
-	BinaryData := &model.BinaryRequest{}
-	BinaryData.UserID = req.AccessToken.UserId
-	BinaryData.Name = req.Name
+	FileData := &model.FileRequest{}
+	FileData.UserID = req.AccessToken.UserId
+	FileData.Name = req.Name
 
-	BinaryId, err := h.binary.DeleteBinary(BinaryData)
+	BinaryId, err := h.file.DeleteFile(FileData)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.DeleteBinaryResponse{}, status.Errorf(
