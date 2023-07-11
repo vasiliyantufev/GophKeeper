@@ -131,7 +131,7 @@ func (c Event) Synchronization(password string, token model.Token) ([][]string, 
 		}
 	}
 	//-----------------------------------------------
-	nodesBinary, err := c.grpc.HandleGetListBinary(c.context,
+	nodesBinary, err := c.grpc.FileGetList(c.context,
 		&grpc.GetListBinaryRequest{AccessToken: &grpc.Token{Token: token.AccessToken,
 			UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}})
 	if err != nil {

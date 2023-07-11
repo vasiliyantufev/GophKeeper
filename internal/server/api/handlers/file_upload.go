@@ -11,9 +11,9 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleUploadBinary - upload binary data
-func (h *Handler) HandleUploadBinary(ctx context.Context, req *grpc.UploadBinaryRequest) (*grpc.UploadBinaryResponse, error) {
-	h.logger.Info("Upload binary data")
+// FileUpload - file upload
+func (h *Handler) FileUpload(ctx context.Context, req *grpc.UploadBinaryRequest) (*grpc.UploadBinaryResponse, error) {
+	h.logger.Info("File upload")
 
 	valid := h.token.Validate(req.AccessToken)
 	if !valid {

@@ -21,7 +21,7 @@ func (c Event) FileRemove(binary []string, token model.Token) error {
 		c.logger.Error(err)
 		return err
 	}
-	deletedCard, err := c.grpc.HandleDeleteBinary(context.Background(),
+	deletedCard, err := c.grpc.FileRemove(context.Background(),
 		&grpc.DeleteBinaryRequest{Name: binary[0], AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
 			CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {

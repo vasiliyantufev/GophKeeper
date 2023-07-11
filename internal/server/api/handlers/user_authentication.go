@@ -11,7 +11,7 @@ import (
 )
 
 // HandleAuthentication - authentication user
-func (h *Handler) HandleAuthentication(ctx context.Context, req *grpc.AuthenticationRequest) (*grpc.AuthenticationResponse, error) {
+func (h *Handler) Authentication(ctx context.Context, req *grpc.AuthenticationRequest) (*grpc.AuthenticationResponse, error) {
 	h.logger.Info("Authentication")
 	UserData := &model.UserRequest{
 		Username: req.Username,

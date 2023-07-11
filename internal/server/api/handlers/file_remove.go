@@ -11,9 +11,9 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleDeleteBinary - delete  binary data
-func (h *Handler) HandleDeleteBinary(ctx context.Context, req *grpc.DeleteBinaryRequest) (*grpc.DeleteBinaryResponse, error) {
-	h.logger.Info("Delete binary data")
+// FileRemove - file remove
+func (h *Handler) FileRemove(ctx context.Context, req *grpc.DeleteBinaryRequest) (*grpc.DeleteBinaryResponse, error) {
+	h.logger.Info("file remove")
 
 	valid := h.token.Validate(req.AccessToken)
 	if !valid {

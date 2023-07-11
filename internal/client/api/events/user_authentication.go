@@ -16,7 +16,7 @@ func (c Event) Authentication(username, password string) (model.Token, error) {
 		c.logger.Error(err)
 		return token, err
 	}
-	authenticatedUser, err := c.grpc.HandleAuthentication(c.context, &grpc.AuthenticationRequest{Username: username, Password: password})
+	authenticatedUser, err := c.grpc.Authentication(c.context, &grpc.AuthenticationRequest{Username: username, Password: password})
 	if err != nil {
 		c.logger.Error(err)
 		return token, err

@@ -10,9 +10,9 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleGetListBinary - get list binary data
-func (h *Handler) HandleGetListBinary(ctx context.Context, req *grpc.GetListBinaryRequest) (*grpc.GetListBinaryResponse, error) {
-	h.logger.Info("Get list binary data")
+// FileGetList - file get list
+func (h *Handler) FileGetList(ctx context.Context, req *grpc.GetListBinaryRequest) (*grpc.GetListBinaryResponse, error) {
+	h.logger.Info("file get list")
 
 	valid := h.token.Validate(req.AccessToken)
 	if !valid {

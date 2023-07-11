@@ -9,7 +9,7 @@ import (
 )
 
 // HandlePing - checks the database connection
-func (h *Handler) HandlePing(ctx context.Context, req *grpc.PingRequest) (*grpc.PingResponse, error) {
+func (h *Handler) Ping(ctx context.Context, req *grpc.PingRequest) (*grpc.PingResponse, error) {
 	h.logger.Info("Ping")
 	var msg string
 	err := h.database.Ping()

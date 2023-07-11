@@ -24,7 +24,7 @@ func (c Event) FileDownload(name string, password string, token model.Token) err
 		return err
 	}
 
-	downloadFile, err := c.grpc.HandleDownloadBinary(context.Background(),
+	downloadFile, err := c.grpc.FileDownload(context.Background(),
 		&grpc.DownloadBinaryRequest{Name: name, AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
 			CreatedAt: createdToken, EndDateAt: endDateToken}})
 	if err != nil {

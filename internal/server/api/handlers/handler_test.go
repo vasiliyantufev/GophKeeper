@@ -106,22 +106,22 @@ func TestHandlers(t *testing.T) {
 
 	// -- TESTS --
 	t.Run("ping db", func(t *testing.T) {
-		_, err = handlerGrpc.HandlePing(context.Background(), &grpcKeeper.PingRequest{})
+		_, err = handlerGrpc.Ping(context.Background(), &grpcKeeper.PingRequest{})
 		assert.NoError(t, err, "failed ping db")
 	})
 
 	t.Run("registration", func(t *testing.T) {
-		_, err = handlerGrpc.HandleRegistration(context.Background(), &grpcKeeper.RegistrationRequest{Username: username, Password: password})
+		_, err = handlerGrpc.Registration(context.Background(), &grpcKeeper.RegistrationRequest{Username: username, Password: password})
 		assert.NoError(t, err, "registration failed")
 	})
 
 	t.Run("user exist", func(t *testing.T) {
-		_, err = handlerGrpc.HandleUserExist(context.Background(), &grpcKeeper.UserExistRequest{Username: username})
+		_, err = handlerGrpc.UserExist(context.Background(), &grpcKeeper.UserExistRequest{Username: username})
 		assert.NoError(t, err, "user exist failed")
 	})
 
 	t.Run("authentication", func(t *testing.T) {
-		authenticatedUser, err = handlerGrpc.HandleAuthentication(context.Background(), &grpcKeeper.AuthenticationRequest{Username: username, Password: password})
+		authenticatedUser, err = handlerGrpc.Authentication(context.Background(), &grpcKeeper.AuthenticationRequest{Username: username, Password: password})
 		assert.NoError(t, err, "authentication failed")
 	})
 

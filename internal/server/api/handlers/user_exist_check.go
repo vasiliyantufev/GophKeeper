@@ -8,8 +8,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// HandleUserExist - user exist check
-func (h *Handler) HandleUserExist(ctx context.Context, req *grpc.UserExistRequest) (*grpc.UserExistResponse, error) {
+// UserExist - user exist check
+func (h *Handler) UserExist(ctx context.Context, req *grpc.UserExistRequest) (*grpc.UserExistResponse, error) {
 	h.logger.Info("User Exist")
 	exist, err := h.user.UserExists(req.Username)
 	if err != nil {

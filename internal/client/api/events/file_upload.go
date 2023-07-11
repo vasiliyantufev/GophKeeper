@@ -29,7 +29,7 @@ func (c Event) FileUpload(name string, password string, file []byte, token model
 		c.logger.Error(err)
 		return "", err
 	}
-	uploadFile, err := c.grpc.HandleUploadBinary(context.Background(),
+	uploadFile, err := c.grpc.FileUpload(context.Background(),
 		&grpc.UploadBinaryRequest{Name: name, Data: []byte(encryptFile),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
 				CreatedAt: createdToken, EndDateAt: endDateToken}})

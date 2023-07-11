@@ -16,7 +16,7 @@ func (c Event) Registration(username, password string) (model.Token, error) {
 		c.logger.Error(err)
 		return token, err
 	}
-	registeredUser, err := c.grpc.HandleRegistration(c.context, &grpc.RegistrationRequest{Username: username, Password: password})
+	registeredUser, err := c.grpc.Registration(c.context, &grpc.RegistrationRequest{Username: username, Password: password})
 	if err != nil {
 		c.logger.Error(err)
 		return token, err
