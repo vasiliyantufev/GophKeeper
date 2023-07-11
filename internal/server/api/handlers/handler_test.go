@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"testing"
 	"time"
 
@@ -86,7 +85,7 @@ func TestHandlers(t *testing.T) {
 
 	go func() {
 		if err := s.Serve(lis); err != nil {
-			log.Fatalf("Server exited with error: %v", err)
+			t.Fatalf("Server exited with error: %v", err)
 		}
 	}()
 

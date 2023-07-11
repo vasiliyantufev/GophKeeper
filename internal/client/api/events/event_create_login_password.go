@@ -8,6 +8,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
 )
 
 func (c Event) EventCreateLoginPassword(name, description, passwordSecure, login, password string, token model.Token) error {
@@ -26,9 +27,17 @@ func (c Event) EventCreateLoginPassword(name, description, passwordSecure, login
 		c.logger.Error(err)
 		return err
 	}
+	createdToken, err := service.ConvertTimeToTimestamp(token.CreatedAt)
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
+	endDateToken, err := service.ConvertTimeToTimestamp(token.EndDateAt)
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
 
-	createdToken, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDateToken, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
 	createdLoginPassword, err := c.grpc.HandleCreateLoginPassword(context.Background(),
 		&grpc.CreateLoginPasswordRequest{Name: name, Description: description, Data: []byte(encryptLoginPassword),
 			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
@@ -36,6 +45,21 @@ func (c Event) EventCreateLoginPassword(name, description, passwordSecure, login
 		c.logger.Error(err)
 		return err
 	}
+
+	metadata := model.MetadataEntity{Name: name, Description: description, Type: variables.LoginPassword.ToString()}
+	jsonMetadata, err := json.Marshal(metadata)
+	if err != nil {
+		return err
+	}
+	createdEntityID, err := c.grpc.HandleCreateEntity(context.Background(),
+		&grpc.CreateEntityRequest{Data: []byte(encryptLoginPassword), Metadata: string(jsonMetadata),
+			AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}})
+	if err != nil {
+		c.logger.Error(err)
+		return err
+	}
+
 	c.logger.Debug(createdLoginPassword.Data)
+	c.logger.Debug(createdEntityID.Id)
 	return nil
 }
