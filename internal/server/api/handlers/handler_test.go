@@ -64,7 +64,7 @@ func TestHandlers(t *testing.T) {
 		t.Fatalf("Migration failed: %v", err)
 	}
 
-	config := &serverConfig.Config{
+	serverConfig := &serverConfig.Config{
 		GRPC:                "localhost:8080",
 		DSN:                 databaseURI,
 		AccessTokenLifetime: 300 * time.Second,
@@ -80,7 +80,7 @@ func TestHandlers(t *testing.T) {
 	tokenRepository := token.New(db)
 
 	// setup server service
-	handlerGrpc := *NewHandler(db, config, userRepository, fileRepository, &storage,
+	handlerGrpc := *NewHandler(db, serverConfig, userRepository, fileRepository, &storage,
 		entityRepository, tokenRepository, logger)
 
 	lis = bufconn.Listen(bufSize)
