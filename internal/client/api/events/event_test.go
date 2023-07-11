@@ -13,6 +13,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 	clientConfig "github.com/vasiliyantufev/gophkeeper/internal/client/config"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/randomizer"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/api/handlers"
@@ -110,8 +111,15 @@ func TestEvents(t *testing.T) {
 	client := NewEvent(context.Background(), clientConfig, logger, grpcClient)
 
 	// -- TEST DATA --
+	//(name string, description string, password string, plaintext string, token model.Token)
+	var accessToken model.Token = model.Token{}
 	username := randomizer.RandStringRunes(10)
 	password, _ := encryption.HashPassword("Password-00")
+
+	name := randomizer.RandStringRunes(10)
+	description := randomizer.RandStringRunes(10)
+	var textRow []string
+	plaintext := randomizer.RandStringRunes(10)
 
 	// -- TESTS --
 	t.Run("ping db", func(t *testing.T) {
@@ -119,8 +127,9 @@ func TestEvents(t *testing.T) {
 		assert.NoError(t, err, "failed ping db")
 	})
 	t.Run("registration", func(t *testing.T) {
-		_, err = client.Registration(username, password)
+		accessToken, err = client.Registration(username, password)
 		assert.NoError(t, err, "failed registration")
+
 	})
 	t.Run("user exist", func(t *testing.T) {
 		_, err = client.UserExist(username)
@@ -129,6 +138,19 @@ func TestEvents(t *testing.T) {
 	t.Run("authentication", func(t *testing.T) {
 		_, err = client.Authentication(username, password)
 		assert.NoError(t, err, "failed authentication")
+	})
+	t.Run("text create", func(t *testing.T) {
+		err = client.TextCreate(name, description, password, plaintext, accessToken)
+		assert.NoError(t, err, "failed text create")
+	})
+	t.Run("text update", func(t *testing.T) {
+		err = client.TextUpdate(name, password, plaintext+":update", accessToken)
+		assert.NoError(t, err, "failed text update")
+	})
+	t.Run("text delete", func(t *testing.T) {
+		textRow = append(textRow, name)
+		err = client.TextDelete(textRow, accessToken)
+		assert.NoError(t, err, "failed text delete")
 	})
 
 }
