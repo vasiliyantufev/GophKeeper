@@ -7,34 +7,26 @@ import (
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/binary"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/card"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/entity"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/login_password"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/metadata"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/text"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/token"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/user"
 )
 
 type Handler struct {
-	database      *database.DB
-	config        *config.Config
-	user          *user.User
-	text          *text.Text
-	card          *card.Card
-	loginPassword *loginPassword.LoginPassword
-	binary        *binary.Binary
-	metadata      *metadata.Metadata
-	storage       *storage.Storage
-	entity        *entity.Entity
-	token         *token.Token
-	logger        *logrus.Logger
+	database *database.DB
+	config   *config.Config
+	user     *user.User
+	binary   *binary.Binary
+	storage  *storage.Storage
+	entity   *entity.Entity
+	token    *token.Token
+	logger   *logrus.Logger
 	grpc.UnimplementedGophkeeperServer
 }
 
 // NewHandler - creates a new grpc server instance
-func NewHandler(db *database.DB, config *config.Config, userRepository *user.User, textRepository *text.Text, cardRepository *card.Card, loginPasswordRepository *loginPassword.LoginPassword, binaryRepository *binary.Binary, metadataRepository *metadata.Metadata, storage *storage.Storage, entityRepository *entity.Entity, tokenRepository *token.Token, log *logrus.Logger) *Handler {
-	return &Handler{database: db, config: config, user: userRepository, text: textRepository, card: cardRepository,
-		loginPassword: loginPasswordRepository, binary: binaryRepository, metadata: metadataRepository, storage: storage,
+func NewHandler(db *database.DB, config *config.Config, userRepository *user.User,
+	binaryRepository *binary.Binary, storage *storage.Storage, entityRepository *entity.Entity, tokenRepository *token.Token, log *logrus.Logger) *Handler {
+	return &Handler{database: db, config: config, user: userRepository, binary: binaryRepository, storage: storage,
 		entity: entityRepository, token: tokenRepository, logger: log}
 }

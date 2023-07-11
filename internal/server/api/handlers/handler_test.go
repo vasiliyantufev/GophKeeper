@@ -1,4 +1,4 @@
-package handlers
+﻿package handlers
 
 import (
 	"context"
@@ -16,6 +16,8 @@ import (
 	serverConfig "github.com/vasiliyantufev/gophkeeper/internal/server/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/binary"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/entity"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/token"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/user"
@@ -72,12 +74,14 @@ func TestHandlers(t *testing.T) {
 
 	// repositories
 	userRepository := user.New(db)
+	binaryRepository := binary.New(db)
+	storage := storage.New("/tmp")
 	entityRepository := entity.New(db)
 	tokenRepository := token.New(db)
 
 	// setup server service
-	handlerGrpc := *NewHandler(db, config, userRepository, nil, nil, nil,
-		nil, nil, nil, entityRepository, tokenRepository, logger)
+	handlerGrpc := *NewHandler(db, config, userRepository, binaryRepository, &storage,
+		entityRepository, tokenRepository, logger)
 
 	lis = bufconn.Listen(bufSize)
 	s := grpc.NewServer()

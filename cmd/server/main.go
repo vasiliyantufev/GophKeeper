@@ -12,11 +12,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/binary"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/card"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/entity"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/login_password"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/metadata"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/text"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/token"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/repositories/user"
 )
@@ -35,20 +31,16 @@ func main() {
 	}
 
 	userRepository := user.New(db)
-	textRepository := text.New(db)
-	cardRepository := card.New(db)
-	loginPasswordRepository := loginPassword.New(db)
 	binaryRepository := binary.New(db)
-	metadataRepository := metadata.New(db)
+	storage := storage.New("/tmp")
 	entityRepository := entity.New(db)
 	tokenRepository := token.New(db)
-	storage := storage.New("/tmp")
 
 	ctx, cnl := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT)
 	defer cnl()
 
-	var handlerGrpc = grpcHandler.NewHandler(db, config, userRepository, textRepository, cardRepository,
-		loginPasswordRepository, binaryRepository, metadataRepository, &storage, entityRepository, tokenRepository, logger)
+	var handlerGrpc = grpcHandler.NewHandler(db, config, userRepository, binaryRepository,
+		&storage, entityRepository, tokenRepository, logger)
 	go api.StartService(handlerGrpc, config, logger)
 
 	<-ctx.Done()

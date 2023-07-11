@@ -194,7 +194,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	})
 	//---------------------------------------------------------------------- buttons event
 	buttonTopSynchronization = widget.NewButton(labels.BtnUpdateData, func() {
-		dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err = client.EventSynchronization(password, accessToken)
+		dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err = client.Synchronization(password, accessToken)
 		if err != nil {
 			labelAlertAuth.SetText(errors.ErrLogin)
 		} else {
@@ -223,7 +223,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonLoginPasswordDelete = widget.NewButton(labels.BtnDeleteLoginPassword, func() {
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard, labelAlertBinary)
 		if indexTblLoginPassword > 0 {
-			client.EventDeleteLoginPassword(selectedRowTblLoginPassword, accessToken)
+			client.LoginPasswordDelete(selectedRowTblLoginPassword, accessToken)
 			// Удаляем строку с индексом indexTblLoginPassword
 			dataTblLoginPassword = table.RemoveRow(dataTblLoginPassword, indexTblLoginPassword)
 			indexTblLoginPassword = 0
@@ -237,7 +237,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonTextDelete = widget.NewButton(labels.BtnDeleteText, func() {
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard, labelAlertBinary)
 		if indexTblText > 0 {
-			client.EventDeleteText(selectedRowTblText, accessToken)
+			client.TextDelete(selectedRowTblText, accessToken)
 			// Удаляем строку с индексом indexTblText
 			dataTblText = table.RemoveRow(dataTblText, indexTblText)
 			indexTblText = 0
@@ -251,7 +251,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonCardDelete = widget.NewButton(labels.BtnDeleteCard, func() {
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard, labelAlertBinary)
 		if indexTblCard > 0 {
-			client.EventDeleteCard(selectedRowTblCard, accessToken)
+			client.CardDelete(selectedRowTblCard, accessToken)
 			// Удаляем строку с индексом indexTblCard
 			dataTblCard = table.RemoveRow(dataTblCard, indexTblCard)
 			indexTblCard = 0
@@ -265,7 +265,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonBinaryDelete = widget.NewButton(labels.BtnDeleteBinary, func() {
 		function.HideLabelsTab(labelAlertLoginPassword, labelAlertText, labelAlertCard, labelAlertBinary)
 		if indexTblBinary > 0 {
-			client.EventDeleteBinary(selectedRowTblBinary, accessToken)
+			client.FileRemove(selectedRowTblBinary, accessToken)
 			// Удаляем строку с индексом indexTblBinary
 			dataTblBinary = table.RemoveRow(dataTblBinary, indexTblBinary)
 			indexTblBinary = 0
@@ -321,7 +321,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		errMsg, valid := function.ValidateLoginPasswordForm(loginPasswordNameEntryUpdate, loginPasswordDescriptionEntryUpdate,
 			loginEntryUpdate, passwordEntryUpdate)
 		if valid {
-			err = client.EventUpdateLoginPassword(loginPasswordNameEntryUpdate.Text, password,
+			err = client.LoginPasswordUpdate(loginPasswordNameEntryUpdate.Text, password,
 				loginEntryUpdate.Text, passwordEntryUpdate.Text, accessToken)
 			if err != nil {
 				labelAlertLoginPasswordUpdate.SetText(errors.ErrLoginPasswordUpdate)
@@ -349,7 +349,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 
 		errMsg, valid := function.ValidateTextForm(textNameEntryUpdate, textDescriptionEntryUpdate, textEntryUpdate)
 		if valid {
-			err = client.EventUpdateText(textNameEntryUpdate.Text, password, textEntryUpdate.Text, accessToken)
+			err = client.TextUpdate(textNameEntryUpdate.Text, password, textEntryUpdate.Text, accessToken)
 			if err != nil {
 				labelAlertTextUpdate.SetText(errors.ErrTextUpdate)
 				log.Error(err)
@@ -376,7 +376,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		errMsg, valid := function.ValidateCardForm(cardNameEntryUpdate, cardDescriptionEntryUpdate, paymentSystemEntryUpdate,
 			numberEntryUpdate, holderEntryUpdate, cvcEntryUpdate, endDateEntryUpdate)
 		if valid {
-			err = client.EventUpdateCard(cardNameEntryUpdate.Text, password, paymentSystemEntryUpdate.Text, numberEntryUpdate.Text,
+			err = client.CardUpdate(cardNameEntryUpdate.Text, password, paymentSystemEntryUpdate.Text, numberEntryUpdate.Text,
 				holderEntryUpdate.Text, cvcEntryUpdate.Text, endDateEntryUpdate.Text, accessToken)
 			if err != nil {
 				labelAlertCardUpdate.SetText(errors.ErrCardUpdate)
@@ -414,7 +414,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 						labelAlertBinary.SetText(errors.ErrUpload)
 						log.Error(err)
 					}
-					name, err := client.EventUpload(r.URI().Name(), password, data, accessToken)
+					name, err := client.FileUpload(r.URI().Name(), password, data, accessToken)
 					if err != nil {
 						labelAlertBinary.SetText(errors.ErrUpload)
 						log.Error(err)
@@ -433,7 +433,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//----------------------------------------------------------------------  download event
 	buttonBinaryDownload = widget.NewButton(labels.BtnDownloadBinary, func() {
 		if indexTblBinary > 0 {
-			err = client.EventDownload(selectedRowTblBinary[0], password, accessToken)
+			err = client.FileDownload(selectedRowTblBinary[0], password, accessToken)
 			if err != nil {
 				labelAlertBinary.SetText(errors.ErrLogin)
 				log.Error(err)
@@ -542,13 +542,13 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		if radioAuth.Selected == "Login" {
 			errMsg, valid := function.ValidateLoginForm(usernameLoginEntry, passwordLoginEntry)
 			if valid {
-				accessToken, err = client.EventAuthentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
+				accessToken, err = client.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
 				if err != nil {
 					labelAlertAuth.SetText(errors.ErrLogin)
 					log.Error(err)
 				} else {
 					password = passwordLoginEntry.Text
-					dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err = client.EventSynchronization(password, accessToken)
+					dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err = client.Synchronization(password, accessToken)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrLogin)
 						log.Error(err)
@@ -566,7 +566,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		if radioAuth.Selected == "Registration" {
 			errMsg, valid := function.ValidateRegistrationForm(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
 			if valid {
-				exist, err = client.EventUserExist(usernameRegistrationEntry.Text)
+				exist, err = client.UserExist(usernameRegistrationEntry.Text)
 				if err != nil {
 					labelAlertAuth.SetText(errors.ErrRegistration)
 					log.Error(err)
@@ -575,7 +575,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 					labelAlertAuth.SetText(errors.ErrUserExist)
 					log.Error(errors.ErrUserExist)
 				} else {
-					accessToken, err = client.EventRegistration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
+					accessToken, err = client.Registration(usernameRegistrationEntry.Text, passwordRegistrationEntry.Text)
 					if err != nil {
 						labelAlertAuth.SetText(errors.ErrRegistration)
 						log.Error(err)
@@ -604,7 +604,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		errMsg, valid := function.ValidateLoginPasswordForm(loginPasswordNameEntryCreate, loginPasswordDescriptionEntryCreate, loginEntryCreate,
 			passwordEntryCreate)
 		if valid {
-			err = client.EventCreateLoginPassword(loginPasswordNameEntryCreate.Text, loginPasswordDescriptionEntryCreate.Text, password,
+			err = client.LoginPasswordCreate(loginPasswordNameEntryCreate.Text, loginPasswordDescriptionEntryCreate.Text, password,
 				loginEntryCreate.Text, passwordEntryCreate.Text, accessToken)
 			if err != nil {
 				labelAlertLoginPasswordCreate.SetText(errors.ErrLoginPasswordCreate)
@@ -637,7 +637,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		}
 		errMsg, valid := function.ValidateTextForm(textNameEntryCreate, textDescriptionEntryCreate, textEntryCreate)
 		if valid {
-			err = client.EventCreateText(textNameEntryCreate.Text, textDescriptionEntryCreate.Text, password, textEntryCreate.Text, accessToken)
+			err = client.TextCreate(textNameEntryCreate.Text, textDescriptionEntryCreate.Text, password, textEntryCreate.Text, accessToken)
 			if err != nil {
 				labelAlertTextCreate.SetText(errors.ErrTextCreate)
 				log.Error(err)
@@ -670,7 +670,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		errMsg, valid := function.ValidateCardForm(cardNameEntryCreate, cardDescriptionEntryCreate, paymentSystemEntryCreate,
 			numberEntryCreate, holderEntryCreate, cvcEntryCreate, endDateEntryCreate)
 		if valid {
-			err = client.EventCreateCard(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password,
+			err = client.CardCreate(cardNameEntryCreate.Text, cardDescriptionEntryCreate.Text, password,
 				paymentSystemEntryCreate.Text, numberEntryCreate.Text, holderEntryCreate.Text,
 				cvcEntryCreate.Text, endDateEntryCreate.Text, accessToken)
 			if err != nil {
