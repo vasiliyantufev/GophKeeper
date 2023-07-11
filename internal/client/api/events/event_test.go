@@ -122,6 +122,12 @@ func TestEvents(t *testing.T) {
 	loginUser := randomizer.RandStringRunes(10)
 	passwordUser := randomizer.RandStringRunes(10)
 
+	paymentSystem := randomizer.RandStringRunes(10)
+	numberCard := "4532015112830366"
+	holder := randomizer.RandStringRunes(10)
+	cvc := "111"
+	endDate := "01/02/2006"
+
 	// -- TESTS --
 	t.Run("ping db", func(t *testing.T) {
 		_, err = client.Ping()
@@ -166,5 +172,17 @@ func TestEvents(t *testing.T) {
 		err = client.LoginPasswordDelete(delRow, accessToken)
 		assert.NoError(t, err, "failed login password delete")
 	})
-
+	t.Run("card create", func(t *testing.T) {
+		err = client.CardCreate(name, description, password, paymentSystem, numberCard, holder, cvc, endDate, accessToken)
+		assert.NoError(t, err, "failed card create")
+	})
+	t.Run("card update", func(t *testing.T) {
+		err = client.CardUpdate(name, password, paymentSystem+":update", numberCard, holder+":update", cvc, endDate, accessToken)
+		assert.NoError(t, err, "failed card update")
+	})
+	t.Run("card delete", func(t *testing.T) {
+		delRow = append(delRow, name)
+		err = client.CardDelete(delRow, accessToken)
+		assert.NoError(t, err, "failed card delete")
+	})
 }
