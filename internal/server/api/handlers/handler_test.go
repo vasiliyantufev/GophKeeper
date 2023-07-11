@@ -106,17 +106,17 @@ func TestHandlers(t *testing.T) {
 
 	// -- TESTS --
 	t.Run("ping db", func(t *testing.T) {
-		err = handlerGrpc.database.Ping()
+		_, err = handlerGrpc.HandlePing(context.Background(), &grpcKeeper.PingRequest{})
 		assert.NoError(t, err, "failed ping db")
 	})
 
 	t.Run("registration", func(t *testing.T) {
-		_, err := handlerGrpc.HandleRegistration(context.Background(), &grpcKeeper.RegistrationRequest{Username: username, Password: password})
+		_, err = handlerGrpc.HandleRegistration(context.Background(), &grpcKeeper.RegistrationRequest{Username: username, Password: password})
 		assert.NoError(t, err, "registration failed")
 	})
 
 	t.Run("user exist", func(t *testing.T) {
-		_, err := handlerGrpc.HandleUserExist(context.Background(), &grpcKeeper.UserExistRequest{Username: username})
+		_, err = handlerGrpc.HandleUserExist(context.Background(), &grpcKeeper.UserExistRequest{Username: username})
 		assert.NoError(t, err, "user exist failed")
 	})
 
@@ -134,7 +134,7 @@ func TestHandlers(t *testing.T) {
 	})
 
 	t.Run("update entity", func(t *testing.T) {
-		_, err := handlerGrpc.HandleUpdateEntity(context.Background(),
+		_, err = handlerGrpc.HandleUpdateEntity(context.Background(),
 			&grpcKeeper.UpdateEntityRequest{Name: name, Data: []byte(dataUpdate), Type: variables.Text.ToString(),
 				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
 					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
@@ -150,7 +150,7 @@ func TestHandlers(t *testing.T) {
 	})
 
 	t.Run("delete entity", func(t *testing.T) {
-		_, err := handlerGrpc.HandleDeleteEntity(context.Background(),
+		_, err = handlerGrpc.HandleDeleteEntity(context.Background(),
 			&grpcKeeper.DeleteEntityRequest{Name: name, Type: variables.Text.ToString(),
 				AccessToken: &grpcKeeper.Token{Token: authenticatedUser.AccessToken.Token, UserId: authenticatedUser.AccessToken.UserId,
 					CreatedAt: authenticatedUser.AccessToken.CreatedAt, EndDateAt: authenticatedUser.AccessToken.EndDateAt}})
