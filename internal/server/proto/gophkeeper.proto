@@ -8,17 +8,16 @@ package api;
 option go_package = "./gophkeeper";
 
 service Gophkeeper {
-  rpc HandlePing(PingRequest) returns (PingResponse) {}
-  rpc HandleUserExist(UserExistRequest) returns (UserExistResponse) {}
+  rpc Ping(PingRequest) returns (PingResponse) {}
+  rpc UserExist(UserExistRequest) returns (UserExistResponse) {}
 
-  rpc HandleAuthentication(AuthenticationRequest) returns (AuthenticationResponse) {}
-  rpc HandleRegistration(RegistrationRequest) returns (RegistrationResponse) {}
+  rpc Authentication(AuthenticationRequest) returns (AuthenticationResponse) {}
+  rpc Registration(RegistrationRequest) returns (RegistrationResponse) {}
 
-  rpc HandleUploadBinary(UploadBinaryRequest) returns (UploadBinaryResponse) {}
-  rpc HandleGetNodeBinary(GetNodeBinaryRequest) returns (GetNodeBinaryResponse) {}
-  rpc HandleGetListBinary(GetListBinaryRequest) returns (GetListBinaryResponse) {}
-  rpc HandleDeleteBinary(DeleteBinaryRequest) returns (DeleteBinaryResponse) {}
-  rpc HandleDownloadBinary(DownloadBinaryRequest) returns (DownloadBinaryResponse) {}
+  rpc FileUpload(UploadBinaryRequest) returns (UploadBinaryResponse) {}
+  rpc FileGetList(GetListBinaryRequest) returns (GetListBinaryResponse) {}
+  rpc FileRemove(DeleteBinaryRequest) returns (DeleteBinaryResponse) {}
+  rpc FileDownload(DownloadBinaryRequest) returns (DownloadBinaryResponse) {}
 
   rpc HandleCreateEntity(CreateEntityRequest) returns (CreateEntityResponse) {}
   rpc HandleGetListEntity(GetListEntityRequest) returns (GetListEntityResponse) {}
