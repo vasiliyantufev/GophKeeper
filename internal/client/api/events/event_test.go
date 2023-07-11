@@ -113,13 +113,14 @@ func TestEvents(t *testing.T) {
 	// -- TEST DATA --
 	//(name string, description string, password string, plaintext string, token model.Token)
 	var accessToken model.Token = model.Token{}
+	var delRow []string
 	username := randomizer.RandStringRunes(10)
 	password, _ := encryption.HashPassword("Password-00")
-
 	name := randomizer.RandStringRunes(10)
 	description := randomizer.RandStringRunes(10)
-	var textRow []string
 	plaintext := randomizer.RandStringRunes(10)
+	loginUser := randomizer.RandStringRunes(10)
+	passwordUser := randomizer.RandStringRunes(10)
 
 	// -- TESTS --
 	t.Run("ping db", func(t *testing.T) {
@@ -148,9 +149,22 @@ func TestEvents(t *testing.T) {
 		assert.NoError(t, err, "failed text update")
 	})
 	t.Run("text delete", func(t *testing.T) {
-		textRow = append(textRow, name)
-		err = client.TextDelete(textRow, accessToken)
+		delRow = append(delRow, name)
+		err = client.TextDelete(delRow, accessToken)
 		assert.NoError(t, err, "failed text delete")
+	})
+	t.Run("login password create", func(t *testing.T) {
+		err = client.LoginPasswordCreate(name, description, password, loginUser, passwordUser, accessToken)
+		assert.NoError(t, err, "failed login password create")
+	})
+	t.Run("login password update", func(t *testing.T) {
+		err = client.LoginPasswordUpdate(name, password, loginUser+":update", passwordUser+":update", accessToken)
+		assert.NoError(t, err, "failed login password update")
+	})
+	t.Run("login password delete", func(t *testing.T) {
+		delRow = append(delRow, name)
+		err = client.LoginPasswordDelete(delRow, accessToken)
+		assert.NoError(t, err, "failed login password delete")
 	})
 
 }
