@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 )
 
 // HandleUpdateCard - update card
-func (h *Handler) HandleUpdateCard(ctx context.Context, req *grpc.UpdateCardRequest) (*grpc.UpdateCardResponse, error) {
+func (h *handlers.Handler) HandleUpdateCard(ctx context.Context, req *grpc.UpdateCardRequest) (*grpc.UpdateCardResponse, error) {
 	h.logger.Info("Update card")
 
 	valid := h.token.Validate(req.AccessToken)

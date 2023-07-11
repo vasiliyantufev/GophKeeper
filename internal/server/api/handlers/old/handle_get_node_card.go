@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 )
 
 // HandleGetNodeCard - get node card
-func (h *Handler) HandleGetNodeCard(ctx context.Context, req *grpc.GetNodeCardRequest) (*grpc.GetNodeCardResponse, error) {
+func (h *handlers.Handler) HandleGetNodeCard(ctx context.Context, req *grpc.GetNodeCardRequest) (*grpc.GetNodeCardResponse, error) {
 	h.logger.Info("Get node card")
 
 	valid := h.token.Validate(req.AccessToken)

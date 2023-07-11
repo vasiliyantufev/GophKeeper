@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 )
 
 // HandleCreateCard - create card
-func (h *Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequest) (*grpc.CreateCardResponse, error) {
+func (h *handlers.Handler) HandleCreateCard(ctx context.Context, req *grpc.CreateCardRequest) (*grpc.CreateCardResponse, error) {
 	h.logger.Info("Create card")
 
 	valid := h.token.Validate(req.AccessToken)

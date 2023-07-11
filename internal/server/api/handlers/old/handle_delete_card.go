@@ -1,4 +1,4 @@
-package handlers
+package old
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 )
 
 // HandleDeleteCard - delete card
-func (h *Handler) HandleDeleteCard(ctx context.Context, req *grpc.DeleteCardRequest) (*grpc.DeleteCardResponse, error) {
+func (h *handlers.Handler) HandleDeleteCard(ctx context.Context, req *grpc.DeleteCardRequest) (*grpc.DeleteCardResponse, error) {
 	h.logger.Info("Delete card")
 
 	valid := h.token.Validate(req.AccessToken)
