@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// EntityDelete - delete entity
+// EntityDelete - check the validity of the token and delete record (text, bank card or login password)
 func (h *Handler) EntityDelete(ctx context.Context, req *grpc.DeleteEntityRequest) (*grpc.DeleteEntityResponse, error) {
 	h.logger.Info("delete entity")
 

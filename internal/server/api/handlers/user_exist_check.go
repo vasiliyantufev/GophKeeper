@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// UserExist - user exist check
+// UserExist - user existence check
 func (h *Handler) UserExist(ctx context.Context, req *grpc.UserExistRequest) (*grpc.UserExistResponse, error) {
 	h.logger.Info("user exist check")
 	exist, err := h.user.UserExists(req.Username)

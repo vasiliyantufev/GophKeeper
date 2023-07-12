@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// FileGetList - file get list
+// FileGetList - checks the validity of tokens and get list records file
 func (h *Handler) FileGetList(ctx context.Context, req *grpc.GetListBinaryRequest) (*grpc.GetListBinaryResponse, error) {
 	h.logger.Info("file get list")
 

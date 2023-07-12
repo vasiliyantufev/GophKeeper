@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// FileDownload - file download
+// FileDownload - checks the validity of the token, save record, upload file on the client
 func (h *Handler) FileDownload(ctx context.Context, req *grpc.DownloadBinaryRequest) (*grpc.DownloadBinaryResponse, error) {
 	h.logger.Info("file download")
 

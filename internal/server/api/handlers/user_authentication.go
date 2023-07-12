@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// Authentication - authentication user
+// Authentication - user authentication, create access token
 func (h *Handler) Authentication(ctx context.Context, req *grpc.AuthenticationRequest) (*grpc.AuthenticationResponse, error) {
 	h.logger.Info("authentication")
 	UserData := &model.UserRequest{
@@ -34,8 +34,22 @@ func (h *Handler) Authentication(ctx context.Context, req *grpc.AuthenticationRe
 			codes.Internal, err.Error(),
 		)
 	}
-	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+
+	createdToken, err := service.ConvertTimeToTimestamp(token.CreatedAt)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.AuthenticationResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+	endDateToken, err := service.ConvertTimeToTimestamp(token.EndDateAt)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.AuthenticationResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
 	h.logger.Debug(authenticatedUser)
-	return &grpc.AuthenticationResponse{AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: created, EndDateAt: endDate}}, nil
+	return &grpc.AuthenticationResponse{AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID, CreatedAt: createdToken, EndDateAt: endDateToken}}, nil
 }

@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// EntityUpdate - update entity
+// EntityUpdate - checks the validity of the token and update record (text, bank card or login password)
 func (h *Handler) EntityUpdate(ctx context.Context, req *grpc.UpdateEntityRequest) (*grpc.UpdateEntityResponse, error) {
 	h.logger.Info("entity update")
 

@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// EntityGetList - get list entity
+// EntityGetList - checks the validity of token and get list records (text, bank card or login-password)
 func (h *Handler) EntityGetList(ctx context.Context, req *grpc.GetListEntityRequest) (*grpc.GetListEntityResponse, error) {
 	h.logger.Info("Get list entity")
 

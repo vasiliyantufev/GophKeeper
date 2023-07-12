@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// Registration - registration new user
+// Registration - registration new user, create access token
 func (h *Handler) Registration(ctx context.Context, req *grpc.RegistrationRequest) (*grpc.RegistrationResponse, error) {
 	h.logger.Info("registration")
 
@@ -49,8 +49,21 @@ func (h *Handler) Registration(ctx context.Context, req *grpc.RegistrationReques
 			codes.Internal, err.Error(),
 		)
 	}
-	created, _ := service.ConvertTimeToTimestamp(token.CreatedAt)
-	endDate, _ := service.ConvertTimeToTimestamp(token.EndDateAt)
+
+	createdToken, err := service.ConvertTimeToTimestamp(token.CreatedAt)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.RegistrationResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+	endDateToken, err := service.ConvertTimeToTimestamp(token.EndDateAt)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.RegistrationResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
 
 	err = service.CreateStorageUser(h.config.FileFolder, token.UserID)
 	if err != nil {
@@ -62,5 +75,5 @@ func (h *Handler) Registration(ctx context.Context, req *grpc.RegistrationReques
 
 	h.logger.Debug(registeredUser)
 	return &grpc.RegistrationResponse{AccessToken: &grpc.Token{Token: token.AccessToken, UserId: token.UserID,
-		CreatedAt: created, EndDateAt: endDate}}, nil
+		CreatedAt: createdToken, EndDateAt: endDateToken}}, nil
 }

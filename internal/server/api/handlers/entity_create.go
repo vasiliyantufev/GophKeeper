@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// EntityCreate - create entity
+// EntityCreate - check the validity of the token and save record (text, bank card or login password)
 func (h *Handler) EntityCreate(ctx context.Context, req *grpc.CreateEntityRequest) (*grpc.CreateEntityResponse, error) {
 	h.logger.Info("entity create")
 
