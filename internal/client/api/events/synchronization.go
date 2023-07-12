@@ -6,6 +6,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/table"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/labels"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/variables"
@@ -29,15 +30,16 @@ func (c Event) Synchronization(password string, token model.Token) ([][]string, 
 		c.logger.Error(err)
 		return dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err
 	}
-
 	//-----------------------------------------------
 	var plaintext string
 	secretKey := encryption.AesKeySecureRandom([]byte(password))
 
-	titleText := []string{"NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}
-	titleCard := []string{"NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}
-	titleLoginPassword := []string{"NAME", "DESCRIPTION", "LOGIN", "PASSWORD", "CREATED AT", "UPDATED AT"}
-	titleBinary := []string{"NAME", "CREATED AT"}
+	titleText := []string{labels.NameItem, labels.DescriptionItem, labels.DataItem, labels.CreatedAtItem, labels.UpdatedAtItem}
+	titleCard := []string{labels.NameItem, labels.DescriptionItem, labels.PaymentSystemItem, labels.NumberItem, labels.HolderItem,
+		labels.CVCItem, labels.EndDateItem, labels.CreatedAtItem, labels.UpdatedAtItem}
+	titleLoginPassword := []string{labels.NameItem, labels.DescriptionItem, labels.LoginItem, labels.PasswordItem,
+		labels.CreatedAtItem, labels.UpdatedAtItem}
+	titleBinary := []string{labels.NameItem, labels.CreatedAtItem}
 
 	dataTblText = append(dataTblText, titleText)
 	dataTblCard = append(dataTblCard, titleCard)

@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// FileUpload - checks the validity of the token, upload file to client
+// FileUpload - checks the validity of the token, upload file on client
 func (h *Handler) FileUpload(ctx context.Context, req *grpc.UploadBinaryRequest) (*grpc.UploadBinaryResponse, error) {
 	h.logger.Info("file upload")
 

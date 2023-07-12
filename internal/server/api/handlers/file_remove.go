@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// FileRemove - checks the validity of the token, delete record, remove file on the server
+// FileRemove - checks the validity of the token, delete record, remove file on server
 func (h *Handler) FileRemove(ctx context.Context, req *grpc.DeleteBinaryRequest) (*grpc.DeleteBinaryResponse, error) {
 	h.logger.Info("file remove")
 

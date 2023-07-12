@@ -1,12 +1,15 @@
 package form
 
-import "fyne.io/fyne/v2/widget"
+import (
+	"fyne.io/fyne/v2/widget"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/labels"
+)
 
 func GetFormText(textName *widget.Entry, textDescription *widget.Entry, text *widget.Entry) *widget.Form {
 	formText := widget.NewForm(
-		widget.NewFormItem("Name", textName),
-		widget.NewFormItem("Description", textDescription),
-		widget.NewFormItem("Data", text),
+		widget.NewFormItem(labels.NameItem, textName),
+		widget.NewFormItem(labels.DescriptionItem, textDescription),
+		widget.NewFormItem(labels.DataItem, text),
 	)
 	return formText
 }

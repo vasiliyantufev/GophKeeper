@@ -23,11 +23,14 @@ import (
 
 func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	window := application.NewWindow("GophKeeper")
+
 	window.Resize(fyne.NewSize(windows.WindowSwitcherWidth.Size(), windows.WindowSwitcherHeight.Size()))
-	var dataTblLoginPassword = [][]string{{"NAME", "DESCRIPTION", "LOGIN", "PASSWORD", "CREATED AT", "UPDATED AT"}}
-	var dataTblText = [][]string{{"NAME", "DESCRIPTION", "DATA", "CREATED AT", "UPDATED AT"}}
-	var dataTblCard = [][]string{{"NAME", "DESCRIPTION", "PAYMENT SYSTEM", "NUMBER", "HOLDER", "CVC", "END DATE", "CREATED AT", "UPDATED AT"}}
-	var dataTblBinary = [][]string{{"NAME", "CREATED AT"}}
+	var dataTblLoginPassword = [][]string{{labels.NameItem, labels.DescriptionItem, labels.LoginItem, labels.PasswordItem,
+		labels.CreatedAtItem, labels.UpdatedAtItem}}
+	var dataTblText = [][]string{{labels.NameItem, labels.DescriptionItem, labels.DataItem, labels.CreatedAtItem, labels.UpdatedAtItem}}
+	var dataTblCard = [][]string{{labels.NameItem, labels.DescriptionItem, labels.PaymentSystemItem, labels.NumberItem, labels.HolderItem, labels.CVCItem,
+		labels.EndDateItem, labels.CreatedAtItem, labels.UpdatedAtItem}}
+	var dataTblBinary = [][]string{{labels.NameItem, labels.CreatedAtItem}}
 
 	var indexTblLoginPassword = 0
 	var selectedRowTblLoginPassword []string
@@ -38,7 +41,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	var indexTblBinary = 0
 	var selectedRowTblBinary []string
 
-	var radioOptions = []string{"Login", "Registration"}
+	var radioOptions = []string{labels.RadioBtnLogin, labels.RadioBtnRegistration}
 	var accessToken = model.Token{}
 	var password string
 	var exist bool
@@ -181,12 +184,12 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	//---------------------------------------------------------------------- radio event
 	radioAuth := widget.NewRadioGroup(radioOptions, func(value string) {
 		log.Println("Radio set to ", value)
-		if value == "Login" {
+		if value == labels.RadioBtnLogin {
 			window.SetContent(containerFormLogin)
 			window.Resize(fyne.NewSize(windows.WindowAuthWidth.Size(), windows.WindowAuthHeight.Size()))
 			window.Show()
 		}
-		if value == "Registration" {
+		if value == labels.RadioBtnRegistration {
 			window.SetContent(containerFormRegistration)
 			window.Resize(fyne.NewSize(windows.WindowAuthWidth.Size(), windows.WindowAuthHeight.Size()))
 			window.Show()
@@ -537,9 +540,9 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		selectedRowTblBinary = dataTblBinary[id.Row]
 	}
 	//---------------------------------------------------------------------- auth event
-	buttonAuth = widget.NewButton("Submit", func() {
+	buttonAuth = widget.NewButton(labels.BtnSubmit, func() {
 		labelAlertAuth.Show()
-		if radioAuth.Selected == "Login" {
+		if radioAuth.Selected == labels.RadioBtnLogin {
 			errMsg, valid := function.ValidateLoginForm(usernameLoginEntry, passwordLoginEntry)
 			if valid {
 				accessToken, err = client.Authentication(usernameLoginEntry.Text, passwordLoginEntry.Text)
@@ -563,7 +566,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 				log.Error(errMsg)
 			}
 		}
-		if radioAuth.Selected == "Registration" {
+		if radioAuth.Selected == labels.RadioBtnRegistration {
 			errMsg, valid := function.ValidateRegistrationForm(usernameRegistrationEntry, passwordRegistrationEntry, passwordConfirmationRegistrationEntry)
 			if valid {
 				exist, err = client.UserExist(usernameRegistrationEntry.Text)
