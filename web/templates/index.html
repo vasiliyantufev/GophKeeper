@@ -6,5 +6,11 @@
 </head>
 <body>
 
+<ul>
+    {{range $id, $name := .Users }}
+    <li>{{ $id }}: {{ $name }}</li>
+    {{end}}
+</ul>
+
 </body>
 </html>

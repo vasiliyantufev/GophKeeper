@@ -13,11 +13,11 @@ type Handler struct {
 	config   *config.Config
 	user     *user.User
 	token    *token.Token
-	logger   *logrus.Logger
+	log      *logrus.Logger
 }
 
 // NewHandler - creates a new server instance
 func NewHandler(db *database.DB, config *config.Config, userRepository *user.User, tokenRepository *token.Token,
 	log *logrus.Logger) *Handler {
-	return &Handler{database: db, config: config, user: userRepository, token: tokenRepository, logger: log}
+	return &Handler{database: db, config: config, user: userRepository, token: tokenRepository, log: log}
 }

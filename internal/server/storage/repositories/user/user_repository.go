@@ -25,6 +25,31 @@ func New(db *database.DB) *User {
 	}
 }
 
+func (u *User) GetAllUsers() ([]model.User, error) {
+	users := []model.User{}
+	rows, err := u.db.Pool.Query("SELECT user_id, username FROM users where deleted_at IS NULL")
+	//rows, err := u.db.Pool.Query("SELECT * FROM users where deleted_at IS NULL")
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return users, errors.ErrRecordNotFound
+		} else {
+			return users, err
+		}
+	}
+	defer rows.Close()
+	for rows.Next() {
+		user := model.User{}
+
+		err = rows.Scan(&user.ID, &user.Username)
+		//err = rows.Scan(&user.ID, &user.Username, &user.Password, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt)
+		if err != nil {
+			return users, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
 func (u *User) Registration(user *model.UserRequest) (*model.User, error) {
 	registeredUser := &model.User{}
 	if err := u.db.Pool.QueryRow(
