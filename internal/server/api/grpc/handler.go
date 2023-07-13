@@ -1,4 +1,4 @@
-package handlers
+package grpchandler
 
 import (
 	"github.com/sirupsen/logrus"

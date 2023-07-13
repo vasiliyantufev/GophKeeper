@@ -1,4 +1,4 @@
-﻿package handlers
+﻿package grpchandler
 
 import (
 	"context"
@@ -65,7 +65,7 @@ func TestHandlers(t *testing.T) {
 	}
 
 	serverConfig := &serverConfig.Config{
-		GRPC:                "localhost:8080",
+		AddressGRPC:         "localhost:8080",
 		DSN:                 databaseURI,
 		AccessTokenLifetime: 300 * time.Second,
 		DebugLevel:          logrus.DebugLevel,

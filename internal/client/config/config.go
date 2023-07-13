@@ -8,7 +8,7 @@ import (
 )
 
 type Config struct {
-	GRPC       string       `env:"GRPC"`
+	GRPC       string       `env:"AddressGRPC"`
 	DebugLevel logrus.Level `env:"DEBUG_LEVEL" envDefault:"debug"`
 	FileFolder string       `env:"DATA_FOLDER"`
 }

@@ -16,7 +16,7 @@ import (
 	"github.com/vasiliyantufev/gophkeeper/internal/client/model"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/randomizer"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/api/handlers"
+	"github.com/vasiliyantufev/gophkeeper/internal/server/api/grpc"
 	serverConfig "github.com/vasiliyantufev/gophkeeper/internal/server/config"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	grpcKeeper "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
@@ -61,7 +61,7 @@ func TestEvents(t *testing.T) {
 
 	// configs
 	serverConfig := &serverConfig.Config{
-		GRPC:                "localhost:50051",
+		AddressGRPC:         "localhost:50051",
 		DSN:                 databaseURI,
 		AccessTokenLifetime: 300 * time.Second,
 		DebugLevel:          logrus.DebugLevel,
@@ -82,9 +82,9 @@ func TestEvents(t *testing.T) {
 	tokenRepository := token.New(db)
 
 	// setup server service
-	handlerGrpc := *handlers.NewHandler(db, serverConfig, userRepository, fileRepository, &storage,
+	handlerGrpc := *grpchandler.NewHandler(db, serverConfig, userRepository, fileRepository, &storage,
 		entityRepository, tokenRepository, logger)
-	lis, err := net.Listen("tcp", serverConfig.GRPC)
+	lis, err := net.Listen("tcp", serverConfig.AddressGRPC)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -96,7 +96,7 @@ func TestEvents(t *testing.T) {
 			t.Fatalf("server exited with error: %v", err)
 		}
 	}()
-	connectionServer, err := grpc.Dial(serverConfig.GRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	connectionServer, err := grpc.Dial(serverConfig.AddressGRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		t.Fatalf("connection server with error: %v", err)
 	}

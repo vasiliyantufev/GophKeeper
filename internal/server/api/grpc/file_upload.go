@@ -1,4 +1,4 @@
-package handlers
+package grpchandler
 
 import (
 	"context"
@@ -11,14 +11,14 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// FileDownload - checks the validity of the token, save record, upload file on client
-func (h *Handler) FileDownload(ctx context.Context, req *grpc.DownloadBinaryRequest) (*grpc.DownloadBinaryResponse, error) {
-	h.logger.Info("file download")
+// FileUpload - checks the validity of the token, upload file on client
+func (h *Handler) FileUpload(ctx context.Context, req *grpc.UploadBinaryRequest) (*grpc.UploadBinaryResponse, error) {
+	h.logger.Info("file upload")
 
 	valid := h.token.Validate(req.AccessToken)
 	if !valid {
 		h.logger.Error(errors.ErrNotValidateToken)
-		return &grpc.DownloadBinaryResponse{}, status.Errorf(
+		return &grpc.UploadBinaryResponse{}, status.Errorf(
 			codes.Unauthenticated, errors.ErrNotValidateToken.Error(),
 		)
 	}
@@ -30,25 +30,34 @@ func (h *Handler) FileDownload(ctx context.Context, req *grpc.DownloadBinaryRequ
 	exists, err := h.file.FileExists(FileData)
 	if err != nil {
 		h.logger.Error(err)
-		return &grpc.DownloadBinaryResponse{}, status.Errorf(
+		return &grpc.UploadBinaryResponse{}, status.Errorf(
 			codes.Internal, err.Error(),
 		)
 	}
-	if exists != true {
-		err = errors.ErrFileNotExists
+	if exists == true {
+		err = errors.ErrNameAlreadyExists
 		h.logger.Error(err)
-		return &grpc.DownloadBinaryResponse{}, status.Errorf(
+		return &grpc.UploadBinaryResponse{}, status.Errorf(
 			codes.AlreadyExists, err.Error(),
 		)
 	}
 
-	data, err := service.DownloadFile(h.config.FileFolder, req.AccessToken.UserId, req.Name)
+	UploadFile, err := h.file.UploadFile(FileData)
 	if err != nil {
 		h.logger.Error(err)
-		return &grpc.DownloadBinaryResponse{}, status.Errorf(
+		return &grpc.UploadBinaryResponse{}, status.Errorf(
 			codes.Internal, err.Error(),
 		)
 	}
 
-	return &grpc.DownloadBinaryResponse{Data: data}, nil
+	err = service.UploadFile(h.config.FileFolder, req.AccessToken.UserId, req.Name, req.Data)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.UploadBinaryResponse{}, status.Errorf(
+			codes.Internal, err.Error(),
+		)
+	}
+
+	h.logger.Debug(UploadFile.Name)
+	return &grpc.UploadBinaryResponse{Name: UploadFile.Name}, nil
 }
