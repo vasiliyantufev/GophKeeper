@@ -1,7 +1,7 @@
 package model
 
 import (
-	"time"
+	"database/sql"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
@@ -20,9 +20,7 @@ type GetAllUsers struct {
 	ID        int64
 	Username  string
 	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt time.Time
+	DeletedAt sql.NullTime
 }
 
 type UserRequest struct {

@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -40,7 +41,11 @@ func (s Handler) TokenList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, token := range tokenList {
-		tokens[token.AccessToken] = token.EndDateAt.String()
+		if token.EndDateAt.Before(time.Now()) {
+			tokens[token.AccessToken] = "Block"
+		} else {
+			tokens[token.AccessToken] = "Active"
+		}
 	}
 
 	w.Header().Set("Content-Type", "text/html")

@@ -65,7 +65,7 @@ func (u *User) UserExists(username string) (bool, error) {
 
 func (u *User) UserList() ([]model.GetAllUsers, error) {
 	users := []model.GetAllUsers{}
-	rows, err := u.db.Pool.Query("SELECT username, created_at FROM users")
+	rows, err := u.db.Pool.Query("SELECT username, deleted_at FROM users")
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return users, errors.ErrRecordNotFound

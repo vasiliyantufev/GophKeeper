@@ -28,7 +28,11 @@ func (s Handler) UserListHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, user := range usersDb {
-		users[user.Username] = user.DeletedAt.String()
+		if user.DeletedAt.Valid {
+			users[user.Username] = "Block"
+		} else {
+			users[user.Username] = "Active"
+		}
 	}
 
 	w.Header().Set("Content-Type", "text/html")
