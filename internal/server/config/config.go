@@ -25,7 +25,7 @@ func NewConfig(log *logrus.Logger) *Config {
 		AddressGRPC:         "localhost:8080",
 		AddressREST:         "localhost:8088",
 		DSN:                 "host=localhost port=5432 user=user password=password dbname=gophkeeper sslmode=disable",
-		AccessTokenLifetime: 300 * time.Second,
+		AccessTokenLifetime: 30000 * time.Second,
 		FileFolder:          "./data/server_keeper",
 		DebugLevel:          logrus.DebugLevel,
 		TemplatePath:        "./web/templates/index.html",

@@ -33,11 +33,12 @@ func (t *Token) Create(userID int64, lifetime time.Duration) (*model.Token, erro
 	accessToken := encryption.GenerateAccessToken(lengthToken)
 	currentTime := time.Now()
 	if err := t.db.Pool.QueryRow(
-		"INSERT INTO access_token (access_token, user_id, created_at, end_date_at) VALUES ($1, $2, $3, $4) RETURNING access_token, user_id, created_at, end_date_at",
+		"INSERT INTO access_token (access_token, user_id, created_at, end_date_at) VALUES ($1, $2, $3, $4) "+
+			"RETURNING access_token, user_id, created_at, end_date_at",
 		accessToken,
 		userID,
 		currentTime,
-		currentTime.Add(time.Hour+lifetime),
+		currentTime.Add(lifetime),
 	).Scan(&token.AccessToken, &token.UserID, &token.CreatedAt, &token.EndDateAt); err != nil {
 		return nil, err
 	}
@@ -55,8 +56,8 @@ func (t *Token) Validate(token *grpc.Token) bool {
 
 func (t *Token) Block(accessToken string) (string, error) {
 	var token string
-	if err := t.db.Pool.QueryRow("UPDATE users SET end_date_at = $1 "+
-		"where user.user_id = $2 RETURNING access_token",
+	if err := t.db.Pool.QueryRow("UPDATE access_token SET end_date_at = $1 "+
+		"where access_token = $2 RETURNING access_token",
 		time.Now(),
 		accessToken,
 	).Scan(&token); err != nil {
@@ -65,11 +66,13 @@ func (t *Token) Block(accessToken string) (string, error) {
 	return token, nil
 }
 
-func (e *Token) GetList(userID int64) ([]model.Token, error) {
+func (t *Token) GetList(userID int64) ([]model.Token, error) {
 	tokens := []model.Token{}
-	rows, err := e.db.Pool.Query("SELECT access_token, user_id, created_at, end_date_at FROM token "+
-		"where user_id = $1 and end_date_at IS NULL",
-		userID)
+	rows, err := t.db.Pool.Query("SELECT access_token, user_id, created_at, end_date_at FROM access_token "+
+		"where user_id = $1 and end_date_at > $2",
+		userID,
+		time.Now(),
+	)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return tokens, errors.ErrRecordNotFound
