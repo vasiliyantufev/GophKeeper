@@ -8,8 +8,14 @@
 
 <ul>
     <h1>Users list:</h1>
-     {{range $name, $deleted_at := .Users }}
-    <li>{{ $name }}: {{ $deleted_at }}</li>
+     {{range $name, $status := .Users }}
+    <li>{{ $name }}:
+        {{if eq  $status "Block" }}
+        -- activate user --
+        {{end}}
+        {{if eq $status "Active" }}
+        -- block user --
+        {{end}}
     {{end}}
 </ul>
 

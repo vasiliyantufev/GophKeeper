@@ -8,8 +8,15 @@
 
 <ul>
     <h1>Tokens list:</h1>
-     {{range $access_token, $end_data_at := .Tokens }}
-    <li>{{ $access_token }}: {{ $end_data_at }}</li>
+     {{range $access_token, $status := .Tokens }}
+    <li>{{ $access_token }}:
+        {{if eq  $status "Block" }}
+        -- token is block --
+        {{end}}
+        {{if eq $status "Active" }}
+        -- block token --
+        {{end}}
+    </li>
     {{end}}
 </ul>
 
