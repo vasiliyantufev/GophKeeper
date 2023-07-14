@@ -91,7 +91,7 @@ func (u *User) GetAllUsers() ([]model.User, error) {
 func (u *User) Block(userID int64) (int64, error) {
 	var id int64
 	if err := u.db.Pool.QueryRow("UPDATE users SET deleted_at = $1 "+
-		"where user.user_id = $2 RETURNING user_id",
+		"where user_id = $2 RETURNING user_id",
 		time.Now(),
 		userID,
 	).Scan(&id); err != nil {
@@ -103,7 +103,7 @@ func (u *User) Block(userID int64) (int64, error) {
 func (u *User) Unblock(userID int64) (int64, error) {
 	var id int64
 	if err := u.db.Pool.QueryRow("UPDATE users SET deleted_at = null "+
-		"where user.user_id = $1 RETURNING user_id",
+		"where user_id = $1 RETURNING user_id",
 		userID,
 	).Scan(&id); err != nil {
 		return 0, err
