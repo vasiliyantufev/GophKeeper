@@ -8,8 +8,8 @@
 
 <ul>
     <h1>Tokens list:</h1>
-     {{range $id, $name := .Tokens }}
-    <li>{{ $id }}: {{ $name }}</li>
+     {{range $access_token, $end_data_at := .Tokens }}
+    <li>{{ $access_token }}: {{ $end_data_at }}</li>
     {{end}}
 </ul>
 

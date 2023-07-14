@@ -8,8 +8,8 @@
 
 <ul>
     <h1>Users list:</h1>
-     {{range $id, $name := .Users }}
-    <li>{{ $id }}: {{ $name }}</li>
+     {{range $name, $deleted_at := .Users }}
+    <li>{{ $name }}: {{ $deleted_at }}</li>
     {{end}}
 </ul>
 
