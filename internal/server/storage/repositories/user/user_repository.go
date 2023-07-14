@@ -63,10 +63,9 @@ func (u *User) UserExists(username string) (bool, error) {
 	return exists, nil
 }
 
-func (u *User) GetAllUsers() ([]model.User, error) {
-	users := []model.User{}
-	rows, err := u.db.Pool.Query("SELECT user_id, username FROM users where deleted_at IS NULL")
-	//rows, err := u.db.Pool.Query("SELECT * FROM users where deleted_at IS NULL")
+func (u *User) UserList() ([]model.GetAllUsers, error) {
+	users := []model.GetAllUsers{}
+	rows, err := u.db.Pool.Query("SELECT username, created_at FROM users")
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return users, errors.ErrRecordNotFound
@@ -76,10 +75,9 @@ func (u *User) GetAllUsers() ([]model.User, error) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		user := model.User{}
+		user := model.GetAllUsers{}
 
-		err = rows.Scan(&user.ID, &user.Username)
-		//err = rows.Scan(&user.ID, &user.Username, &user.Password, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt)
+		err = rows.Scan(&user.Username, &user.DeletedAt)
 		if err != nil {
 			return users, err
 		}

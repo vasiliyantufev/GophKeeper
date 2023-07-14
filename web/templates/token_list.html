@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Tokens</title>
 </head>
 <body>
 
 <ul>
-    {{range $id, $name := .Users }}
+    <h1>Tokens list:</h1>
+     {{range $id, $name := .Tokens }}
     <li>{{ $id }}: {{ $name }}</li>
     {{end}}
 </ul>

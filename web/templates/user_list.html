@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+
+<ul>
+    <h1>Users list:</h1>
+     {{range $id, $name := .Users }}
+    <li>{{ $id }}: {{ $name }}</li>
+    {{end}}
+</ul>
+
+</body>
+</html>

@@ -7,7 +7,6 @@ import (
 
 // UserBlock - UserBlock
 func (s Handler) UserBlock(w http.ResponseWriter, r *http.Request) {
-
 	userID := r.FormValue("user_id") // userID will be "" if parameter is not set
 	if userID == "" {
 		w.WriteHeader(http.StatusInternalServerError)

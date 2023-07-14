@@ -10,13 +10,13 @@ func Route(s *resthandler.Handler) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Route("/api", func(r chi.Router) {
-		r.Get("/", s.IndexHandler)
+		r.Get("/", s.UserListHandler)
 		r.Route("/user", func(r chi.Router) {
 			r.Post("/block", s.UserBlock)
 			r.Post("/unblock", s.UserUnblock)
 		})
 		r.Route("/token", func(r chi.Router) {
-			r.Get("/{userId}", s.TokenGetList)
+			r.Get("/{userId}", s.TokenList)
 			r.Post("/block", s.TokenBlock)
 		})
 	})

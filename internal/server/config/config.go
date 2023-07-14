@@ -15,7 +15,8 @@ type Config struct {
 	DebugLevel          logrus.Level  `env:"DEBUG_LEVEL"`
 	AccessTokenLifetime time.Duration `env:"ACCESS_TOKEN_LIFETIME"`
 	FileFolder          string        `env:"DATA_FOLDER"`
-	TemplatePath        string        `env:"TEMPLATE_PATH"`
+	TemplatePathUser    string        `env:"TEMPLATE_PATH_USER"`
+	TemplatePathToken   string        `env:"TEMPLATE_PATH_TOKEN"`
 }
 
 // NewConfig - creates a new instance with the configuration for the server
@@ -28,7 +29,8 @@ func NewConfig(log *logrus.Logger) *Config {
 		AccessTokenLifetime: 30000 * time.Second,
 		FileFolder:          "./data/server_keeper",
 		DebugLevel:          logrus.DebugLevel,
-		TemplatePath:        "./web/templates/index.html",
+		TemplatePathUser:    "./web/templates/user_list.html",
+		TemplatePathToken:   "./web/templates/token_list.html",
 	}
 
 	flag.StringVar(&configServer.AddressGRPC, "g", configServer.AddressGRPC, "Server address GRPC")

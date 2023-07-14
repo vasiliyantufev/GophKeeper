@@ -69,9 +69,8 @@ func (t *Token) Block(accessToken string) (string, error) {
 func (t *Token) GetList(userID int64) ([]model.Token, error) {
 	tokens := []model.Token{}
 	rows, err := t.db.Pool.Query("SELECT access_token, user_id, created_at, end_date_at FROM access_token "+
-		"where user_id = $1 and end_date_at > $2",
+		"where user_id = $1",
 		userID,
-		time.Now(),
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {

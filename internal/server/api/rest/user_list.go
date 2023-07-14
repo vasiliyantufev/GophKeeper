@@ -5,22 +5,22 @@ import (
 	"net/http"
 )
 
-type ViewData struct {
-	Users map[int64]string
+type ViewDataUser struct {
+	Users map[string]string
 }
 
-// IndexHandler - the page that displays all users
-func (s Handler) IndexHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles(s.config.TemplatePath)
+// UserListHandler - the page that displays all users
+func (s Handler) UserListHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles(s.config.TemplatePathUser)
 	if err != nil {
 		s.log.Errorf("Parse failed: %s", err)
-		http.Error(w, "Error loading index page", http.StatusInternalServerError)
+		http.Error(w, "Error loading user list page", http.StatusInternalServerError)
 		return
 	}
 
-	users := make(map[int64]string)
+	users := make(map[string]string)
 
-	usersDb, err := s.user.GetAllUsers()
+	usersDb, err := s.user.UserList()
 	if err != nil {
 		s.log.Errorf("Execution failed: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -28,13 +28,13 @@ func (s Handler) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, user := range usersDb {
-		users[user.ID] = user.Username
+		users[user.Username] = user.DeletedAt.String()
 	}
 
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusOK)
 
-	data := ViewData{Users: users}
+	data := ViewDataUser{Users: users}
 	err = tmpl.Execute(w, data)
 	if err != nil {
 		s.log.Errorf("Execution failed: %s", err)

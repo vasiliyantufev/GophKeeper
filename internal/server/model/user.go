@@ -1,6 +1,8 @@
 package model
 
 import (
+	"time"
+
 	"github.com/golang/protobuf/ptypes/timestamp"
 	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
 )
@@ -12,6 +14,15 @@ type User struct {
 	CreatedAt timestamp.Timestamp
 	UpdatedAt timestamp.Timestamp
 	DeletedAt timestamp.Timestamp
+}
+
+type GetAllUsers struct {
+	ID        int64
+	Username  string
+	Password  string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
 }
 
 type UserRequest struct {
