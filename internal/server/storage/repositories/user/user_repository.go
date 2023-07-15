@@ -39,7 +39,7 @@ func (u *User) Registration(user *model.UserRequest) (*model.User, error) {
 
 func (u *User) Authentication(userRequest *model.UserRequest) (*model.User, error) {
 	authenticatedUser := &model.User{}
-	err := u.db.Pool.QueryRow("SELECT user_id, username FROM users WHERE username=$1 and password=$2",
+	err := u.db.Pool.QueryRow("SELECT user_id, username FROM users WHERE username=$1 and password=$2 and deleted_at IS NULL",
 		userRequest.Username, userRequest.Password).Scan(
 		&authenticatedUser.ID,
 		&authenticatedUser.Username,
