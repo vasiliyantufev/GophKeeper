@@ -9,13 +9,29 @@
 <ul>
     <h1>Users list:</h1>
      {{range $name, $status := .Users }}
-    <li>{{ $name }}:
         {{if eq  $status "Block" }}
-        -- activate user --
+        <li>
+            <form action="/api/user/unblock" method="post" class="form-example">
+                <div class="form-example">
+                    <label>{{ $name }}: </label>
+                    <input type="text" name="username" value="{{ $name }}" hidden="hidden">
+                    <input type="submit" value="activate user">
+                </div>
+            </form>
+        </li>
         {{end}}
         {{if eq $status "Active" }}
-        -- block user --
+        <li>
+            <form action="/api/user/block" method="post" class="form-example">
+                <div class="form-example">
+                    <label>{{ $name }}: </label>
+                    <input type="text" name="username" value="{{ $name }}" hidden="hidden">
+                    <input type="submit" value="block user">
+                </div>
+            </form>
+        </li>
         {{end}}
+
     {{end}}
 </ul>
 

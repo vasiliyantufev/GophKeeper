@@ -2,22 +2,16 @@ package resthandler
 
 import (
 	"net/http"
-	"strconv"
 )
 
 // UserBlock - UserBlock
 func (s Handler) UserBlock(w http.ResponseWriter, r *http.Request) {
-	userID := r.FormValue("user_id") // userID will be "" if parameter is not set
-	if userID == "" {
+	username := r.FormValue("username") // username will be "" if parameter is not set
+	if username == "" {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	index, err := strconv.ParseInt(userID, 10, 64)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	index, err = s.user.Block(index)
+	index, err := s.user.Block(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
