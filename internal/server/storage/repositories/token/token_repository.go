@@ -66,6 +66,18 @@ func (t *Token) Block(accessToken string) (string, error) {
 	return token, nil
 }
 
+func (t *Token) BlockAllTokenUser(userID int64) (string, error) {
+	var token string
+	if err := t.db.Pool.QueryRow("UPDATE access_token SET end_date_at = $1 "+
+		"where user_id = $2 RETURNING access_token",
+		time.Now(),
+		userID,
+	).Scan(&token); err != nil {
+		return "", err
+	}
+	return token, nil
+}
+
 func (t *Token) GetList(userID int64) ([]model.Token, error) {
 	tokens := []model.Token{}
 	rows, err := t.db.Pool.Query("SELECT access_token, user_id, created_at, end_date_at FROM access_token "+

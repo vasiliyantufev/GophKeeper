@@ -11,12 +11,18 @@ func (s Handler) UserBlock(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	index, err := s.user.Block(username)
+	userID, err := s.user.Block(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	s.log.Info(index)
+	_, err = s.token.BlockAllTokenUser(userID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	s.log.Info(userID)
 	http.Redirect(w, r, r.Header.Get("Referer"), 302)
 }
