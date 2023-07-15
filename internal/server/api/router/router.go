@@ -16,7 +16,7 @@ func Route(s *resthandler.Handler) *chi.Mux {
 			r.Post("/unblock", s.UserUnblock)
 		})
 		r.Route("/token", func(r chi.Router) {
-			r.Get("/{userId}", s.TokenList)
+			r.Get("/{username}", s.TokenList)
 			r.Post("/block", s.TokenBlock)
 		})
 	})

@@ -3,7 +3,6 @@ package resthandler
 import (
 	"html/template"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -11,20 +10,12 @@ import (
 )
 
 type ViewDataToken struct {
-	Url    string
 	Tokens map[string]string
 }
 
 // TokenList -  the page that displays all tokens user
 func (s Handler) TokenList(w http.ResponseWriter, r *http.Request) {
-	userID := chi.URLParam(r, "userId")
-
-	id, err := strconv.ParseInt(userID, 10, 64)
-	if err != nil {
-		s.log.Error(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	username := chi.URLParam(r, "username")
 
 	tmpl, err := template.ParseFiles(s.config.TemplatePathToken)
 	if err != nil {
@@ -35,7 +26,14 @@ func (s Handler) TokenList(w http.ResponseWriter, r *http.Request) {
 
 	tokens := make(map[string]string)
 
-	tokenList, err := s.token.GetList(id)
+	userID, err := s.user.GetUserID(username)
+	if err != nil {
+		s.log.Error(err)
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	tokenList, err := s.token.GetList(userID)
 	if err != nil {
 		s.log.Error(err)
 		w.WriteHeader(http.StatusNoContent)
@@ -43,7 +41,6 @@ func (s Handler) TokenList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, token := range tokenList {
-
 		now := time.Now().Format(layouts.LayoutDateAndTime.ToString())
 		end := token.EndDateAt.Format(layouts.LayoutDateAndTime.ToString())
 		check := now > end
