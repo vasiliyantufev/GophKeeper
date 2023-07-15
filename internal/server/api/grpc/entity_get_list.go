@@ -14,7 +14,12 @@ import (
 func (h *Handler) EntityGetList(ctx context.Context, req *grpc.GetListEntityRequest) (*grpc.GetListEntityResponse, error) {
 	h.logger.Info("Get list entity")
 
-	valid := h.token.Validate(req.AccessToken)
+	endDateToken, err := h.token.GetEndDateToken(req.AccessToken.Token)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.GetListEntityResponse{}, err
+	}
+	valid := h.token.Validate(endDateToken)
 	if !valid {
 		h.logger.Error(errors.ErrNotValidateToken)
 		return &grpc.GetListEntityResponse{}, status.Errorf(

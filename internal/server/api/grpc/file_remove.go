@@ -15,7 +15,12 @@ import (
 func (h *Handler) FileRemove(ctx context.Context, req *grpc.DeleteBinaryRequest) (*grpc.DeleteBinaryResponse, error) {
 	h.logger.Info("file remove")
 
-	valid := h.token.Validate(req.AccessToken)
+	endDateToken, err := h.token.GetEndDateToken(req.AccessToken.Token)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.DeleteBinaryResponse{}, err
+	}
+	valid := h.token.Validate(endDateToken)
 	if !valid {
 		h.logger.Error(errors.ErrNotValidateToken)
 		return &grpc.DeleteBinaryResponse{}, status.Errorf(

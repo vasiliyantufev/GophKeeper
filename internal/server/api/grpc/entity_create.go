@@ -15,7 +15,12 @@ import (
 func (h *Handler) EntityCreate(ctx context.Context, req *grpc.CreateEntityRequest) (*grpc.CreateEntityResponse, error) {
 	h.logger.Info("entity create")
 
-	valid := h.token.Validate(req.AccessToken)
+	endDateToken, err := h.token.GetEndDateToken(req.AccessToken.Token)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.CreateEntityResponse{}, err
+	}
+	valid := h.token.Validate(endDateToken)
 	if !valid {
 		h.logger.Error(errors.ErrNotValidateToken)
 		return &grpc.CreateEntityResponse{}, status.Errorf(
@@ -24,7 +29,7 @@ func (h *Handler) EntityCreate(ctx context.Context, req *grpc.CreateEntityReques
 	}
 
 	var metadata model.MetadataEntity
-	err := json.Unmarshal([]byte(req.Metadata), &metadata)
+	err = json.Unmarshal([]byte(req.Metadata), &metadata)
 	if err != nil {
 		h.logger.Error(err)
 		return &grpc.CreateEntityResponse{}, err

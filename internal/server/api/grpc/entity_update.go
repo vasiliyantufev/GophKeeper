@@ -13,7 +13,12 @@ import (
 func (h *Handler) EntityUpdate(ctx context.Context, req *grpc.UpdateEntityRequest) (*grpc.UpdateEntityResponse, error) {
 	h.logger.Info("entity update")
 
-	valid := h.token.Validate(req.AccessToken)
+	endDateToken, err := h.token.GetEndDateToken(req.AccessToken.Token)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.UpdateEntityResponse{}, err
+	}
+	valid := h.token.Validate(endDateToken)
 	if !valid {
 		h.logger.Error(errors.ErrNotValidateToken)
 		return &grpc.UpdateEntityResponse{}, status.Errorf(

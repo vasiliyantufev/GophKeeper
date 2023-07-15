@@ -5,10 +5,9 @@ import (
 	"time"
 
 	"github.com/vasiliyantufev/gophkeeper/internal/client/service/encryption"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/layouts"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/database"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/model"
-	grpc "github.com/vasiliyantufev/gophkeeper/internal/server/proto"
-	"github.com/vasiliyantufev/gophkeeper/internal/server/service"
 	"github.com/vasiliyantufev/gophkeeper/internal/server/storage/errors"
 )
 
@@ -45,13 +44,24 @@ func (t *Token) Create(userID int64, lifetime time.Duration) (*model.Token, erro
 	return token, nil
 }
 
-func (t *Token) Validate(token *grpc.Token) bool {
-	currentTime := time.Now()
-	endDate, _ := service.ConvertTimestampToTime(token.EndDateAt)
-	if currentTime.After(endDate) {
+func (t *Token) Validate(endDate time.Time) bool {
+	now := time.Now().Format(layouts.LayoutDateAndTime.ToString())
+	end := endDate.Format(layouts.LayoutDateAndTime.ToString())
+	check := now > end
+	if check {
 		return false
 	}
 	return true
+}
+
+func (t *Token) GetEndDateToken(accessToken string) (time.Time, error) {
+	var end time.Time
+	if err := t.db.Pool.QueryRow("SELECT end_date_at FROM access_token where access_token = $1",
+		accessToken,
+	).Scan(&end); err != nil {
+		return end, err
+	}
+	return end, nil
 }
 
 func (t *Token) Block(accessToken string) (string, error) {
@@ -61,7 +71,7 @@ func (t *Token) Block(accessToken string) (string, error) {
 		time.Now(),
 		accessToken,
 	).Scan(&token); err != nil {
-		return "", err
+		return token, err
 	}
 	return token, nil
 }
@@ -73,7 +83,7 @@ func (t *Token) BlockAllTokenUser(userID int64) (string, error) {
 		time.Now(),
 		userID,
 	).Scan(&token); err != nil {
-		return "", err
+		return token, err
 	}
 	return token, nil
 }

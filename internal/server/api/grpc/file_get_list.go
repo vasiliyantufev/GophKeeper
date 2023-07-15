@@ -14,7 +14,12 @@ import (
 func (h *Handler) FileGetList(ctx context.Context, req *grpc.GetListBinaryRequest) (*grpc.GetListBinaryResponse, error) {
 	h.logger.Info("file get list")
 
-	valid := h.token.Validate(req.AccessToken)
+	endDateToken, err := h.token.GetEndDateToken(req.AccessToken.Token)
+	if err != nil {
+		h.logger.Error(err)
+		return &grpc.GetListBinaryResponse{}, err
+	}
+	valid := h.token.Validate(endDateToken)
 	if !valid {
 		h.logger.Error(errors.ErrNotValidateToken)
 		return &grpc.GetListBinaryResponse{}, status.Errorf(

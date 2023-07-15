@@ -199,7 +199,14 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 	buttonTopSynchronization = widget.NewButton(labels.BtnUpdateData, func() {
 		dataTblText, dataTblCard, dataTblLoginPassword, dataTblBinary, err = client.Synchronization(password, accessToken)
 		if err != nil {
-			labelAlertAuth.SetText(errors.ErrLogin)
+			labelAlertText.Show()
+			labelAlertCard.Show()
+			labelAlertLoginPassword.Show()
+			labelAlertBinary.Show()
+			labelAlertText.SetText(errors.ErrSynchronization)
+			labelAlertCard.SetText(errors.ErrSynchronization)
+			labelAlertLoginPassword.SetText(errors.ErrSynchronization)
+			labelAlertLoginPassword.SetText(errors.ErrSynchronization)
 		} else {
 			tblLoginPassword.Resize(fyne.NewSize(float32(len(dataTblLoginPassword)), float32(len(dataTblLoginPassword[0]))))
 			tblLoginPassword.Refresh()
