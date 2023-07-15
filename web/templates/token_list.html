@@ -7,14 +7,26 @@
 <body>
 
 <ul>
+
     <h1>Tokens list:</h1>
      {{range $access_token, $status := .Tokens }}
-    <li>{{ $access_token }}:
+    <li>
         {{if eq  $status "Block" }}
-        -- token is block --
+        <form method="get" class="form-example">
+            <div class="form-example">
+                <label>{{ $access_token }}: </label>
+                <input disabled type="submit" value="token is block">
+            </div>
+        </form>
         {{end}}
         {{if eq $status "Active" }}
-        -- block token --
+        <form action="/api/token/block" method="post" class="form-example">
+            <div class="form-example">
+                <label>{{ $access_token }}: </label>
+                <input type="text" name="access_token" value="{{ $access_token }}" hidden="hidden">
+                <input type="submit" value="block token">
+            </div>
+        </form>
         {{end}}
     </li>
     {{end}}

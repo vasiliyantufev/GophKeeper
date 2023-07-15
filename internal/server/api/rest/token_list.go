@@ -7,9 +7,11 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/vasiliyantufev/gophkeeper/internal/client/storage/layouts"
 )
 
 type ViewDataToken struct {
+	Url    string
 	Tokens map[string]string
 }
 
@@ -41,7 +43,16 @@ func (s Handler) TokenList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, token := range tokenList {
-		if token.EndDateAt.Before(time.Now()) {
+
+		now := time.Now().Format(layouts.LayoutDateAndTime.ToString())
+		end := token.EndDateAt.Format(layouts.LayoutDateAndTime.ToString())
+		check := now > end
+
+		s.log.Debug(now)
+		s.log.Debug(end)
+		s.log.Debug(check)
+
+		if check {
 			tokens[token.AccessToken] = "Block"
 		} else {
 			tokens[token.AccessToken] = "Active"
