@@ -47,11 +47,11 @@ func (t *Token) Create(userID int64, lifetime time.Duration) (*model.Token, erro
 func (t *Token) Validate(endDate time.Time) bool {
 	now := time.Now().Format(layouts.LayoutDateAndTime.ToString())
 	end := endDate.Format(layouts.LayoutDateAndTime.ToString())
-	check := now > end
-	if check {
-		return false
+	valid := end > now
+	if valid {
+		return true
 	}
-	return true
+	return false
 }
 
 func (t *Token) GetEndDateToken(accessToken string) (time.Time, error) {
