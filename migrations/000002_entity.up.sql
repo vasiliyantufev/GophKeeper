@@ -1,4 +1,4 @@
---  data - зашифрованный
+--  data encrypted aes
 create table entity
 (
     entity_id     serial PRIMARY KEY,
@@ -9,3 +9,7 @@ create table entity
     updated_at  timestamp NOT NULL,
     deleted_at  timestamp NULL
 );
+
+CREATE UNIQUE INDEX idx_entity_user_id ON entity (user_id);
+CREATE UNIQUE INDEX idx_entity_metadata ON entity (metadata);
+CREATE UNIQUE INDEX idx_entity_deleted_at ON entity (deleted_at);

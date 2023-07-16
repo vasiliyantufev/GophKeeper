@@ -6,3 +6,6 @@ create table file
     created_at timestamp    NOT NULL,
     deleted_at timestamp NULL
 );
+
+CREATE UNIQUE INDEX idx_file_user_id ON file (user_id);
+CREATE UNIQUE INDEX idx_file_deleted_at ON file (deleted_at);
