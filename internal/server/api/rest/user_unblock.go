@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// UserUnblock - UserUnblock
+// UserUnblock - unblock the user
 func (s Handler) UserUnblock(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username") // username will be "" if parameter is not set
 	if username == "" {

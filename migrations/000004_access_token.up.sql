@@ -7,5 +7,5 @@ create table access_token
 );
 
 CREATE UNIQUE INDEX idx_access_token_unique ON access_token (access_token);
-CREATE UNIQUE INDEX idx_access_token_user_id ON access_token (user_id);
-CREATE UNIQUE INDEX idx_access_token_end_date_at ON access_token (end_date_at);
+CREATE INDEX idx_access_token_user_id ON access_token (user_id);
+CREATE INDEX idx_access_token_end_date_at ON access_token (end_date_at);

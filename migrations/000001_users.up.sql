@@ -9,4 +9,4 @@ create table users
 );
 
 CREATE UNIQUE INDEX idx_username_unique ON users (username);
-CREATE UNIQUE INDEX idx_users_deleted_at ON users (deleted_at);
+CREATE INDEX idx_users_deleted_at ON users (deleted_at);

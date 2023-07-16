@@ -10,6 +10,6 @@ create table entity
     deleted_at  timestamp NULL
 );
 
-CREATE UNIQUE INDEX idx_entity_user_id ON entity (user_id);
-CREATE UNIQUE INDEX idx_entity_metadata ON entity (metadata);
-CREATE UNIQUE INDEX idx_entity_deleted_at ON entity (deleted_at);
+CREATE INDEX idx_entity_user_id ON entity (user_id);
+CREATE INDEX idx_entity_metadata ON entity (metadata);
+CREATE INDEX idx_entity_deleted_at ON entity (deleted_at);

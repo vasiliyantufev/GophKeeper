@@ -45,10 +45,6 @@ func (s Handler) TokenList(w http.ResponseWriter, r *http.Request) {
 		end := token.EndDateAt.Format(layouts.LayoutDateAndTime.ToString())
 		check := now > end
 
-		s.log.Debug(now)
-		s.log.Debug(end)
-		s.log.Debug(check)
-
 		if check {
 			tokens[token.AccessToken] = "Block"
 		} else {

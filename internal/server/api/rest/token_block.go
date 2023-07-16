@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// TokenBlock - TokenBlock
+// TokenBlock - block the user token
 func (s Handler) TokenBlock(w http.ResponseWriter, r *http.Request) {
 
 	accessToken := r.FormValue("access_token") // access_token will be "" if parameter is not set

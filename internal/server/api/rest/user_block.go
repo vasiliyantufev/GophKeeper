@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// UserBlock - UserBlock
+// UserBlock - block the user and all his tokens
 func (s Handler) UserBlock(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username") // username will be "" if parameter is not set
 	if username == "" {
