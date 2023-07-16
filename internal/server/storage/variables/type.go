@@ -3,7 +3,12 @@ package variables
 type Types string
 
 const (
-	Text   Types = "Text data"
-	Binary Types = "File data"
-	Card   Types = "Bank card data"
+	LoginPassword Types = "Login password data"
+	Text          Types = "Text data"
+	Binary        Types = "Binary data"
+	Card          Types = "Bank card data"
 )
+
+func (t Types) ToString() string {
+	return string(t)
+}

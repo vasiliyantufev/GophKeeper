@@ -16,6 +16,9 @@ bin/
 cmd/client
 cmd/server
 
+# Data
+data/
+
 # Dependency directories (remove the comment below to include it)
 vendor/
 

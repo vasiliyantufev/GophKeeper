@@ -25,11 +25,12 @@ func main() {
 		log.Fatal(err)
 	}
 	grpc := gophkeeper.NewGophkeeperClient(conn)
-	client := events.NewEvent(ctx, log, grpc)
-	ping, err := client.EventPing()
+	client := events.NewEvent(ctx, config, log, grpc)
+	ping, err := client.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	log.Debug(ping)
 	//---------------------------------------------------------------------- fyne.app init
 	application := app.New()
