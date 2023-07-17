@@ -1,39 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Users</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GophKeeper - Users</title>
+    <!-- Including bootstrap 5 CSS file -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link href="style.css" rel="stylesheet">
 </head>
-<body>
 
-<ul>
-    <h1>Users list:</h1>
-     {{range $name, $status := .Users }}
-        {{if eq  $status "Block" }}
-        <li>
+<body>
+<div class="container">
+    <h1 class="text-center">Users List</h1>
+    <br>
+    <br>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+
+
+        {{range $name, $status := .Users }}
+        {{if eq $status "Block" }}
+        <tr>
             <form action="/api/user/unblock" method="post" class="form-example">
                 <div class="form-example">
-                    <label><a href="/api/token/{{ $name }}">{{ $name }}: </a></label>
-                    <input type="text" name="username" value="{{ $name }}" hidden="hidden">
-                    <input type="submit" value="activate user">
+                    <td>
+                        <label><a href="/api/token/{{ $name }}">{{ $name }} </a></label>
+                    </td>
+                    <td>
+                        <input type="text" name="username" value="{{ $name }}" hidden="hidden">
+                        <input type="submit" class="btn btn-success" value="activate user">
+                    </td>
                 </div>
             </form>
-        </li>
+        </tr>
         {{end}}
         {{if eq $status "Active" }}
-        <li>
+        <tr>
             <form action="/api/user/block" method="post" class="form-example">
                 <div class="form-example">
-                    <label><a href="/api/token/{{ $name }}">{{ $name }}: </a> </label>
-                    <input type="text" name="username" value="{{ $name }}" hidden="hidden">
-                    <input type="submit" value="block user">
+                    <td>
+                        <label><a href="/api/token/{{ $name }}">{{ $name }} </a> </label>
+                    </td>
+                    <td>
+                        <input type="text" name="username" value="{{ $name }}" hidden="hidden">
+                        <input type="submit" class="btn btn-danger" value="block user">
+                    </td>
                 </div>
             </form>
-        </li>
+        </tr>
         {{end}}
+        {{end}}
+        </tbody>
+    </table>
+</div>
 
-    {{end}}
-</ul>
+<!-- Including bootstrap 5 JS file -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 
 </body>
 </html>

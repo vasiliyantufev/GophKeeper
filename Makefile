@@ -24,9 +24,9 @@ run_evans:
 
 .PHONY: build_app
 build_app:
-	go build -o bin/clientLinux cmd/client/main.go
-	go build -o bin/serverLinux cmd/server/main.go
-
+	go build -o bin/client cmd/client/main.go
+	go build -o bin/server cmd/server/main.go
+						  
 #GOOS=linux GOARCH=amd64  go build -o bin/linux64_client cmd/client/main.go
 #GOOS=linux GOARCH=amd64  go build -o bin/linux64_server cmd/server/main.go
 #GOOS=windows GOARCH=amd64  go build -o bin/win64_client.exe cmd/client/main.go
