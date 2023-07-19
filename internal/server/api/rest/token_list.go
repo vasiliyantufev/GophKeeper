@@ -26,14 +26,14 @@ func (s Handler) TokenList(w http.ResponseWriter, r *http.Request) {
 
 	tokens := make(map[string]string)
 
-	userID, err := s.user.GetUserID(username)
+	id, err := s.user.GetUserID(username)
 	if err != nil {
 		s.log.Error(err)
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
 
-	tokenList, err := s.token.GetList(userID)
+	tokenList, err := s.token.GetList(id)
 	if err != nil {
 		s.log.Error(err)
 		w.WriteHeader(http.StatusNoContent)
