@@ -87,4 +87,4 @@ GophKeeper представляет собой клиент-серверную �
 -----
 ## Принципиальная схема
 
-![alt text](https://github.com/vasiliyantufev/gophkeeper/web/assets/schema.png?raw=true)
+![alt text](https://github.com/vasiliyantufev/gophkeeper/doc/schema.png?raw=true)
