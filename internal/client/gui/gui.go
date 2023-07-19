@@ -2,6 +2,7 @@ package gui
 
 import (
 	"io"
+	"strconv"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -420,21 +421,25 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 					}
 
 					data, err := io.ReadAll(r)
-					if err != nil {
-						labelAlertBinary.SetText(errors.ErrUpload)
-						log.Error(err)
-					}
-					name, err := client.FileUpload(r.URI().Name(), password, data, accessToken)
-					if err != nil {
+					if len(data) > client.GetConfig().FileSize {
+						labelAlertBinary.SetText(errors.ErrFileSize + "Размер загружаемого файла: " + strconv.Itoa(len(data)) + " байт")
+						log.Error(errors.ErrFileSize + "Размер загружаемого файла: " + strconv.Itoa(len(data)) + " байт")
+					} else if err != nil {
 						labelAlertBinary.SetText(errors.ErrUpload)
 						log.Error(err)
 					} else {
-						dataTblBinary = append(dataTblBinary, []string{name, time.Now().Format(layouts.LayoutDateAndTime.ToString())})
-						log.Info("Файл добавлен: " + name)
+						name, err := client.FileUpload(r.URI().Name(), password, data, accessToken)
+						if err != nil {
+							labelAlertBinary.SetText(errors.ErrUpload)
+							log.Error(err)
+						} else {
+							dataTblBinary = append(dataTblBinary, []string{name, time.Now().Format(layouts.LayoutDateAndTime.ToString())})
+							log.Info("Файл добавлен: " + name)
 
-						labelAlertBinary.Hide()
-						window.SetContent(containerTabs)
-						window.Show()
+							labelAlertBinary.Hide()
+							window.SetContent(containerTabs)
+							window.Show()
+						}
 					}
 				}
 			}, window)
@@ -470,6 +475,7 @@ func InitGUI(log *logrus.Logger, application fyne.App, client *events.Event) {
 		labelAlertTextUpdate.Hide()
 		labelAlertCardCreate.Hide()
 		labelAlertCardUpdate.Hide()
+
 		window.SetContent(containerTabs)
 		window.Resize(fyne.NewSize(windows.WindowMainWidth.Size(), windows.WindowMainHeight.Size()))
 		window.Show()

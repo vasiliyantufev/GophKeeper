@@ -20,3 +20,7 @@ type Event struct {
 func NewEvent(ctx context.Context, config *config.Config, log *logrus.Logger, client grpc.GophkeeperClient) *Event {
 	return &Event{context: ctx, config: config, logger: log, grpc: client}
 }
+
+func (s Event) GetConfig() *config.Config {
+	return s.config
+}

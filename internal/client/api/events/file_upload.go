@@ -18,7 +18,6 @@ func (c Event) FileUpload(name string, password string, file []byte, token model
 		c.logger.Error(err)
 		return "", err
 	}
-
 	createdToken, err := service.ConvertTimeToTimestamp(token.CreatedAt)
 	if err != nil {
 		c.logger.Error(err)
