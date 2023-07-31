@@ -87,3 +87,6 @@ GophKeeper представляет собой клиент-серверную �
 
 ![изображение](https://github.com/vasiliyantufev/gophkeeper/assets/4541435/1002d9e8-1bc5-4516-bb33-1eb468c75ce9)
 
+## Презентация
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/niXpTGFqdmA/0.jpg)](https://www.youtube.com/watch?v=niXpTGFqdmA)
